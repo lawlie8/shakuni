@@ -57,7 +57,7 @@ public class SecurityConfiguration{
 
                 }).formLogin(httpSecurityFormLoginConfigurer -> {
                     httpSecurityFormLoginConfigurer
-                            .loginPage("/web/logreq")
+                            .loginPage("/web/security/logreq")
                             .successHandler(authenticationSuccessHandler())
                             .failureHandler(authenticationFailureHandler())
                             .loginProcessingUrl("/web/auth")
