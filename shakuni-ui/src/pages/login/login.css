@@ -57,3 +57,6 @@
 .login-container-form{
     padding-top: 20px;
 }
+.login-form-item-list{
+    list-style: none;
+}
