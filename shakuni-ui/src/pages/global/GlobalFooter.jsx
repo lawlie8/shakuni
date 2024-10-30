@@ -6,7 +6,7 @@ export function GlobalFooter(){
 
 return <Layout>
     <Footer  className="global-footer">
-      Created with ❤ by <a style={{ color: 'white', textDecoration: 'underline' }} href="https://github.com/lawlie8">lawlie8</a>
+      Created with ❤ by <a style={{ color: 'white', textDecoration: 'underline',fontFamily:'Helvetica' }} href="https://github.com/lawlie8">lawlie8</a>
       <span style={{ float: "right", position: "absolute", right: "1%", fontWeight: "bold" }}>v.0.1</span>
     </Footer>
   </Layout>
