@@ -1,10 +1,10 @@
 package org.lawlie8.shakuni.security.config;
 
+import org.junit.jupiter.api.Order;
 import org.lawlie8.shakuni.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,12 +20,15 @@ import org.springframework.security.web.authentication.session.*;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.lawlie8.shakuni.security.config.SecurityConstants.*;
+
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration{
+public class SecurityConfiguration {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -38,55 +41,54 @@ public class SecurityConfiguration{
     LogOutSuccessHandler logOutSuccessHandler;
 
     @Bean
-    public DaoAuthenticationProvider userDetailsService(CustomUserDetailService customUserDetailService, PasswordEncoder passwordEncoder){
+    public DaoAuthenticationProvider userDetailsService(CustomUserDetailService customUserDetailService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return daoAuthenticationProvider ;
+        return daoAuthenticationProvider;
     }
-
-
 
     @Bean
     @Order(1)
-    public SecurityFilterChain mainFilterChain(HttpSecurity httpSecurity) throws Exception{
-        return httpSecurity.httpBasic((basic)-> basic.disable()).csrf((csrf) -> csrf.disable()).authorizeHttpRequests((auth) -> {
+    public SecurityFilterChain mainFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity.httpBasic((basic) -> basic.disable()).csrf((csrf) -> csrf.disable()).authorizeHttpRequests((auth) -> {
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/app/**")).authenticated();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/web/**")).permitAll();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll();
 
-                }).formLogin(httpSecurityFormLoginConfigurer -> {
+                })
+                .rememberMe(rememberMe -> rememberMe.key(REMEMBER_ME_SECRET)
+                        .tokenValiditySeconds(REMEMBER_ME_DURATION)
+                        .rememberMeParameter(REMEMBER_ME_PARAMETER))
+                .formLogin(httpSecurityFormLoginConfigurer -> {
                     httpSecurityFormLoginConfigurer
                             .loginPage("/web/security/logreq")
                             .successHandler(authenticationSuccessHandler())
                             .failureHandler(authenticationFailureHandler())
-                            .loginProcessingUrl("/web/auth")
-                            .usernameParameter("email")
-                            .passwordParameter("password")
+                            .loginProcessingUrl(LOGIN_PROCESSING_URL)
+                            .usernameParameter(EMAIL_PARAMETER)
+                            .passwordParameter(PASSWORD_PARAMETER)
                             .permitAll();
-                }).logout((logout)-> logout.logoutUrl("/web/logout")
+                }).logout((logout) -> logout.logoutUrl(LOGOUT_URL)
                         .logoutSuccessHandler(logOutSuccessHandler)
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies(COOKIE_PARAM)
                         .permitAll())
-                /*.sessionManagement(s -> s.sessionAuthenticationStrategy(concurrentSession())
-                        .maximumSessions(-1)
-                        .expiredSessionStrategy(sessionInformationExpiredStrategy()))*/
                 .build();
     }
 
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(){
-        return new SucessHandler();
+        return new SuccessHandler();
     }
 
     @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler(){
+    public AuthenticationFailureHandler authenticationFailureHandler() {
         return new FailureHandler();
     }
 
     @Bean
-    public SessionAuthenticationStrategy sessionAuthenticationStrategy(){
+    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         ConcurrentSessionControlAuthenticationStrategy concurrentSessionControlAuthenticationStrategy = new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
         concurrentSessionControlAuthenticationStrategy.setMaximumSessions(-1);
         concurrentSessionControlAuthenticationStrategy.setExceptionIfMaximumExceeded(true);
@@ -119,7 +121,7 @@ public class SecurityConfiguration{
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
