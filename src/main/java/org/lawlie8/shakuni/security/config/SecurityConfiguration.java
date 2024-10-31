@@ -61,7 +61,7 @@ public class SecurityConfiguration{
                             .successHandler(authenticationSuccessHandler())
                             .failureHandler(authenticationFailureHandler())
                             .loginProcessingUrl("/web/auth")
-                            .usernameParameter("username")
+                            .usernameParameter("email")
                             .passwordParameter("password")
                             .permitAll();
                 }).logout((logout)-> logout.logoutUrl("/web/logout")

@@ -1,33 +1,51 @@
-import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
+import { Button, Checkbox, Col, Form, Input, notification, Row } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import './login.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { login } from './login-service';
 
 
 export function Login() {
     const navigate = useNavigate();
 
-
     function AuthenticateUser(values) {
-        console.log(values);
-        
-        navigate("/dashboard");
-    
+        login(values).then((response) => {
+            if (response.status === 200) {
+                navigate("/dashboard");
+                //Notify User of Login Sucess
+                notification.success({
+                    message: "Sucess",
+                    duration: 1,
+                    description: "Logged In",
+                    style: { width: '250px' }
+                })
+            }
+
+
+        }).catch(() => {
+            //Notify User of Login Failure
+            notification.error({
+                message: "Error",
+                duration: 1,
+                description: "Login Failed",
+                style: { width: '250px' }
+            })
+        })
     }
-    
+
 
     return <div className="login-main">
         <div className='login-container'>
             <div className='logo'>
-                
+
             </div>
             <div className='login-container-header'>
                 <h2>Shakuni</h2>
             </div>
             <div className='login-container-form'>
                 <Form name="normal-login" initialValues={{ remember: true }} onFinish={AuthenticateUser}>
-                    <Form.Item style={{ paddingTop: "10px", fontSize: '15px'}} name="email" rules={[{ required: true, message: 'Email Required!' }]} >
+                    <Form.Item style={{ paddingTop: "10px", fontSize: '15px' }} name="email" rules={[{ required: true, message: 'Email Required!' }]} >
                         <div>
                             <UserOutlined className="site-form-item-icon" />
                             <input placeholder='Email' className='login-user-input' />
