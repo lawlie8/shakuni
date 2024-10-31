@@ -19,12 +19,15 @@ export function Login() {
 
     return <div className="login-main">
         <div className='login-container'>
+            <div className='logo'>
+                
+            </div>
             <div className='login-container-header'>
                 <h2>Shakuni</h2>
             </div>
             <div className='login-container-form'>
                 <Form name="normal-login" initialValues={{ remember: true }} onFinish={AuthenticateUser}>
-                    <Form.Item style={{ paddingTop: "10px", fontSize: '15px' }} name="email" rules={[{ required: true, message: 'Email Required!' }]} >
+                    <Form.Item style={{ paddingTop: "10px", fontSize: '15px'}} name="email" rules={[{ required: true, message: 'Email Required!' }]} >
                         <div>
                             <UserOutlined className="site-form-item-icon" />
                             <input placeholder='Email' className='login-user-input' />

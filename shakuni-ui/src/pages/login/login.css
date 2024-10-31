@@ -52,6 +52,19 @@
     left: 0%;
     width: 225px;
     background-color: #dfdfdf;
+    color: black;
+}
+
+.logo{
+    position: relative;
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    border: 2px solid black;
+    left: 50%;
+    top: 20px;
+    transform: translate(-50%);
+
 }
 
 .login-container-form{
