@@ -1,6 +1,6 @@
 import './App.css'
-import { GlobalFooter } from './pages/global/GlobalFooter'
-import { GlobalHeader } from './pages/global/GlobalHeader'
+import GlobalFooter from './pages/global/GlobalFooter'
+import GlobalHeader from './pages/global/GlobalHeader';
 import ShakkuniRoute from './util/ShakuniRoute'
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
   return (
     <section>
       <ShakkuniRoute />
-      <GlobalHeader />
+        <GlobalHeader />
       <GlobalFooter />
     </section>
   );

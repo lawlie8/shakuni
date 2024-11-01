@@ -2,7 +2,7 @@ import { Footer } from 'antd/es/layout/layout'
 import { Layout } from 'antd'
 import './global.css'
 
-export function GlobalFooter(){
+export default function GlobalFooter(){
 
 return <Layout>
     <Footer  className="global-footer">
