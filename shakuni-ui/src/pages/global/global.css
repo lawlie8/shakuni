@@ -25,6 +25,7 @@
     z-index: 23;
     background-color: #000000;
     color: #fff;
+    box-shadow: 1px 1px 2px gray;
 }
 
 .header-list{
@@ -37,9 +38,15 @@
     padding: 0px;
 }
 
+
+
 .header-list-item{
     float: left;
     margin: none;
+    li &:hover{
+        border-bottom: 5px solid #000000;
+        cursor: pointer;
+    }
 }
 
 .header-list-item-logo{
@@ -57,6 +64,14 @@
     padding: 10px;
 }
 
+.header-user-logo-avatar{
+    &:hover{
+        box-shadow: 0px 0px 5px #dfdfdf;
+        cursor:pointer;
+    }
+}
+
+
 
 .header-logo{
     height: 50px;
@@ -67,16 +82,10 @@
     left: 25px;
     top: 0px;
     background-color: #dfdfdf;
+    &:hover{
+        cursor: pointer;
+        box-shadow: 0px 0px 5px #dfdfdf ;
+
+    }
 }
 
-.header-logo:hover{
-    height: 50px;
-    width: 50px;
-    border: 2px solid #dfdfdf;
-    border-radius: 100%;
-    position: relative;
-    left: 25px;
-    top: 0px;
-    background-color: #dfdfdf;
-    box-shadow: 0px 0px 5px #dfdfdf ;
-}
