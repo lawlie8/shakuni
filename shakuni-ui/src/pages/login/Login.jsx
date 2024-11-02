@@ -4,12 +4,17 @@ import './login.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from './login-service';
-
+import store from '../../util/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserCurrentUser } from './LoginSlice';
 
 export function Login() {
-    const navigate = useNavigate();
-
+        const navigate = useNavigate();
+        const dispatch = useDispatch();
     function AuthenticateUser(values) {
+
+        dispatch(setUserCurrentUser(values.email));
+        
         login(values).then((response) => {
             if (response.status === 200) {
                 navigate("/dashboard");
@@ -21,6 +26,8 @@ export function Login() {
                     style: { width: '250px' }
                 })
             }
+        
+
 
 
         }).catch(() => {

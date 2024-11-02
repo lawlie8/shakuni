@@ -12,7 +12,7 @@ export function DashBoard(){
 
     useEffect(()=>{
         instance.get(CONFIG_URL).then((response)=>{
-            console.log(response.data);
+
         })
     },[])
 
