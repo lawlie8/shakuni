@@ -1,34 +1,35 @@
-import { Button, Checkbox, Col, Form, Input, notification, Row } from 'antd';
+import { Checkbox,Form,notification} from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import './login.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from './login-service';
-import store from '../../util/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserCurrentUser } from './LoginSlice';
 
 export function Login() {
         const navigate = useNavigate();
         const dispatch = useDispatch();
-    function AuthenticateUser(values) {
 
-        dispatch(setUserCurrentUser(values.email));
-        
+
+    //Authenticate User Function
+    function AuthenticateUser(values) {
         login(values).then((response) => {
             if (response.status === 200) {
                 navigate("/dashboard");
-                //Notify User of Login Sucess
+                //Notify User of Login Success
                 notification.success({
                     message: "Sucess",
                     duration: 1,
                     description: "Logged In",
                     style: { width: '250px' }
                 })
+
+                //Save User Details
+                dispatch(setUserCurrentUser(values.email));
+                localStorage.setItem("userName",values.email);        
             }
         
-
-
 
         }).catch(() => {
             //Notify User of Login Failure
