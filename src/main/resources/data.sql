@@ -13,14 +13,17 @@ CREATE TABLE `persistent_logins` (
   `last_used` TIMESTAMP NOT NULL,
   PRIMARY KEY (`series`));
 
-CREATE TABLE `datasource_type`  (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `data_source_type` varchar(200) NOT NULL,
-    `is_active` boolean,
-    `version` varchar(200) NOT NULL,
-    `is_default_driver` boolean,
-    `driver_version` varchar(200),
-    PRIMARY KEY (`id`));
+CREATE TABLE `datasource_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `data_source_type` varchar(200) NOT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `datasource_version` varchar(200) NOT NULL,
+  `is_default_driver` tinyint(1) DEFAULT NULL,
+  `driver_version` varchar(200) DEFAULT NULL,
+  `datasource_img_url` varchar(200) DEFAULT NULL,
+  `datasource_site` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci
 
 INSERT INTO `datasource_type` (
 `id`,
@@ -34,5 +37,7 @@ INSERT INTO `datasource_type` (
 '1',
 '10.10.2-MariaDB',
 '1',
-'3.3.3');
+'3.3.3',
+'/public/datasource_logo/mariadb_logo.svg',
+'https://mariadb.org/');
 
