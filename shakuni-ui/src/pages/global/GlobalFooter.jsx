@@ -1,7 +1,9 @@
 import { Footer } from 'antd/es/layout/layout'
 import { Layout } from 'antd'
-import './global.css'
-import { useState } from 'react'
+import './global.css';
+import instance from '../../util/axios'
+import { useState,useEffect } from 'react'
+import { VERSION_API } from '../../util/Constants';
 
 export default function GlobalFooter() {
 

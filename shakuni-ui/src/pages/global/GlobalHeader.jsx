@@ -6,10 +6,11 @@ import { logout } from "./globalService";
 
 export default function GlobalHeader() {
 
-    const headerList = ['Jobs', 'Config', "Mangement"];
+    const headerList = [{name:'Dashboard',url:"/dashboard"},{name:'Jobs',url:"/jobs"}, {name:'Config',url:"/config"}, {name:'Management',url:"/management"}];
     const email = useSelector((state) => state.login.userName);
     const emailFromLocalStorage = localStorage.getItem("userName");
     const navigate = useNavigate();
+
     const onClick = ({ key }) => {
         if (key === '3') {
             //logout for key 3
@@ -75,10 +76,16 @@ function fetchUserAvatarImage() {
 }
 
 function navbarClick(item) {
+    navigate(item.url)
+    
 }
 
 
 function userAvatarClick() {
+}
+
+function logoClick(){
+    navigate("/about")
 }
 
 
@@ -88,14 +95,14 @@ return (
 
         <ul className="header-list">
             <li className="header-list-item-logo">
-                <div className="header-logo" />
+                <div className="header-logo" onClick={()=>logoClick()} />
             </li>
             <li className="header-list-item">
                 <ul className="header-list">
                     {
                         headerList.map((item) => (
-                            <li style={{ paddingRight: '5px', paddingLeft: '5px' }} className="header-list-item" onClick={navbarClick(item)}>
-                                <h3>{item}</h3>
+                            <li style={{ paddingRight: '5px', paddingLeft: '5px' }} className="header-list-item" onClick={()=>navbarClick(item)}>
+                                <h3>{item.name}</h3>
                             </li>
                         ))
                     }
