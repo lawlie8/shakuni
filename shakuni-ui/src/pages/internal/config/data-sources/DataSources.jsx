@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './datasource-service.js';
 import './datasources.css';
 import { fetchDataSourceTypes } from './datasource-service.js';
+import { Divider } from 'antd';
 export default function DataSources(params = {params}){
 
     const [datasourceType,setDataSourceType] = useState([]);
@@ -16,7 +17,8 @@ export default function DataSources(params = {params}){
     },[])
 
     return <div className="datasources-main">
-        <h2 style={{color:'black'}}>Data Sources</h2>
+        <h2 className='datasources-headline'>Data Sources</h2>
+        <Divider style={{borderColor: '#000000',margin:'10px'}} />
         {
         datasourceType.map((item)=>(
             <div key={item.id} className='datasource-item'>
