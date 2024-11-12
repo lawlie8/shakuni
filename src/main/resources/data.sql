@@ -38,6 +38,6 @@ INSERT INTO `datasource_type` (
 '10.10.2-MariaDB',
 '1',
 '3.3.3',
-'/public/datasource_logo/mariadb_logo.svg',
+'/datasource_logo/mariadb_logo.svg',
 'https://mariadb.org/');
 

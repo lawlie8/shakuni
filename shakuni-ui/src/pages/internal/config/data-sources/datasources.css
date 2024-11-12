@@ -1,0 +1,10 @@
+.datasources-main{
+    height: 100vh;
+}
+
+.datasource-item{
+    border-radius: 10px;
+    border: 1px solid black;
+    height: 100px;
+    width: 200px;
+}

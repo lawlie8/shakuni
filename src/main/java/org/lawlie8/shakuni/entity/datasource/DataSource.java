@@ -26,6 +26,12 @@ public class DataSource {
     @Column(name = "driver_version")
     private String driverVersion;
 
+    @Column(name = "datasource_img_url")
+    private String dataSourceImageUrl;
+
+    @Column(name = "datasource_site")
+    private String dataSourceSiteUrl;
+
     public Long getId() {
         return id;
     }
@@ -74,6 +80,22 @@ public class DataSource {
         this.driverVersion = driverVersion;
     }
 
+    public String getDataSourceImageUrl() {
+        return dataSourceImageUrl;
+    }
+
+    public void setDataSourceImageUrl(String dataSourceImageUrl) {
+        this.dataSourceImageUrl = dataSourceImageUrl;
+    }
+
+    public String getDataSourceSiteUrl() {
+        return dataSourceSiteUrl;
+    }
+
+    public void setDataSourceSiteUrl(String dataSourceSiteUrl) {
+        this.dataSourceSiteUrl = dataSourceSiteUrl;
+    }
+
     @Override
     public String toString() {
         return "DataSource{" +
@@ -83,6 +105,8 @@ public class DataSource {
                 ", version='" + version + '\'' +
                 ", isDefaultDriver='" + isDefaultDriver + '\'' +
                 ", driverVersion='" + driverVersion + '\'' +
+                ", dataSourceImageUrl='" + dataSourceImageUrl + '\'' +
+                ", dataSourceSiteUrl='" + dataSourceSiteUrl + '\'' +
                 '}';
     }
 }

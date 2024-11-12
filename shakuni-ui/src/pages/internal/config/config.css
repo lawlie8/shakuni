@@ -1,0 +1,34 @@
+.config-page-selection{
+
+}
+
+.config-page-content{
+    margin: 0px;
+    padding: 0px;
+}
+
+.config-page-main{
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.config-page{
+    position: fixed;
+    left: 0px;
+    top: 65px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.config-page-selection-menu{
+    border-radius: 0px;
+    padding: 0px;
+    border: none;
+    height: 100vh;
+    &:hover{
+        border-radius: 0px;
+    }
+}
