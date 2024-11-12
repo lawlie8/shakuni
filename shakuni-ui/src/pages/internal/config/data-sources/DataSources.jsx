@@ -16,10 +16,12 @@ export default function DataSources(params = {params}){
     },[])
 
     return <div className="datasources-main">
+        <h2 style={{color:'black'}}>Data Sources</h2>
         {
         datasourceType.map((item)=>(
             <div key={item.id} className='datasource-item'>
-
+                <img className='datasource-item-icon' src={item.dataSourceImageUrl}></img>
+                <h4 className='datasource-item-name'>{item.dataSourceLabel}</h4>
             </div>
     ))
     }

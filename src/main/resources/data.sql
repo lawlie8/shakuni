@@ -22,7 +22,9 @@ CREATE TABLE `datasource_type` (
   `driver_version` varchar(200) DEFAULT NULL,
   `datasource_img_url` varchar(200) DEFAULT NULL,
   `datasource_site` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `datasource_label` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `datasource_label_UNIQUE` (`datasource_label`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci
 
 INSERT INTO `datasource_type` (
@@ -31,7 +33,10 @@ INSERT INTO `datasource_type` (
 `is_active`,
 `datasource_version`,
 `is_default_driver`,
-`driver_version`) VALUES (
+`driver_version`,
+`datasource_img_url`,
+`datasource_site`,
+`datasource_label`) VALUES (
 '1',
 'maria_db',
 '1',
@@ -39,5 +44,6 @@ INSERT INTO `datasource_type` (
 '1',
 '3.3.3',
 '/datasource_logo/mariadb_logo.svg',
-'https://mariadb.org/');
+'https://mariadb.org/',
+'Maria Db');
 

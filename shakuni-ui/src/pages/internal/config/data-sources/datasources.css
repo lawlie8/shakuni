@@ -3,8 +3,27 @@
 }
 
 .datasource-item{
+    margin: 25px;
     border-radius: 10px;
     border: 1px solid black;
     height: 100px;
     width: 200px;
+    color: black;
+
+    background: rgb(24,125,47);
+    background: linear-gradient(315deg, rgba(24,125,47,1) 0%, rgba(255,255,255,1) 99%);
+}
+
+.datasource-item-name{
+    position: relative;
+    top: -53px;
+    left: 58px;
+}
+
+.datasource-item-icon{
+    height: 100px;
+    width: 100px;
+    left: -45px;
+    position: relative;
+    top: -28px;
 }

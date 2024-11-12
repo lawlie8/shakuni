@@ -32,6 +32,9 @@ public class DataSource {
     @Column(name = "datasource_site")
     private String dataSourceSiteUrl;
 
+    @Column(name = "datasource_label")
+    private String dataSourceLabel;
+
     public Long getId() {
         return id;
     }
@@ -96,6 +99,14 @@ public class DataSource {
         this.dataSourceSiteUrl = dataSourceSiteUrl;
     }
 
+    public String getDataSourceLabel() {
+        return dataSourceLabel;
+    }
+
+    public void setDataSourceLabel(String dataSourceLabel) {
+        this.dataSourceLabel = dataSourceLabel;
+    }
+
     @Override
     public String toString() {
         return "DataSource{" +
@@ -107,6 +118,7 @@ public class DataSource {
                 ", driverVersion='" + driverVersion + '\'' +
                 ", dataSourceImageUrl='" + dataSourceImageUrl + '\'' +
                 ", dataSourceSiteUrl='" + dataSourceSiteUrl + '\'' +
+                ", dataSourceLabel='" + dataSourceLabel + '\'' +
                 '}';
     }
 }
