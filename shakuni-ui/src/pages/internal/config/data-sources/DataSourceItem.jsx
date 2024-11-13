@@ -11,7 +11,7 @@ export default function DataSourceItem({ params }) {
             cover={<img src={params.dataSourceImageUrl} style={{ height: '100px', width: '100px', position: 'relative', left: '50%', top: '50%', transform: 'translate(-50%,20px)', filter: params.active ? 'none' : 'grayscale(1)' }} />}
             style={{ width: 240, backgroundColor: params.active ? 'none' : '#80808069', border: params.active ? '1px solid #f0f0f0' : 'none' }}
         >
-            <Divider />
+            <Divider style = {{borderColor: params.active ? '' : '#ffffff70'}}  />
             <Meta title={params.dataSourceLabel}></Meta>
         </Card>
     </Tooltip>

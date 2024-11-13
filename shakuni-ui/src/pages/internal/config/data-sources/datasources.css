@@ -2,7 +2,10 @@
     height: 100vh;
 }
 .datasources-headline{
+    position: relative;
+    width: 100%;
     color: black;
+    font-size: 30px;
 }
 
 .datasource-item{
