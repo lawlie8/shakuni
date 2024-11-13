@@ -9,6 +9,7 @@ export default function GlobalHeader() {
     const headerList = [{name:'Dashboard',url:"/dashboard"},{name:'Jobs',url:"/jobs"}, {name:'Config',url:"/config"}, {name:'Management',url:"/management"}];
     const email = useSelector((state) => state.login.userName);
     const emailFromLocalStorage = localStorage.getItem("userName");
+    
     const navigate = useNavigate();
 
     const onClick = ({ key }) => {
@@ -36,7 +37,7 @@ export default function GlobalHeader() {
     const items = [
         {
             key: '1',
-            label: email,
+            label: email !== '' ? '' : emailFromLocalStorage,
             disabled: true,
         },
         {
@@ -61,7 +62,9 @@ export default function GlobalHeader() {
 
 //Fetch Email for Display in Avatar
 function fetchEmail() {
-    if (email !== undefined) {
+    console.log(emailFromLocalStorage);
+    
+    if (email !== undefined && email !=='') {
         return email;
     }
     else if (emailFromLocalStorage !== undefined) {

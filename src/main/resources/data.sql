@@ -47,3 +47,24 @@ INSERT INTO `datasource_type` (
 'https://mariadb.org/',
 'Maria Db');
 
+INSERT INTO `datasource_type` (
+`id`,
+`data_source_type`,
+`is_active`,
+`datasource_version`,
+`is_default_driver`,
+`driver_version`,
+`datasource_img_url`,
+`datasource_site`,
+`datasource_label`) VALUES (
+'2',
+'postgres_sql',
+'1',
+'16',
+'1',
+'42.7.4',
+'/datasource_logo/postgresql_logo.svg',
+'https://www.postgresql.org',
+'Postgres Sql');
+
+
