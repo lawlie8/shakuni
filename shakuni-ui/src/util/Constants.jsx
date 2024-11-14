@@ -6,3 +6,4 @@ export const VERSION_API = "/web/config/version";
 export const CONFIG_URL = "/app/config/settings/all";
 
 export const DATASOURCE_TYPE_GET = "/app/datasource/type/all";
+export const DATASOURCE_CONFIGURED_GET_BY_ID = "/app/datasource/configured/type";

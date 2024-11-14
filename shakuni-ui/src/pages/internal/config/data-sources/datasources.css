@@ -3,9 +3,12 @@
 }
 .datasources-headline{
     position: relative;
-    width: 100%;
     color: black;
-    font-size: 30px;
+    font-size: 25px;
+    background-color: white;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .datasource-item{
@@ -22,4 +25,24 @@
 .datasource-item-icon{
     position: absolute;
 
+}
+
+.datasources-configured-segment{
+    height: calc(100% - 200px);
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+.datasources-configured-segment-breadcrumb{
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+
+.datasource-type-segment{
+    height: calc(100% - 200px);
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px;
 }
