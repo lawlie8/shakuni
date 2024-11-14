@@ -1,7 +1,8 @@
-.datasources-main{
+.datasources-main {
     height: 100vh;
 }
-.datasources-headline{
+
+.datasources-headline {
     position: relative;
     color: black;
     font-size: 25px;
@@ -11,38 +12,80 @@
     border-radius: 10px;
 }
 
-.datasource-item{
-   margin: 20px;
-   float: left;
+.datasource-item {
+    margin: 20px;
+    float: left;
 }
 
-.datasource-item-name{
+.datasource-item-name {
     position: relative;
     top: -53px;
     left: 58px;
 }
 
-.datasource-item-icon{
+.datasource-item-icon {
     position: absolute;
 
 }
 
-.datasources-configured-segment{
+.datasources-configured-segment {
     height: calc(100% - 200px);
     background-color: white;
     margin: 20px;
     border-radius: 10px;
 }
 
-.datasources-configured-segment-breadcrumb{
+.datasources-configured-segment-breadcrumb {
     position: relative;
     top: 10px;
     left: 10px;
 }
 
-.datasource-type-segment{
+.datasource-type-segment {
     height: calc(100% - 200px);
     background-color: white;
     margin: 20px;
     border-radius: 10px;
+}
+
+.configured-datasource-list {
+    margin: 20px;
+}
+
+.configured-datasource-list-item {
+    width: 100%;
+    padding: 0px;
+}
+
+.configured-datasource-list-item h3 {
+    position: relative;
+}
+
+.datasource-item-edit-icon {
+    margin: 20px;
+    font-size: 25px;
+    &:hover{
+        color: rgb(145, 145, 145);
+        cursor: pointer;
+    }
+}
+
+.configured-datasource-add{
+    width: 100%;
+    margin-top: 10px;
+    height: 80px;
+    background-color: #2caa34;
+    border-radius: 10px;
+    &:hover{
+        background-color: #1c8a23;
+        cursor: pointer;
+    }
+}
+
+.configured-datasource-add-icon{
+    font-size:50px;
+    position:relative;
+    left:50%;
+    transform:translate(-50%);
+    color: black;
 }
