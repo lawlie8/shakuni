@@ -55,6 +55,14 @@
 .configured-datasource-list-item {
     width: 100%;
     padding: 0px;
+    margin-bottom: 10px;
+    height: 70px;
+    &:hover{
+        cursor: pointer;
+        box-shadow: 0px 0px 1px 0px rgba(148, 148, 148, 0.644);
+        border-radius: 10px;
+        background-color: #6868681e;
+    }
 }
 
 .configured-datasource-list-item h3 {
@@ -62,18 +70,32 @@
 }
 
 .datasource-item-edit-icon {
-    margin: 20px;
+    margin: 10px;
     font-size: 25px;
     &:hover{
-        color: rgb(145, 145, 145);
+        color: rgba(60, 219, 29, 0.74);
         cursor: pointer;
     }
+}
+
+.datasource-item-delete-icon {
+    margin: 10px;
+    font-size: 25px;
+    color: #fd3838;
+    &:hover{
+        color: rgb(255, 0, 0);
+        cursor: pointer;
+    }
+}
+
+.configured-datasources-action-icons{
+    
 }
 
 .configured-datasource-add{
     width: 100%;
     margin-top: 10px;
-    height: 80px;
+    height: 70px;
     background-color: #2caa34;
     border-radius: 10px;
     &:hover{

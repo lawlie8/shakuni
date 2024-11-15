@@ -6,7 +6,7 @@ import DataSourceItem from './DataSourceItem.jsx';
 import { Avatar, Breadcrumb, Button, Divider, List, notification, Tabs, Tooltip } from 'antd';
 import DataSourceJdbcConnection from './jdbc-connection/DataSourceJdbcConnection.jsx';
 import DataSourceDriverConnection from './jdbc-connection/DataSourceDriverConnection.jsx';
-import { DatabaseFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
+import { DatabaseFilled, DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
 export default function DataSources(params = { params }) {
 
 
@@ -65,6 +65,11 @@ export default function DataSources(params = { params }) {
 
     }
 
+    function handleConfiguredDataSourceDelete(item) {
+        console.log("Deleteing Item with id", item);
+
+    }
+
     return <div className="datasources-main">
         <h2 className='datasources-headline'><DatabaseFilled />  Data Sources</h2>
         <div className='datasource-type-segment' style={{ display: selectedDataSourceType === null ? 'block' : 'none' }}>
@@ -89,20 +94,29 @@ export default function DataSources(params = { params }) {
             <List className='configured-datasource-list'>
                 {
                     configuredDataSourceList?.map((item, index) => (
-                        <List.Item style={{ padding: '5px' }} className='configured-datasource-list-item'>
+                        <List.Item style={{ padding: '5px',border:'1px solid gray',borderRadius:'10px' }} className='configured-datasource-list-item'>
                             <>
                                 <img src={selectedDataSourceImageUrl} height='50px' width='50px' />
                                 <div>
                                     <h3 style={{ margin: '0px' }}>{item.name}</h3>
                                     <span style={{ margin: '0px', color: 'gray' }}>{item.description}</span>
                                 </div>
-                                <EditFilled onClick={() => handleConfiguredDataSourceEdit(item)} className='datasource-item-edit-icon' />
+
+                                <div className='configured-datasources-action-icons'>
+                                    <Tooltip arrow={false} placement='topLeft' title={'Edit'}>
+                                        <EditFilled onClick={() => handleConfiguredDataSourceEdit(item)} className='datasource-item-edit-icon' />
+                                    </Tooltip>
+
+                                    <Tooltip arrow={false} placement='topLeft' title={'Delete'}>
+                                        <DeleteFilled onClick={() => handleConfiguredDataSourceDelete(item)} className='datasource-item-delete-icon' />
+                                    </Tooltip>
+                                </div>
                             </>
                         </List.Item>
                     ))
                 }
                 <Tooltip arrow={false} placement="bottom" title={'Add New DataSource'} color='black'>
-                    <List.Item className='configured-datasource-add' onClick={()=>handleConfiguredDataSourceAdd(selectedDataSourceType)}>
+                    <List.Item className='configured-datasource-add' onClick={() => handleConfiguredDataSourceAdd(selectedDataSourceType)}>
                         <PlusCircleFilled className='configured-datasource-add-icon' />
                     </List.Item>
                 </Tooltip>

@@ -62,7 +62,6 @@ export default function GlobalHeader() {
 
 //Fetch Email for Display in Avatar
 function fetchEmail() {
-    console.log(emailFromLocalStorage);
     
     if (email !== undefined && email !=='') {
         return email;
