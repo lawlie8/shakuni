@@ -16,7 +16,7 @@ export default function DataSources(params = { params }) {
 
     const [datasourceType, setDataSourceType] = useState([]);
     const [selectedDataSourceType, setSelectedDataSourceType] = useState({ id: null, label: '', actionType: '' })
-    const [configuredDataSourceList, setConfiguredDataSourceList] = useState([{ id: 5, name: 'maria 10server', description: 'MaraDb Server Description' }, { id: 6, name: 'Postgres 10 Server', description: 'Postgres Server Description' }])
+    const [configuredDataSourceList, setConfiguredDataSourceList] = useState([]);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
     const [selectedDataSourceImageUrl, setSelectedDataSourceImageUrl] = useState('');
 
@@ -56,10 +56,10 @@ export default function DataSources(params = { params }) {
             fetchConfiguredDataSourcesById(item.id)
                 .then((response) => {
                     setBreadCrumbItems([...breadCrumbItems, { title: <span><img src={item.dataSourceImageUrl} onClick={()=>handleBreadCrumbDataSourceClick(item)} className='datasource-breadcrumb-image'></img>{item.dataSourceLabel}</span> }]);
-                    //setConfiguredDataSourceList(response.data)
+                    setConfiguredDataSourceList(response.data)
                 }).catch((error) => {
-                    //setSelectedDataSourceType({ id: null, label: '', actionType: 'View' })
-                    //setConfiguredDataSourceList([]);
+                    setSelectedDataSourceType({ id: null, label: '', actionType: 'View' })
+                    setConfiguredDataSourceList([]);
                 });
         } else {
             notification.error({ message: "Error", description: 'Inactive DataSource', duration: 1, style: { width: '250px' } })
@@ -131,8 +131,8 @@ export default function DataSources(params = { params }) {
                                 <>
                                     <img src={selectedDataSourceImageUrl} height='50px' width='50px' />
                                     <div>
-                                        <h3 style={{ margin: '0px' }}>{item.name}</h3>
-                                        <span style={{ margin: '0px', color: 'gray' }}>{item.description}</span>
+                                        <h3 style={{ margin: '0px' }}>{item.datasourceName}</h3>
+                                        <span style={{ margin: '0px', color: 'gray' }}>{item.datasourceDescription}</span>
                                     </div>
 
                                     <div className='configured-datasources-action-icons'>

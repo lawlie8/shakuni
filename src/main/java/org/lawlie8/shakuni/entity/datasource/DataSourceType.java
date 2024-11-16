@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "datasource_type")
-public class DataSource {
+public class DataSourceType {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

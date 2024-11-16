@@ -68,3 +68,16 @@ INSERT INTO `datasource_type` (
 'Postgres Sql');
 
 
+CREATE TABLE `configured_datasource` (
+  `id` INT NOT NULL,
+  `datasource_name` VARCHAR(200) NOT NULL,
+  `datasource_description` VARCHAR(400) NULL,
+  `created_by` VARCHAR(100) NULL,
+  `creation_date` DATETIME NULL,
+  `datasource_type` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `datasource_name_UNIQUE` (`datasource_name` ASC) VISIBLE)
+COMMENT = 'Saved DataSources by User';
+
+
+
