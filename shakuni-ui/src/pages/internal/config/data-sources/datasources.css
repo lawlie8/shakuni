@@ -2,6 +2,14 @@
     height: 100vh;
 }
 
+.datasources-view{
+    height: 100vh;
+}
+
+.datasources-add-edit{
+    height: 100vh;
+}
+
 .datasources-headline {
     position: relative;
     color: black;

@@ -112,7 +112,7 @@ return (
             </li>
             <li className="header-user-logo">
                 <Dropdown menu={{ items, onClick }} >
-                    <Avatar className="header-user-logo-avatar" src={{ fetchUserAvatarImage }} size={35} style={{ backgroundColor: 'purple' }} onClick={userAvatarClick()}>{fetchEmail().toUpperCase()[0]}</Avatar>
+                    <Avatar className="header-user-logo-avatar" src={{ fetchUserAvatarImage }} size={35} style={{ backgroundColor: 'purple' }} onClick={userAvatarClick()}>{fetchEmail()?.toUpperCase()[0]}</Avatar>
                 </Dropdown>
             </li>
         </ul>

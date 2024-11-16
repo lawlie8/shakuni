@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react';
 import './datasource-service.js';
 import './datasources.css';
-import { fetchConfiguredDataSourcesbyId, fetchDataSourceTypes } from './datasource-service.js';
+import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
-import { Avatar, Breadcrumb, Button, Divider, List, notification, Tabs, Tooltip } from 'antd';
+import { Breadcrumb, Divider, List, notification, Tooltip } from 'antd';
 import DataSourceJdbcConnection from './jdbc-connection/DataSourceJdbcConnection.jsx';
 import DataSourceDriverConnection from './jdbc-connection/DataSourceDriverConnection.jsx';
 import { DatabaseFilled, DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
+
+
 export default function DataSources(params = { params }) {
 
 
 
 
     const [datasourceType, setDataSourceType] = useState([]);
-    const [selectedDataSourceType, setSelectedDataSourceType] = useState(null)
+    const [selectedDataSourceType, setSelectedDataSourceType] = useState({id:null,label:'',actionType:''})
     const [configuredDataSourceList, setConfiguredDataSourceList] = useState([{ id: 1, name: 'maria 10server', description: 'MaraDb Server Description' }, { id: 2, name: 'Postgres 10 Server', description: 'Postgres Server Description' }])
-    const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { setSelectedDataSourceType(null); setBreadCrumbItems(breadCrumbItems) }} /></>) }]);
+    const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { setSelectedDataSourceType({id:null,label:'',actionType:''}); setBreadCrumbItems(breadCrumbItems) }} /></>) }]);
     const [selectedDataSourceImageUrl, setSelectedDataSourceImageUrl] = useState('');
+
+    const [addEditDataSourceType, setAddEditDataSourceType] = useState({id:null,label:'',actionType:''});
 
     const dataSourceTabItems = [{
         key: '1',
@@ -39,14 +43,16 @@ export default function DataSources(params = { params }) {
 
     function handleDatasourceItemClick(item) {
         if (item.active) {
+
             setSelectedDataSourceImageUrl(item.dataSourceImageUrl);
-            setSelectedDataSourceType(item.id)
-            fetchConfiguredDataSourcesbyId(item.id)
+            setSelectedDataSourceType({id:item.id,label:item.dataSourceLabel,actionType:'View'});
+
+            fetchConfiguredDataSourcesById(item.id)
                 .then((response) => {
-                    setBreadCrumbItems([...breadCrumbItems, { title: item.dataSourceLabel }])
+                    setBreadCrumbItems([...breadCrumbItems, { title: item.dataSourceLabel }]);
                     //setConfiguredDataSourceList(response.data)
                 }).catch((error) => {
-                    setSelectedDataSourceType(null)
+                    setSelectedDataSourceType({id:null,label:'',actionType:'View'})
                     //setConfiguredDataSourceList([]);
                 });
         } else {
@@ -57,11 +63,15 @@ export default function DataSources(params = { params }) {
 
     function handleConfiguredDataSourceEdit(item) {
         console.log("Editing item  with id", item.id);
+        setSelectedDataSourceType({id: item.id,label:item.dataSourceLabel,actionType:'Edit'})
+        setAddEditDataSourceType({id:item.id,label:item.dataSourceLabel,actionType:'Edit'});
 
     }
 
     function handleConfiguredDataSourceAdd(item) {
         console.log("Editing item  with id", item);
+        setSelectedDataSourceType({id: item.id,label:item.dataSourceLabel,actionType:'Add'})
+        setAddEditDataSourceType({id:item.id,label:item.dataSourceLabel,actionType:'Add'});
 
     }
 
@@ -71,59 +81,66 @@ export default function DataSources(params = { params }) {
     }
 
     return <div className="datasources-main">
-        <h2 className='datasources-headline'><DatabaseFilled />  Data Sources</h2>
-        <div className='datasource-type-segment' style={{ display: selectedDataSourceType === null ? 'block' : 'none' }}>
-            <div className='datasource-type-list' style={{ display: selectedDataSourceType === null ? 'block' : 'none', marginTop: '20px' }}>
-                {
+        <div className='datasources-view' style={{ display: addEditDataSourceType.id === null ? 'block' : 'none' }}>
+            <h2 className='datasources-headline'><DatabaseFilled />  Data Sources</h2>
+            <div className='datasource-type-segment' style={{ display: selectedDataSourceType.id === null ? 'block' : 'none' }}>
+                <div className='datasource-type-list' style={{ display: selectedDataSourceType.id === null ? 'block' : 'none', marginTop: '20px' }}>
+                    {
 
-                    datasourceType?.map((item) => (
-                        <div className='datasource-item' onClick={() => handleDatasourceItemClick(item)}>
-                            <DataSourceItem params={item} />
-                        </div>
-                    ))
-                }
+                        datasourceType?.map((item) => (
+                            <div className='datasource-item' onClick={() => handleDatasourceItemClick(item)}>
+                                <DataSourceItem params={item} />
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
 
-        </div>
+            <div className='datasources-configured-segment' style={{ display: selectedDataSourceType.id !== null ? 'block' : 'none' }}>
+                <Breadcrumb className='datasources-configured-segment-breadcrumb'
+                    items={breadCrumbItems}
+                />
+                <Divider style={{ width: 'calc(100% - 20px)', marginTop: '20px', borderColor: 'lightgray' }} />
+                <List className='configured-datasource-list'>
+                    {
+                        configuredDataSourceList?.map((item, index) => (
+                            <List.Item style={{ padding: '5px', border: '1px solid gray', borderRadius: '10px' }} className='configured-datasource-list-item'>
+                                <>
+                                    <img src={selectedDataSourceImageUrl} height='50px' width='50px' />
+                                    <div>
+                                        <h3 style={{ margin: '0px' }}>{item.name}</h3>
+                                        <span style={{ margin: '0px', color: 'gray' }}>{item.description}</span>
+                                    </div>
 
-        <div className='datasources-configured-segment' style={{ display: selectedDataSourceType !== null ? 'block' : 'none' }}>
-            <Breadcrumb className='datasources-configured-segment-breadcrumb'
-                items={breadCrumbItems}
-            />
-            <Divider style={{ width: 'calc(100% - 20px)', marginTop: '20px', borderColor: 'lightgray' }} />
-            <List className='configured-datasource-list'>
-                {
-                    configuredDataSourceList?.map((item, index) => (
-                        <List.Item style={{ padding: '5px',border:'1px solid gray',borderRadius:'10px' }} className='configured-datasource-list-item'>
-                            <>
-                                <img src={selectedDataSourceImageUrl} height='50px' width='50px' />
-                                <div>
-                                    <h3 style={{ margin: '0px' }}>{item.name}</h3>
-                                    <span style={{ margin: '0px', color: 'gray' }}>{item.description}</span>
-                                </div>
+                                    <div className='configured-datasources-action-icons'>
+                                        <Tooltip arrow={false} placement='topLeft' title={'Edit'}>
+                                            <EditFilled onClick={() => handleConfiguredDataSourceEdit(item)} className='datasource-item-edit-icon' />
+                                        </Tooltip>
 
-                                <div className='configured-datasources-action-icons'>
-                                    <Tooltip arrow={false} placement='topLeft' title={'Edit'}>
-                                        <EditFilled onClick={() => handleConfiguredDataSourceEdit(item)} className='datasource-item-edit-icon' />
-                                    </Tooltip>
-
-                                    <Tooltip arrow={false} placement='topLeft' title={'Delete'}>
-                                        <DeleteFilled onClick={() => handleConfiguredDataSourceDelete(item)} className='datasource-item-delete-icon' />
-                                    </Tooltip>
-                                </div>
-                            </>
+                                        <Tooltip arrow={false} placement='topLeft' title={'Delete'}>
+                                            <DeleteFilled onClick={() => handleConfiguredDataSourceDelete(item)} className='datasource-item-delete-icon' />
+                                        </Tooltip>
+                                    </div>
+                                </>
+                            </List.Item>
+                        ))
+                    }
+                    <Tooltip arrow={false} placement="bottom" title={'Add New DataSource'} color='black'>
+                        <List.Item className='configured-datasource-add' onClick={() => handleConfiguredDataSourceAdd(selectedDataSourceType)}>
+                            <PlusCircleFilled className='configured-datasource-add-icon' />
                         </List.Item>
-                    ))
-                }
-                <Tooltip arrow={false} placement="bottom" title={'Add New DataSource'} color='black'>
-                    <List.Item className='configured-datasource-add' onClick={() => handleConfiguredDataSourceAdd(selectedDataSourceType)}>
-                        <PlusCircleFilled className='configured-datasource-add-icon' />
-                    </List.Item>
-                </Tooltip>
-            </List>
+                    </Tooltip>
+                </List>
 
+            </div>
         </div>
 
+        <div className='datasources-add-edit' style={{ display: addEditDataSourceType.id !== null ? 'block' : 'none' }}>
+            <h2 className='datasources-headline'><DatabaseFilled /> {addEditDataSourceType.actionType} <span style={{color:'gray'}}>{selectedDataSourceType.label}</span>  Data Source</h2>
+            <div className='datasource-type-segment'>
+
+            </div>
+        </div>
 
     </div>
 
