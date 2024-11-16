@@ -25,18 +25,18 @@ instance.interceptors.response.use(
 
     return response
     },error =>{
-        if(error.response.status === 403){
-            notification.error({
-            message:error.response.status,
-            duration:1,
-            description:"Login Required",
-            style: { width: '250px' }
-        })
-        const delayFucnt = setTimeout(() => {
-           window.location.href = "/"
-        }, 1000);
+    //     if(error.response.status === 403){
+    //         notification.error({
+    //         message:error.response.status,
+    //         duration:1,
+    //         description:"Login Required",
+    //         style: { width: '250px' }
+    //     })
+    //     const delayFucnt = setTimeout(() => {
+    //        window.location.href = "/"
+    //     }, 1000);
 
-    }
+    // }
 
     return error
 

@@ -18,8 +18,10 @@ export default function GlobalHeader() {
             logout().then((response) => {
                 if (response.status === 200) {
                     notification.success({
-                        message: "Logged Out",
+                        message: "Success",
                         duration: 1,
+                        description:'Logged Out',
+                        style:{width:'200px'}
                     })
                     navigate("/");
                 }
@@ -37,7 +39,7 @@ export default function GlobalHeader() {
     const items = [
         {
             key: '1',
-            label: email !== '' ? '' : emailFromLocalStorage,
+            label: fetchEmail(),
             disabled: true,
         },
         {
@@ -79,7 +81,6 @@ function fetchUserAvatarImage() {
 
 function navbarClick(item) {
     navigate(item.url)
-    
 }
 
 

@@ -1,0 +1,11 @@
+.datasource-jdbc-segment{
+    color:black;
+    margin: 0px;
+    height: calc(100vh - 242px);
+}
+
+.datasource-details{
+    height: calc(100vh - 242px);
+    padding: 10px;
+    border-radius: 10px;
+}

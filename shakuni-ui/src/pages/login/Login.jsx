@@ -22,7 +22,7 @@ export function Login() {
                     message: "Sucess",
                     duration: 1,
                     description: "Logged In",
-                    style: { width: '250px' }
+                    style: { width: '200px' }
                 })
 
                 //Save User Details

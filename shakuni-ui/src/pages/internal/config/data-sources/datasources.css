@@ -119,3 +119,16 @@
     transform:translate(-50%);
     color: black;
 }
+
+.datasource-breadcrumb-image{
+    height:15px;
+    width:15px;
+    top:25%;
+    left:0%;
+    position:relative;
+    transform:translate(-25%,-15%);
+    &:hover{
+        filter: contrast(0.5);
+        cursor: pointer;
+    }
+}
