@@ -92,9 +92,10 @@ export default function DataSources(params = { params }) {
                 notification.success({
                     message:'Success',
                     description:'DataSource Deleted SuccessFully',
-                    duration:1
+                    duration:1,
+                    width:'200px'
                 })
-            //useLocation("/");
+            setConfiguredDataSourceList(configuredDataSourceList.filter(a=> a.id !== item.id));
             }
         })
     }
