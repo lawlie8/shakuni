@@ -3,10 +3,11 @@ import './datasource-service.js';
 import './datasources.css';
 import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
-import { Breadcrumb, Divider, List, notification, Tooltip } from 'antd';
+import { Breadcrumb, Divider, List, notification, Popconfirm, Tooltip } from 'antd';
 import DataSourceJdbcConnection from './jdbc-connection/DataSourceJdbcConnection.jsx';
 import DataSourceDriverConnection from './jdbc-connection/DataSourceDriverConnection.jsx';
-import { DatabaseFilled, DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
+import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
+import { useLocation } from 'react-router-dom';
 
 
 export default function DataSources(params = { params }) {
@@ -93,13 +94,8 @@ export default function DataSources(params = { params }) {
                     description:'DataSource Deleted SuccessFully',
                     duration:1
                 })
+            //useLocation("/");
             }
-        }).catch((error)=>{
-            notification.error({
-                message:'Error',
-                description:'Error',
-                duration:1
-            }) 
         })
     }
 
@@ -127,7 +123,7 @@ export default function DataSources(params = { params }) {
                 <List className='configured-datasource-list'>
                     {
                         configuredDataSourceList?.map((item, index) => (
-                            <List.Item style={{ padding: '5px', border: '1px solid gray', borderRadius: '10px' }} className='configured-datasource-list-item'>
+                            <List.Item key={item.id} style={{ padding: '5px', border: '1px solid gray', borderRadius: '10px' }} className='configured-datasource-list-item'>
                                 <>
                                     <img src={selectedDataSourceImageUrl} height='50px' width='50px' />
                                     <div>
@@ -136,12 +132,35 @@ export default function DataSources(params = { params }) {
                                     </div>
 
                                     <div className='configured-datasources-action-icons'>
+
+                                        {/* <span style={{color:'gray',top:'-5px',position:'relative'}}>{new Date(item.creationDate).getMonth()}
+                                            /{new Date(item.creationDate).getDate()}
+                                            /{new Date(item.creationDate).getFullYear()}
+                                             -{new Date(item.creationDate).getHours()}
+                                            :{new Date(item.creationDate).getMinutes()}
+                                            :{new Date(item.creationDate).getSeconds()}</span> */}
+
+                                        <Tooltip arrow={false} placement='topLeft' title={`Created By :   ${item.createdBy} Created On : ${new Date(item.creationDate).getMonth()}/${new Date(item.creationDate).getDate()}/${new Date(item.creationDate).getFullYear()}
+                                             -${new Date(item.creationDate).getHours()}:${new Date(item.creationDate).getMinutes()}:${new Date(item.creationDate).getSeconds()}`}>
+                                            <InfoCircleFilled className='datasource-item-edit-icon' />
+                                        </Tooltip>
+
+
                                         <Tooltip arrow={false} placement='topLeft' title={'Edit'}>
                                             <EditFilled onClick={() => handleConfiguredDataSourceEdit(item)} className='datasource-item-edit-icon' />
                                         </Tooltip>
 
+
                                         <Tooltip arrow={false} placement='topLeft' title={'Delete'}>
-                                            <DeleteFilled onClick={() => handleConfiguredDataSourceDelete(item)} className='datasource-item-delete-icon' />
+                                            <Popconfirm
+                                            placement="leftTop"
+                                            title="Delete Confirmation"
+                                            description="Are you sure you want to delete this Data-Source?"
+                                            okText="Yes"
+                                            cancelText="No"
+                                            onConfirm={() => handleConfiguredDataSourceDelete(item)}>
+                                                <DeleteFilled className='datasource-item-delete-icon' />
+                                            </Popconfirm>
                                         </Tooltip>
                                     </div>
                                 </>

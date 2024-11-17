@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,6 @@ public class DataSourceResource {
     public ResponseEntity<?> deleteDataSourceById(@PathVariable(name = "id") Long id){
         try {
             dataSourceService.deleteConfiguredDataSourceById(id);
-            return ResponseEntity.ok("Deleted Successfully");
         }catch (Exception e){
             System.out.println(e);
         }
