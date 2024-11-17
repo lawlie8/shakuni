@@ -1,0 +1,26 @@
+.datasource-jdbc-segment{
+    color:black;
+    margin: 0px;
+    height: calc(100vh - 242px);
+}
+
+.datasource-details{
+    height: calc(100vh - 242px);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.datasource-connection-test-connection-button{
+    background-color: #8bae26;
+    color: white;
+    border: 1px solid green;
+    margin: 2px;
+
+}
+
+.datasource-connection-cancel-button{
+    margin: 2px;
+    background-color: #d43838;
+    color: white;
+    border: 1px solid red;
+}

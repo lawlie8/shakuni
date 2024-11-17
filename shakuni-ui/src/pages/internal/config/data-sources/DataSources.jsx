@@ -4,41 +4,24 @@ import './datasources.css';
 import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
 import { Breadcrumb, Divider, List, notification, Popconfirm, Tooltip } from 'antd';
-import DataSourceJdbcConnection from './jdbc-connection/DataSourceJdbcConnection.jsx';
-import DataSourceDriverConnection from './jdbc-connection/DataSourceDriverConnection.jsx';
 import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
-import { useLocation } from 'react-router-dom';
+import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
 
 
 export default function DataSources(params = { params }) {
-
-
-
 
     const [datasourceType, setDataSourceType] = useState([]);
     const [selectedDataSourceType, setSelectedDataSourceType] = useState({ id: null, label: '', actionType: '' })
     const [configuredDataSourceList, setConfiguredDataSourceList] = useState([]);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
     const [selectedDataSourceImageUrl, setSelectedDataSourceImageUrl] = useState('');
-
     const [addEditDataSourceType, setAddEditDataSourceType] = useState({ id: null, label: '', actionType: '' });
 
-    const dataSourceTabItems = [{
-        key: '1',
-        lebel: 'Connection Properties',
-        childrem: <DataSourceJdbcConnection />
-    }, {
-        key: '2',
-        lebel: 'Driver Properties',
-        childrem: <DataSourceDriverConnection />
-    },]
 
 
     useEffect(() => {
         fetchDataSourceTypes().then((response) => {
             setDataSourceType(response.data)
-        }).catch((error) => {
-
         })
     }, [])
 
@@ -186,7 +169,7 @@ export default function DataSources(params = { params }) {
                 />
                 <Divider style={{ width: 'calc(100% - 20px)', margin: '20px 0px 0px 0px',paddingBottom:'0px' ,borderColor: 'lightgray' }} />
 
-                <DataSourceJdbcConnection id={addEditDataSourceType.id} label={selectedDataSourceType.label} actionType={addEditDataSourceType.actionType} />
+                <DataSourceConnection id={addEditDataSourceType.id} label={selectedDataSourceType.label} actionType={addEditDataSourceType.actionType} />
             </div>
         </div>
 
