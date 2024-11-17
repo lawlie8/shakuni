@@ -30,6 +30,12 @@ public class DataSourceResource {
         return ResponseEntity.ok(dataSourceTypeList);
     }
 
+    @RequestMapping(path = "/datasource/configured/type/properties/get/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDataSourcePropertiesById(@PathVariable(name = "id") Long id){
+        dataSourceService.getDataSourcePropertiesById(id);
+        return ResponseEntity.ok("dataSourceTypeList");
+    }
+
     @RequestMapping(path = "/datasource/configured/delete/{id}",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteDataSourceById(@PathVariable(name = "id") Long id){
         try {
