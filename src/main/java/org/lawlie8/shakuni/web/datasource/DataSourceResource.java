@@ -35,6 +35,7 @@ public class DataSourceResource {
         try {
             dataSourceService.deleteConfiguredDataSourceById(id);
         }catch (Exception e){
+            //add logs here
             System.out.println(e);
         }
         return ResponseEntity.ok("Deleted Successfully");
