@@ -1,9 +1,9 @@
-import { DatabaseFilled } from "@ant-design/icons";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     selectedDataSouceType : 0,
     selectedDataSourceImageUrl : '',
+    selectedDataSourceProperties:[],
 }
 
 const dataSourceSlice = createSlice({
@@ -20,9 +20,12 @@ const dataSourceSlice = createSlice({
             localStorage.setItem('setStoreSelectedDataSourceImageUrl',state.selectedDataSourceImageUrl);
         },
 
+        setStoreselectedDataSourceProperties(state,action){
+            state.selectedDataSourceProperties = action.payload;
+        },
 
     }
 });
 
-export const {setStoreSelectedDataSourceType,setStoreSelectedDataSourceImageUrl} = dataSourceSlice.actions;
+export const {setStoreSelectedDataSourceType,setStoreSelectedDataSourceImageUrl,setStoreselectedDataSourceProperties} = dataSourceSlice.actions;
 export default dataSourceSlice.reducer;

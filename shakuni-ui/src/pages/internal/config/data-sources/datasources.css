@@ -41,6 +41,7 @@
     background-color: white;
     margin: 20px;
     border-radius: 10px;
+    overflow-y: auto;
 }
 
 .datasources-configured-segment-breadcrumb {
@@ -50,10 +51,11 @@
 }
 
 .datasource-type-segment {
-    height: calc(100% - 200px);
     background-color: white;
     margin: 20px;
     border-radius: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .configured-datasource-list {

@@ -1,23 +1,22 @@
 package org.lawlie8.shakuni.web.datasource.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.lawlie8.shakuni.web.datasource.util.DataSourceConstants.*;
 
 public enum DataSourcePropertiesEnum {
 
-    NAME("name","Name", "Connection", "String", "true", "false", "true", "LEFT"),
-    DESCRIPTION("description","Description", "Connection", "String", "false", "false", "true", "RIGHT"),
-    HOST("host", "Host","Connection", "String", "true", "false", "true", "LEFT"),
-    PORT("port","Port", "Connection", "Integer", "true", "false", "true", "RIGHT"),
-    ADDITIONAL_PROPERTIES("additionalProperties","Additional Properties", "Connection", "Map", "false", "false", "true", "RIGHT"),
-    USERNAME("userName","User Name", "Connection", "String", "true", "false", "true", "LEFT"),
-    PASSWORD("password","Password", "Connection", "String", "true", "true", "true", "LEFT"),
-    DATABASE("database","Database", "Connection", "String", "true", "false", "true", "RIGHT");
+    NAME("1","name","Name", "Connection", "Input", "true", "false", "true", "LEFT"),
+    DESCRIPTION("2","description","Description", "Connection", "TextArea", "false", "false", "true", "RIGHT"),
+    HOST("3","host", "Host","Connection", "Input", "true", "false", "true", "LEFT"),
+    PORT("4","port","Port", "Connection", "InputNumber", "true", "false", "true", "RIGHT"),
+    USERNAME("5","userName","User Name", "Connection", "Input", "true", "false", "true", "LEFT"),
+    PASSWORD("6","password","Password", "Connection", "Input.Password", "true", "true", "true", "LEFT"),
+    DATABASE("7","database","Database", "Connection", "Input", "true", "false", "true", "RIGHT"),
+    ADDITIONAL_PROPERTIES("8","additionalProperties","Additional Properties", "Connection", "TextArea", "false", "false", "true", "RIGHT");
 
+    private final String ordinal;
     private final String propertyName;
     private final String propertyLabel;
     private final String pageType;
@@ -27,7 +26,8 @@ public enum DataSourcePropertiesEnum {
     private final String isActive;
     private final String position;
 
-    DataSourcePropertiesEnum(String propertyName,String propertyLabel, String pageType, String dataType, String isRequired, String isSensitive, String isActive, String position) {
+    DataSourcePropertiesEnum(String ordinal,String propertyName,String propertyLabel, String pageType, String dataType, String isRequired, String isSensitive, String isActive, String position) {
+        this.ordinal = ordinal;
         this.propertyName = propertyName;
         this.propertyLabel = propertyLabel;
         this.pageType = pageType;
@@ -70,8 +70,13 @@ public enum DataSourcePropertiesEnum {
         return position;
     }
 
+    public String getOrdinal() {
+        return ordinal;
+    }
+
     public Map<String,String> getAllValues() {
         Map<String,String> values = new HashMap<>();
+        values.put(ORDINAL,getOrdinal());
         values.put(PROPERTY_NAME,getPropertyName());
         values.put(PROPERTY_LABEL,getPropertyLabel());
         values.put(PAGE_TYPE,getPageType());

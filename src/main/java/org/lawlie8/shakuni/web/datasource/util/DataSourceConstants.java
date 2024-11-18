@@ -4,6 +4,8 @@ public interface DataSourceConstants {
     Long MARIADB_DATASOURCE_ID = 1L;
     Long POSTGRES_DATASOURCE_ID = 2L;
 
+    String ORDINAL = "ordinal";
+
     String PROPERTY_NAME = "propertyName";
     String PROPERTY_LABEL = "propertyLabel";
 

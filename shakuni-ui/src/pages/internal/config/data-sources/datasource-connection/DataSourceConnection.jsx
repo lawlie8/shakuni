@@ -14,7 +14,7 @@ export default function DataSourceConnection({jdbcProperties,driverProperties,id
     const tabItems = [{
         key:'1',
         label:'Connection',
-        children:<DataSourceJdbcConnection jdbcProprties={jdbcProperties} />,
+        children:<DataSourceJdbcConnection jdbcProperties={jdbcProperties} />,
     },
     {
         key:'2',
@@ -25,7 +25,7 @@ export default function DataSourceConnection({jdbcProperties,driverProperties,id
 
 
     return <div className="datasource-connection-segment">
-       <Tabs className='datasource-details'  tabBarExtraContent={tabsExtraItems} defaultActiveKey="1" items={tabItems} >
+       <Tabs className='datasource-details' tabBarExtraContent={tabsExtraItems} defaultActiveKey="1" items={tabItems} >
 
        </Tabs>
     </div>

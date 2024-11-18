@@ -6,6 +6,8 @@ import DataSourceItem from './DataSourceItem.jsx';
 import { Breadcrumb, Divider, List, notification, Popconfirm, Tooltip } from 'antd';
 import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
+import { setStoreselectedDataSourceProperties } from './DataSourceSlice.js';
+import { useDispatch } from 'react-redux';
 
 
 export default function DataSources(params = { params }) {
@@ -18,7 +20,7 @@ export default function DataSources(params = { params }) {
     const [addEditDataSourceType, setAddEditDataSourceType] = useState({ id: null, label: '', actionType: '' });
     const [dataSourcePropList,setDataSourcePropList] = useState([]);
     const [driverPropList,setDriverPropList] = useState([]);
-
+    const dispatch = useDispatch();
 
     useEffect(() => {
         fetchDataSourceTypes().then((response) => {
@@ -71,6 +73,7 @@ export default function DataSources(params = { params }) {
         fetchConfiguredDataSourcePropertiesByDataSourceTypeId(item.id)
         .then(response=>{
             setDataSourcePropList(response.data)
+            dispatch(setStoreselectedDataSourceProperties(response.data));
         })
     }
 

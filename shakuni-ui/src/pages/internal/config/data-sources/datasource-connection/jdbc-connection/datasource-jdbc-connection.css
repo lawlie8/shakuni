@@ -1,3 +1,34 @@
-.datasource-connection-jdbc-segment{
+.datasource-connection-jdbc-segment {
+    position: relative;
     
+}
+
+.jdbc-connection-user-input {
+    width: 250px;
+}
+
+.jdbc-connection-user-text {
+    width: 250px;
+}
+
+.jdbc-connection-user-password {
+    width: 250px;
+}
+
+.jdbc-connection-user-number {
+    width: 250px;
+}
+
+.datasource-jdbc-properties-table {
+    left: 100px;
+}
+
+.form-left{
+    border-radius: 10px;
+    margin: 10px;
+}
+
+
+.datasource-jdbc-properties-table-left {
+    margin: 0px;
 }
