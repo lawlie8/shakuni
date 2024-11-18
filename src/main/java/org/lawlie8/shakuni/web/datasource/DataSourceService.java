@@ -8,7 +8,10 @@ import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum;
 import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -38,12 +41,13 @@ public class DataSourceService {
         }
         return null;
     }
-
-    public void getDataSourcePropertiesById(Long datasourceTypeId){
+    public Map<DataSourcePropertiesEnum,Map<String,String>> getDataSourcePropertiesById(Long datasourceTypeId){
         List<DataSourcePropertiesEnum> properties =  DataSourcePropertiesMap.getInstance().getDataSourcePropertiesById(datasourceTypeId);
+        Map<DataSourcePropertiesEnum,Map<String,String>> propListMap = new HashMap<>();
         for(int i = 0;i<properties.size();i++){
-            System.out.println(properties.get(i).getAllValues());
+            propListMap.put(properties.get(i),properties.get(i).getAllValues());
         }
+        return propListMap;
     }
 
     public void deleteConfiguredDataSourceById(Long id){

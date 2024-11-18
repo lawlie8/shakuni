@@ -2,6 +2,7 @@ package org.lawlie8.shakuni.web.datasource;
 
 import org.lawlie8.shakuni.entity.datasource.ConfiguredDataSource;
 import org.lawlie8.shakuni.entity.datasource.DataSourceType;
+import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -32,8 +34,8 @@ public class DataSourceResource {
 
     @RequestMapping(path = "/datasource/configured/type/properties/get/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDataSourcePropertiesById(@PathVariable(name = "id") Long id){
-        dataSourceService.getDataSourcePropertiesById(id);
-        return ResponseEntity.ok("dataSourceTypeList");
+        Map<DataSourcePropertiesEnum, Map<String,String>> properties = dataSourceService.getDataSourcePropertiesById(id);
+        return ResponseEntity.ok(properties);
     }
 
     @RequestMapping(path = "/datasource/configured/delete/{id}",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
