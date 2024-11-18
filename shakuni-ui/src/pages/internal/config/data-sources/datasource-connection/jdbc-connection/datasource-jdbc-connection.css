@@ -1,5 +1,4 @@
 .datasource-connection-jdbc-segment {
-    position: relative;
     
 }
 
@@ -31,4 +30,20 @@
 
 .datasource-jdbc-properties-table-left {
     margin: 0px;
+}
+
+.datasource-connection-jdbc-form{
+    position: relative;
+    width: 100%;
+    left: 200px;
+}
+
+.datasource-connection-extra{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin: 20px;
+    height: calc(100% - 200px);
+    width: 400px;
+    border-radius: 10px;
 }

@@ -8,6 +8,7 @@ public interface DataSourceConstants {
 
     String PROPERTY_NAME = "propertyName";
     String PROPERTY_LABEL = "propertyLabel";
+    String EXAMPLE = "example";
 
     String DATA_TYPE = "dataType";
     String PAGE_TYPE = "pageType";
