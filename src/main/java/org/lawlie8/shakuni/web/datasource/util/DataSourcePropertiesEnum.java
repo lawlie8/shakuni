@@ -12,7 +12,7 @@ public enum DataSourcePropertiesEnum {
     HOST("3","host", "mysql.database.windows.net","Host","Connection", "Input", "true", "false", "true", "LEFT"),
     PORT("4","port","3600","Port", "Connection", "InputNumber", "true", "false", "true", "RIGHT"),
     USERNAME("5","userName","adminUser","User Name", "Connection", "Input", "true", "false", "true", "LEFT"),
-    PASSWORD("6","password","secretPassword","Password", "Connection", "Input.Password", "true", "true", "true", "LEFT"),
+    PASSWORD("6","password","E;kh@r9z=D6ju_N()8~Yb*","Password", "Connection", "Input.Password", "true", "true", "true", "LEFT"),
     DATABASE("7","database","prodDb1","Database", "Connection", "Input", "true", "false", "true", "RIGHT"),
     ADDITIONAL_PROPERTIES("8","TrustServerCertificate=false","additionalProperties","Additional Properties", "Connection", "TextArea", "false", "false", "true", "RIGHT");
 
