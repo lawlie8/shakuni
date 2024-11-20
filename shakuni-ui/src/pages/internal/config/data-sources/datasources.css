@@ -134,3 +134,11 @@
         cursor: pointer;
     }
 }
+.header-user-logo-avatar{
+    top: -6px;
+    margin: 5px;
+    &:hover{
+        box-shadow: 0px 0px 5px #dfdfdf;
+        cursor:pointer;
+    }
+}

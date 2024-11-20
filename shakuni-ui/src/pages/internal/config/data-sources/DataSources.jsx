@@ -3,13 +3,11 @@ import './datasource-service.js';
 import './datasources.css';
 import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcePropertiesByDataSourceTypeId, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
-import { Breadcrumb, Divider, List, notification, Popconfirm, Tooltip } from 'antd';
+import { Avatar, Breadcrumb, Button, Divider, Dropdown, List, notification, Popconfirm, Tooltip } from 'antd';
 import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
 import { setStoreConfiguredDataSourceList, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, setStoreSelectedDataSourceTypeLabel } from './DataSourceSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-
-
 export default function DataSources(params = { params }) {
 
     const [datasourceType, setDataSourceType] = useState([]);
@@ -137,16 +135,16 @@ export default function DataSources(params = { params }) {
 
                                     <div className='configured-datasources-action-icons'>
 
-                                        {/* <span style={{color:'gray',top:'-5px',position:'relative'}}>{new Date(item.creationDate).getMonth()}
+
+                                        {<span style={{ color: 'gray', top: '-2px', position: 'relative' ,fontStyle:'oblique',margin:'5px' }}>{new Date(item.creationDate).getMonth()}
                                             /{new Date(item.creationDate).getDate()}
                                             /{new Date(item.creationDate).getFullYear()}
-                                             -{new Date(item.creationDate).getHours()}
+                                            -{new Date(item.creationDate).getHours()}
                                             :{new Date(item.creationDate).getMinutes()}
-                                            :{new Date(item.creationDate).getSeconds()}</span> */}
+                                            :{new Date(item.creationDate).getSeconds()}</span>}
 
-                                        <Tooltip arrow={false} placement='topLeft' title={`Created By :   ${item.createdBy} Created On : ${new Date(item.creationDate).getMonth()}/${new Date(item.creationDate).getDate()}/${new Date(item.creationDate).getFullYear()}
-                                             -${new Date(item.creationDate).getHours()}:${new Date(item.creationDate).getMinutes()}:${new Date(item.creationDate).getSeconds()}`}>
-                                            <InfoCircleFilled className='datasource-item-edit-icon' />
+                                        <Tooltip arrow={false} placement='topLeft' title={`Created By :   ${item.createdBy}`}>
+                                            <Avatar className="header-user-logo-avatar"  size={30} style={{ backgroundColor: 'purple' }}>{item.createdBy?.toUpperCase()[0]}</Avatar>
                                         </Tooltip>
 
 
