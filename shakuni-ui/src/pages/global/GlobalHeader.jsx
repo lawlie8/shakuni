@@ -1,8 +1,9 @@
 import { LogoutOutlined, ProfileOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, message, notification } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logout } from "./globalService";
+import { setStoreSelectedDataSourceType,setStoreSelectedAddEditDataSourceType } from "../internal/config/data-sources/DataSourceSlice";
 
 export default function GlobalHeader() {
 
@@ -11,7 +12,7 @@ export default function GlobalHeader() {
     const emailFromLocalStorage = localStorage.getItem("userName");
     
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     const onClick = ({ key }) => {
         if (key === '3') {
             //logout for key 3
@@ -24,6 +25,9 @@ export default function GlobalHeader() {
                         style:{width:'200px'}
                     })
                     navigate("/");
+                    dispatch(setStoreSelectedDataSourceType(0))
+                    dispatch(setStoreSelectedAddEditDataSourceType(0));
+
                 }
             }).catch(() => {
                 notification.error({

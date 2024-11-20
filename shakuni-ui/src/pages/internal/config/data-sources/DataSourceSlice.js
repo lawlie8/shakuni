@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    selectedDataSouceType : 0,
+    addEditDataSourceType : 0,
+    selectedDataSourceType : 0,
+    selectedDataSourceTypeLabel : '',
+    selectedDataSourceTypeAction : '',
+
     selectedDataSourceImageUrl : '',
     selectedDataSourceProperties:[],
+    configuredDataSourceList:[],
 }
 
 const dataSourceSlice = createSlice({
@@ -11,8 +16,8 @@ const dataSourceSlice = createSlice({
     initialState,
     reducers:{
         setStoreSelectedDataSourceType(state,action){
-            state.selectedDataSouceType = action.payload;
-            localStorage.setItem('setStoreSelectedDataSourceType',state.selectedDataSouceType);
+            state.selectedDataSourceType = action.payload;
+            localStorage.setItem('setStoreSelectedDataSourceType',state.selectedDataSourceType);
         },
 
         setStoreSelectedDataSourceImageUrl(state,action){
@@ -20,12 +25,30 @@ const dataSourceSlice = createSlice({
             localStorage.setItem('setStoreSelectedDataSourceImageUrl',state.selectedDataSourceImageUrl);
         },
 
-        setStoreselectedDataSourceProperties(state,action){
+        setStoreSelectedDataSourceProperties(state,action){
             state.selectedDataSourceProperties = action.payload;
         },
+
+        setStoreConfiguredDataSourceList(state,action){
+            state.configuredDataSourceList = action.payload;
+        },
+        
+        setStoreSelectedAddEditDataSourceType(state,action){
+            state.addEditDataSourceType = action.payload;
+        },
+
+        setStoreSelectedDataSourceTypeLabel(state,action){
+            state.selectedDataSourceTypeLabel = action.payload;
+        },
+
+        setStoreSelectedDataSourceTypeAction(state,action){
+            state.selectedDataSourceTypeAction = action.payload;
+        },
+
+
 
     }
 });
 
-export const {setStoreSelectedDataSourceType,setStoreSelectedDataSourceImageUrl,setStoreselectedDataSourceProperties} = dataSourceSlice.actions;
+export const {setStoreSelectedDataSourceType,setStoreSelectedDataSourceTypeAction,setStoreSelectedDataSourceTypeLabel,setStoreSelectedAddEditDataSourceType,setStoreSelectedDataSourceImageUrl,setStoreSelectedDataSourceProperties,setStoreConfiguredDataSourceList} = dataSourceSlice.actions;
 export default dataSourceSlice.reducer;

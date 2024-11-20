@@ -6,20 +6,23 @@ import DataSourceItem from './DataSourceItem.jsx';
 import { Breadcrumb, Divider, List, notification, Popconfirm, Tooltip } from 'antd';
 import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
-import { setStoreselectedDataSourceProperties } from './DataSourceSlice.js';
-import { useDispatch } from 'react-redux';
+import { setStoreConfiguredDataSourceList, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, setStoreSelectedDataSourceTypeLabel } from './DataSourceSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function DataSources(params = { params }) {
 
     const [datasourceType, setDataSourceType] = useState([]);
-    const [selectedDataSourceType, setSelectedDataSourceType] = useState({ id: null, label: '', actionType: '' })
-    const [configuredDataSourceList, setConfiguredDataSourceList] = useState([]);
+    const addEditDataSourceType = useSelector((state) => state.dataSource.addEditDataSourceType);
+    const selectedDataSourceType = useSelector((state) => state.dataSource.selectedDataSourceType);
+    const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
+    const selectedDataSourceTypeAction = useSelector((state) => state.dataSource.selectedDataSourceTypeAction);
+
+    const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
-    const [selectedDataSourceImageUrl, setSelectedDataSourceImageUrl] = useState('');
-    const [addEditDataSourceType, setAddEditDataSourceType] = useState({ id: null, label: '', actionType: '' });
-    const [dataSourcePropList,setDataSourcePropList] = useState([]);
-    const [driverPropList,setDriverPropList] = useState([]);
+    const selectedDataSourceImageUrl = useSelector((state) => state.dataSource.selectedDataSourceImageUrl);
+    const [dataSourcePropList, setDataSourcePropList] = useState([]);
+    const [driverPropList, setDriverPropList] = useState([]);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -29,24 +32,27 @@ export default function DataSources(params = { params }) {
     }, [])
 
     function handleBreadCrumbDatabaseClick() {
-        setSelectedDataSourceType({ id: null, label: '', actionType: '' });
-        setAddEditDataSourceType({ id: null, label: '', actionType: '' });
+
+        dispatch(setStoreSelectedDataSourceType(0));
+        dispatch(setStoreSelectedAddEditDataSourceType(0));
+        dispatch(setStoreSelectedDataSourceTypeLabel(''));
+
         setBreadCrumbItems([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }])
     }
 
     function handleDatasourceItemClick(item) {
         if (item.active) {
+            dispatch(setStoreSelectedDataSourceImageUrl(item.dataSourceImageUrl));
 
-            setSelectedDataSourceImageUrl(item.dataSourceImageUrl);
-            setSelectedDataSourceType({ id: item.id, label: item.dataSourceLabel, actionType: 'View' });
-
+            dispatch(setStoreSelectedDataSourceType(item.id));
             fetchConfiguredDataSourcesById(item.id)
                 .then((response) => {
-                    setBreadCrumbItems([...breadCrumbItems, { title: <span><img src={item.dataSourceImageUrl} onClick={()=>handleBreadCrumbDataSourceClick(item)} className='datasource-breadcrumb-image'></img>{item.dataSourceLabel}</span> }]);
-                    setConfiguredDataSourceList(response.data)
+                    setBreadCrumbItems([...breadCrumbItems, { title: <span><img src={item.dataSourceImageUrl} onClick={() => handleBreadCrumbDataSourceClick(item)} className='datasource-breadcrumb-image'></img>{item.dataSourceLabel}</span> }]);
+                    dispatch(setStoreSelectedDataSourceTypeLabel(item.dataSourceLabel));
+                    dispatch(setStoreConfiguredDataSourceList(response.data));
                 }).catch((error) => {
-                    setSelectedDataSourceType({ id: null, label: '', actionType: 'View' })
-                    setConfiguredDataSourceList([]);
+                    dispatch(setStoreSelectedDataSourceType(0));
+                    dispatch(setStoreConfiguredDataSourceList([]));
                 });
         } else {
             notification.error({ message: "Error", description: 'Inactive DataSource', duration: 1, style: { width: '250px' } })
@@ -54,49 +60,54 @@ export default function DataSources(params = { params }) {
 
     }
 
-    function handleBreadCrumbDataSourceClick(item){
-        setSelectedDataSourceType({ id: item.id, label: item.label, actionType: 'Edit' });
-        setAddEditDataSourceType({ id: null, label: '', actionType: 'View' });
+    function handleBreadCrumbDataSourceClick(item) {
+        dispatch(setStoreSelectedDataSourceType(item.id));
+        dispatch(setStoreSelectedAddEditDataSourceType(0));
+
     }
 
     function handleConfiguredDataSourceEdit(item) {
-        console.log("Editing item  with id", item.id);
-        setSelectedDataSourceType({ id: item.id, label: selectedDataSourceType.label, actionType: 'Edit' })
-        setAddEditDataSourceType({ id: item.id, label: item.dataSourceLabel, actionType: 'Edit' });
+        dispatch(setStoreSelectedDataSourceType(item.id));
+        dispatch(setStoreSelectedAddEditDataSourceType(item.id));
+        dispatch(setStoreSelectedDataSourceTypeLabel(selectedDataSourceTypeLabel));
+        dispatch(setStoreSelectedDataSourceTypeAction("Edit"));
+
 
     }
 
     function handleConfiguredDataSourceAdd(item) {
-        setSelectedDataSourceType({ id: item.id, label: item.label, actionType: 'Add' })
-        setAddEditDataSourceType({ id: item.id, label: item.label, actionType: 'Add' });
-        
-        fetchConfiguredDataSourcePropertiesByDataSourceTypeId(item.id)
-        .then(response=>{
-            setDataSourcePropList(response.data)
-            dispatch(setStoreselectedDataSourceProperties(response.data));
-        })
+        dispatch(setStoreSelectedAddEditDataSourceType(item));
+        dispatch(setStoreSelectedDataSourceTypeLabel(selectedDataSourceTypeLabel));
+        dispatch(setStoreSelectedDataSourceTypeAction("Add"));
+
+        fetchConfiguredDataSourcePropertiesByDataSourceTypeId(item)
+            .then(response => {
+                setDataSourcePropList(response.data)
+                dispatch(setStoreSelectedDataSourceProperties(response.data));
+            })
+
     }
 
     function handleConfiguredDataSourceDelete(item) {
         deleteConfiguredDataSourceById(item.id)
-        .then((response)=>{
-            if(response.status === 200){
-                notification.success({
-                    message:'Success',
-                    description:'DataSource Deleted SuccessFully',
-                    duration:1,
-                    width:'200px'
-                })
-            setConfiguredDataSourceList(configuredDataSourceList.filter(a=> a.id !== item.id));
-            }
-        })
+            .then((response) => {
+                if (response.status === 200) {
+                    notification.success({
+                        message: 'Success',
+                        description: 'DataSource Deleted SuccessFully',
+                        duration: 1,
+                        width: '200px'
+                    })
+                    dispatch(setStoreConfiguredDataSourceList(configuredDataSourceList.filter(a => a.id !== item.id)));
+                }
+            })
     }
 
     return <div className="datasources-main">
-        <div className='datasources-view' style={{ display: addEditDataSourceType.id === null ? 'block' : 'none' }}>
+        <div className='datasources-view' style={{ display: addEditDataSourceType === 0 ? 'block' : 'none' }}>
             <h2 className='datasources-headline'><DatabaseFilled />  Data Sources</h2>
-            <div className='datasource-type-segment' style={{ display: selectedDataSourceType.id === null ? 'block' : 'none' }}>
-                <div className='datasource-type-list' style={{ display: selectedDataSourceType.id === null ? 'block' : 'none', marginTop: '20px' }}>
+            <div className='datasource-type-segment' style={{ display: selectedDataSourceType === 0 ? 'block' : 'none' }}>
+                <div className='datasource-type-list' style={{ display: selectedDataSourceType === 0 ? 'block' : 'none', marginTop: '20px' }}>
                     {
 
                         datasourceType?.map((item) => (
@@ -108,7 +119,7 @@ export default function DataSources(params = { params }) {
                 </div>
             </div>
 
-            <div className='datasources-configured-segment' style={{ display: selectedDataSourceType.id !== null ? 'block' : 'none' }}>
+            <div className='datasources-configured-segment' style={{ display: selectedDataSourceType !== 0 ? 'block' : 'none' }}>
                 <Breadcrumb className='datasources-configured-segment-breadcrumb'
                     items={breadCrumbItems}
                 />
@@ -146,12 +157,12 @@ export default function DataSources(params = { params }) {
 
                                         <Tooltip arrow={false} placement='topLeft' title={'Delete'}>
                                             <Popconfirm
-                                            placement="leftTop"
-                                            title="Delete Confirmation"
-                                            description="Are you sure you want to delete this Data-Source?"
-                                            okText="Yes"
-                                            cancelText="No"
-                                            onConfirm={() => handleConfiguredDataSourceDelete(item)}>
+                                                placement="leftTop"
+                                                title="Delete Confirmation"
+                                                description="Are you sure you want to delete this Data-Source?"
+                                                okText="Yes"
+                                                cancelText="No"
+                                                onConfirm={() => handleConfiguredDataSourceDelete(item)}>
                                                 <DeleteFilled className='datasource-item-delete-icon' />
                                             </Popconfirm>
                                         </Tooltip>
@@ -170,15 +181,15 @@ export default function DataSources(params = { params }) {
             </div>
         </div>
 
-        <div className='datasources-add-edit' style={{ display: addEditDataSourceType.id !== null ? 'block' : 'none' }}>
-            <h2 className='datasources-headline'><DatabaseFilled /> {addEditDataSourceType.actionType} <span style={{ color: 'gray'}}>{selectedDataSourceType.label}</span> Data Source</h2>
+        <div className='datasources-add-edit' style={{ display: addEditDataSourceType !== 0 ? 'block' : 'none' }}>
+            <h2 className='datasources-headline'><DatabaseFilled /> {selectedDataSourceTypeAction} <span style={{ color: 'gray' }}>{selectedDataSourceTypeLabel}</span> Data Source</h2>
             <div className='datasource-type-segment'>
                 <Breadcrumb className='datasources-configured-segment-breadcrumb'
                     items={breadCrumbItems}
                 />
-                <Divider style={{ width: 'calc(100% - 20px)', margin: '20px 0px 0px 0px',paddingBottom:'0px' ,borderColor: 'lightgray' }} />
+                <Divider style={{ width: 'calc(100% - 20px)', margin: '20px 0px 0px 0px', paddingBottom: '0px', borderColor: 'lightgray' }} />
 
-                <DataSourceConnection jdbcProperties={dataSourcePropList} driverProperties={driverPropList} id={addEditDataSourceType.id} label={selectedDataSourceType.label} actionType={addEditDataSourceType.actionType} />
+                <DataSourceConnection jdbcProperties={dataSourcePropList} driverProperties={driverPropList} id={addEditDataSourceType} label={selectedDataSourceTypeLabel} actionType={selectedDataSourceTypeAction} />
             </div>
         </div>
 
