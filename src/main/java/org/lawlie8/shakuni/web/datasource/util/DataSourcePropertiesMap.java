@@ -41,6 +41,17 @@ public class DataSourcePropertiesMap {
                 PASSWORD,
                 DATABASE
         )));
+
+        props.put(MYSQL_DATASOURCE_ID, new ArrayList<>(Arrays.asList(
+                NAME,
+                DESCRIPTION,
+                HOST,
+                PORT,
+                ADDITIONAL_PROPERTIES,
+                USERNAME,
+                PASSWORD,
+                DATABASE
+        )));
     }
 
     public List<DataSourcePropertiesEnum> getDataSourcePropertiesById(Long dataStoreTypeId) {

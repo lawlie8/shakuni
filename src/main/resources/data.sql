@@ -80,4 +80,22 @@ CREATE TABLE `configured_datasource` (
 COMMENT = 'Saved DataSources by User';
 
 
-
+INSERT INTO `datasource_type` (
+`id`,
+`data_source_type`,
+`is_active`,
+`datasource_version`,
+`is_default_driver`,
+`driver_version`,
+`datasource_img_url`,
+`datasource_site`,
+`datasource_label`) VALUES (
+'3',
+'mysql',
+'1',
+'8.4.3',
+'1',
+'9.1.0',
+'/datasource_logo/mysql_logo.png',
+'https://www.mysql.com/',
+'MySQL');

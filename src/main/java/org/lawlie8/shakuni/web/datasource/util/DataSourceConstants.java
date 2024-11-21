@@ -3,6 +3,7 @@ package org.lawlie8.shakuni.web.datasource.util;
 public interface DataSourceConstants {
     Long MARIADB_DATASOURCE_ID = 1L;
     Long POSTGRES_DATASOURCE_ID = 2L;
+    Long MYSQL_DATASOURCE_ID = 3L;
 
     String ORDINAL = "ordinal";
 
