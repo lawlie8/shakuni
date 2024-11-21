@@ -7,8 +7,8 @@ const initialState = {
     selectedDataSourceTypeAction : '',
 
     selectedDataSourceImageUrl : '',
-    selectedDataSourceProperties:[],
-    configuredDataSourceList:[],
+    selectedDataSourceProperties : [],
+    configuredDataSourceList : [],
 }
 
 const dataSourceSlice = createSlice({

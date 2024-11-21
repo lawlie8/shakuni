@@ -1,22 +1,22 @@
 import { Button, Card, Flex, Form, Input, InputNumber, List } from "antd";
 import './datasource-jdbc-connection.css';
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
+import { setStoreSelectedDataSourceProperties } from "../../DataSourceSlice";
 export default function DataSourceJdbcConnection({ jdbcProperties }) {
 
     let storeJdbcProperties = useSelector((state) => state.dataSource.selectedDataSourceProperties)
-    const [jdbcPropertiesList, setJdbcPropertiesList] = useState(storeJdbcProperties);
-
+    const dispatch = useDispatch();
     useEffect(() => {
         sortPropertiesPerOrdinal()
     }, [])
 
     function sortPropertiesPerOrdinal() {
-        let entries = Object.entries(jdbcPropertiesList);
+        let entries = Object.entries(storeJdbcProperties);
         entries.sort(([, a], [, b]) => Number(a.ordinal) - Number(b.ordinal));
-        setJdbcPropertiesList(Object.fromEntries(entries));
+        dispatch(setStoreSelectedDataSourceProperties(Object.fromEntries(entries)))
     }
 
     function handleTestConnection(values){
@@ -39,34 +39,34 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
         <Form name="jdbc-connection-form" className="datasource-connection-jdbc-form" onFinish={()=>handleTestConnection(values)} layout="vertical">
             <List>
                 {
-                    Object.keys(jdbcPropertiesList).map(e => (
+                    Object.keys(storeJdbcProperties).map(e => (
                         <List.Item style={{ border: 'none', margin: '0px' }}>
-                            <Form.Item className="form-left" label={jdbcPropertiesList[e].propertyLabel} name={jdbcPropertiesList[e].propertyName}>
+                            <Form.Item className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} name={storeJdbcProperties[e].propertyName}>
                                 {
                                     {
-                                        'Input': <Input required={jdbcPropertiesList[e].isRequired}
-                                            disabled={!jdbcPropertiesList[e].isActive}
-                                            placeholder={jdbcPropertiesList[e].example}
-                                            className="jdbc-connection-user-input"></Input>,
+                                        'Input': <><Input required={Boolean(storeJdbcProperties[e].isRequired)}
+                                            disabled={!storeJdbcProperties[e].isActive}
+                                            placeholder={storeJdbcProperties[e].example}
+                                            className="jdbc-connection-user-input"></Input><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></> ,
 
-                                        'TextArea': <TextArea
-                                            required={jdbcPropertiesList[e].isRequired}
-                                            disabled={!jdbcPropertiesList[e].isActive}
-                                            placeholder={jdbcPropertiesList[e].example}
-                                            className="jdbc-connection-user-text"></TextArea>,
+                                        'TextArea': <><TextArea
+                                            required={Boolean(storeJdbcProperties[e].isRequired)}
+                                            disabled={!storeJdbcProperties[e].isActive}
+                                            placeholder={storeJdbcProperties[e].example}
+                                            className="jdbc-connection-user-text"></TextArea><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
-                                        'Input.Password': <Input.Password
-                                            required={jdbcPropertiesList[e].isRequired}
-                                            disabled={!jdbcPropertiesList[e].isActive}
-                                            placeholder={jdbcPropertiesList[e].example}
-                                            className="jdbc-connection-user-password"></Input.Password>,
+                                        'Input.Password': <><Input.Password
+                                            required={Boolean(storeJdbcProperties[e].isRequired)}
+                                            disabled={!storeJdbcProperties[e].isActive}
+                                            placeholder={storeJdbcProperties[e].example}
+                                            className="jdbc-connection-user-password"></Input.Password><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
-                                        'InputNumber': <InputNumber
-                                            required={jdbcPropertiesList[e].isRequired}
-                                            disabled={!jdbcPropertiesList[e].isActive}
-                                            placeholder={jdbcPropertiesList[e].example}
-                                            className="jdbc-connection-user-number"></InputNumber>
-                                    }[jdbcPropertiesList[e].dataType]
+                                        'InputNumber': <><InputNumber
+                                            required={Boolean(storeJdbcProperties[e].isRequired)}
+                                            disabled={!storeJdbcProperties[e].isActive}
+                                            placeholder={storeJdbcProperties[e].example}
+                                            className="jdbc-connection-user-number"></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
+                                    }[storeJdbcProperties[e].dataType]
                                 }
                             </Form.Item>
                         </List.Item>

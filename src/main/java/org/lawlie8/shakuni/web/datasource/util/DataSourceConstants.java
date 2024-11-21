@@ -16,5 +16,7 @@ public interface DataSourceConstants {
     String IS_SENSITIVE = "isSensitive";
     String IS_ACTIVE = "isActive";
     String POSITION = "position";
+    String PROPERTY_DESCRIPTION = "propertyDescription";
+
 
 }

@@ -74,6 +74,7 @@ export default function DataSources(params = { params }) {
     }
 
     function handleConfiguredDataSourceAdd(item) {
+        
         dispatch(setStoreSelectedAddEditDataSourceType(item));
         dispatch(setStoreSelectedDataSourceTypeLabel(selectedDataSourceTypeLabel));
         dispatch(setStoreSelectedDataSourceTypeAction("Add"));

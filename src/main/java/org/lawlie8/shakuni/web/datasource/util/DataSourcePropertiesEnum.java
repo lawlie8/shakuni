@@ -7,14 +7,101 @@ import static org.lawlie8.shakuni.web.datasource.util.DataSourceConstants.*;
 
 public enum DataSourcePropertiesEnum {
 
-    NAME("1","name","Prod Server 1","Name", "Connection", "Input", "true", "false", "true", "LEFT"),
-    DESCRIPTION("2","description","Data-Source Used For Production","Description", "Connection", "TextArea", "false", "false", "true", "RIGHT"),
-    HOST("3","host", "mysql.database.windows.net","Host","Connection", "Input", "true", "false", "true", "LEFT"),
-    PORT("4","port","3600","Port", "Connection", "InputNumber", "true", "false", "true", "RIGHT"),
-    USERNAME("5","userName","adminUser","User Name", "Connection", "Input", "true", "false", "true", "LEFT"),
-    PASSWORD("6","password","E;kh@r9z=D6ju_N()8~Yb*","Password", "Connection", "Input.Password", "true", "true", "true", "LEFT"),
-    DATABASE("7","database","prodDb1","Database", "Connection", "Input", "true", "false", "true", "RIGHT"),
-    ADDITIONAL_PROPERTIES("8","additionalProperties","TrustServerCertificate=false","Additional Properties", "Connection", "TextArea", "false", "false", "true", "RIGHT");
+    NAME("1",
+            "name",
+            "ex. Prod Server 1",
+            "Name",
+            "Connection",
+            "Input",
+            "true",
+            "false",
+            "true",
+            "LEFT",
+            "Name to Save Configured Data-Source (Must be Unique)"),
+
+    DESCRIPTION("2",
+            "description",
+            "ex. Data-Source Used For Production",
+            "Description",
+            "Connection",
+            "TextArea",
+            "false",
+            "false",
+            "true",
+            "RIGHT",
+            "Additional Description for Data-Source (200 max characters)"),
+
+    HOST("3",
+            "host",
+            "ex. mysql.database.windows.net",
+            "Host",
+            "Connection",
+            "Input",
+            "true",
+            "false",
+            "true",
+            "LEFT",
+            "Host Name is unique identifier assigned to a device or system on a network"),
+
+    PORT("4",
+            "port",
+            "ex. 3600",
+            "Port",
+            "Connection",
+            "InputNumber",
+            "true",
+            "false",
+            "true",
+            "RIGHT",
+            "Port at which the Service is Hosted (range 0-65535)"),
+
+    USERNAME("5",
+            "userName",
+            "ex. adminUser",
+            "User Name",
+            "Connection",
+            "Input",
+            "true",
+            "false",
+            "true",
+            "LEFT",
+            "Unique Identifier to login into Data-Source (Must be Present at Data-Source)"),
+
+    PASSWORD("6",
+            "password",
+            "ex. E;kh@r9z=D6ju_N()8~Yb*",
+            "Password",
+            "Connection",
+            "Input.Password",
+            "true",
+            "true",
+            "true",
+            "LEFT",
+            "Password associated with User Name (note : All Passwords are Encrypted and Stored Locally)"),
+
+    DATABASE("7",
+            "database",
+            "ex. prodDb1",
+            "Database",
+            "Connection",
+            "Input",
+            "true",
+            "false",
+            "true",
+            "RIGHT",
+            "Database to Connect (Must be Present on Data-Source)"),
+
+    ADDITIONAL_PROPERTIES("8",
+            "additionalProperties",
+            "ex. TrustServerCertificate=false;",
+            "Additional Properties",
+            "Connection",
+            "TextArea",
+            "false",
+            "false",
+            "true",
+            "RIGHT",
+            "Additional Jdbc Properties (properties must be separated by ';')");
 
     private final String ordinal;
     private final String propertyName;
@@ -26,8 +113,9 @@ public enum DataSourcePropertiesEnum {
     private final String isSensitive;
     private final String isActive;
     private final String position;
+    private final String propertyDescription;
 
-    DataSourcePropertiesEnum(String ordinal,String propertyName,String example,String propertyLabel, String pageType, String dataType, String isRequired, String isSensitive, String isActive, String position) {
+    DataSourcePropertiesEnum(String ordinal,String propertyName,String example,String propertyLabel, String pageType, String dataType, String isRequired, String isSensitive, String isActive, String position,String propertyDescription) {
         this.ordinal = ordinal;
         this.propertyName = propertyName;
         this.example = example;
@@ -38,6 +126,7 @@ public enum DataSourcePropertiesEnum {
         this.isSensitive = isSensitive;
         this.isActive = isActive;
         this.position = position;
+        this.propertyDescription = propertyDescription;
     }
 
     public String getPropertyName() {
@@ -79,6 +168,10 @@ public enum DataSourcePropertiesEnum {
         return example;
     }
 
+    public String getPropertyDescription() {
+        return propertyDescription;
+    }
+
     public Map<String,String> getAllValues() {
         Map<String,String> values = new HashMap<>();
         values.put(ORDINAL,getOrdinal());
@@ -91,6 +184,7 @@ public enum DataSourcePropertiesEnum {
         values.put(IS_SENSITIVE,isSensitive());
         values.put(IS_ACTIVE,isActive());
         values.put(POSITION,getPosition());
+        values.put(PROPERTY_DESCRIPTION,getPropertyDescription());
         return values;
     }
 }
