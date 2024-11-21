@@ -1,42 +1,36 @@
-import { Card, Form, Input, InputNumber, List } from "antd";
+import { Button, Card, Form, Input, InputNumber, List } from "antd";
 import './datasource-jdbc-connection.css';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
+import { setStoreSelectedAddEditDataSourceType } from '../../DataSourceSlice';
+
 export default function DataSourceJdbcConnection({ jdbcProperties }) {
 
     let storeJdbcProperties = useSelector((state) => state.dataSource.selectedDataSourceProperties)
+    const dispatch = useDispatch();
 
-
-    function handleTestConnection(values){
+    const handleTestConnection = (values) => {
         console.log(values);
     }
+    function handleCancelConnection() {
+        dispatch(setStoreSelectedAddEditDataSourceType(0));
+    }
 
-    // LEFT  <tr><td>LEFT</td> 
-    // RIGHT <td>RIGHT</td></tr>
-    // LEFT  <tr><td>LEFT</td>
-    // RIGHT <td>RIGHT</td></tr>
-    // LEFT  <tr><td>LEFT</td><td></td></tr>
-    // LEFT  <tr><td>LEFT</td>
-    // RIGHT <td>RIGHT</td></tr>
-    // RIGHT <tr><td></td><td>RIGHT</td></tr> 
-
-
-    // <input type={jdbcPropertiesList[e].dataType} placeholder={jdbcPropertiesList[e].propertyLabel} className="jdbc-connection-user-input"></input>
 
     return <div className="datasource-connection-jdbc-segment">
-        <Form name="jdbc-connection-form" className="datasource-connection-jdbc-form" onFinish={()=>handleTestConnection(values)} layout="vertical">
+        <Form name="jdbc-connection-form" className="datasource-connection-jdbc-form" onFinish={handleTestConnection} layout="vertical">
             <List>
                 {
                     Object.keys(storeJdbcProperties).map(e => (
-                        <List.Item style={{ border: 'none', margin: '0px' }}>
-                            <Form.Item className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} name={storeJdbcProperties[e].propertyName}>
+                        <Form.Item className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} name={storeJdbcProperties[e].propertyName}>
+                            <List.Item style={{ border: 'none', margin: '0px', padding: '0px' }}>
                                 {
                                     {
                                         'Input': <><Input required={Boolean(storeJdbcProperties[e].isRequired)}
                                             disabled={!storeJdbcProperties[e].isActive}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-input"></Input><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></> ,
+                                            className="jdbc-connection-user-input" /><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'TextArea': <><TextArea
                                             required={Boolean(storeJdbcProperties[e].isRequired)}
@@ -57,17 +51,24 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
                                             className="jdbc-connection-user-number"></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
                                     }[storeJdbcProperties[e].dataType]
                                 }
-                            </Form.Item>
-                        </List.Item>
+                            </List.Item>
+                        </Form.Item>
+
                     ))
                 }
-            </List>
 
+            </List>
+            <div className="form-buttons">
+                <Form.Item>
+                    <button className='datasource-connection-test-connection-button' type='submit'>Test Connection</button>
+                    <button className='datasource-connection-cancel-button' onClick={() => handleCancelConnection()}>Cancel</button>
+                </Form.Item>
+            </div>
         </Form>
         <div className="datasource-connection-extra">
             <List>
                 <List.Item>
-                    <Card size="small" style={{width: 200,boxShadow:'0px 0px 5px gray'}} cover={<img alt="example" src="/misc/jdbc-connection-card-1.jpg"></img>}>
+                    <Card size="small" style={{ width: 200, boxShadow: '0px 0px 5px gray' }} cover={<img alt="example" src="/misc/jdbc-connection-card-1.jpg"></img>}>
                         <Meta
                             title="Data is Secured"
                             description="All Jdbc Properties are Encrypted Locally"

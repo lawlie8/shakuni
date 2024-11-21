@@ -7,8 +7,14 @@ import { useDispatch } from 'react-redux';
 
 export default function DataSourceConnection({jdbcProperties,driverProperties,id,label,actionType}){
     const dispatch = useDispatch()
+    
+    const handleTestConnection = (values)=>{
+        console.log(values);
+            ///console.log(values);
+            
+        }
     const tabsExtraItems = {
-        right:<><Button className='datasource-connection-test-connection-button'>Test Connection</Button>
+        right:<><Button className='datasource-connection-test-connection-button' type='submit'  form='jdbc-connection-form'>Test Connection</Button>
         <Button className='datasource-connection-cancel-button' onClick={()=>handleCancelConnection()}>Cancel</Button></>,
     }
 
@@ -31,7 +37,7 @@ export default function DataSourceConnection({jdbcProperties,driverProperties,id
 
 
     return <div className="datasource-connection-segment">
-       <Tabs className='datasource-details' tabBarExtraContent={tabsExtraItems} defaultActiveKey="1" items={tabItems} >
+       <Tabs className='datasource-details'  defaultActiveKey="1" items={tabItems} >
 
        </Tabs>
     </div>
