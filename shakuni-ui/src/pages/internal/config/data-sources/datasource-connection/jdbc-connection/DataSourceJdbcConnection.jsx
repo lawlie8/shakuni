@@ -1,23 +1,12 @@
-import { Button, Card, Flex, Form, Input, InputNumber, List } from "antd";
+import { Card, Form, Input, InputNumber, List } from "antd";
 import './datasource-jdbc-connection.css';
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
-import { setStoreSelectedDataSourceProperties } from "../../DataSourceSlice";
 export default function DataSourceJdbcConnection({ jdbcProperties }) {
 
     let storeJdbcProperties = useSelector((state) => state.dataSource.selectedDataSourceProperties)
-    const dispatch = useDispatch();
-    useEffect(() => {
-        sortPropertiesPerOrdinal()
-    }, [])
 
-    function sortPropertiesPerOrdinal() {
-        let entries = Object.entries(storeJdbcProperties);
-        entries.sort(([, a], [, b]) => Number(a.ordinal) - Number(b.ordinal));
-        dispatch(setStoreSelectedDataSourceProperties(Object.fromEntries(entries)))
-    }
 
     function handleTestConnection(values){
         console.log(values);

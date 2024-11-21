@@ -11,6 +11,13 @@ const initialState = {
     configuredDataSourceList : [],
 }
 
+function sortPropertiesPerOrdinal(props) {
+    let entries = Object.entries(props);
+    entries.sort(([, a], [, b]) => Number(a.ordinal) - Number(b.ordinal));
+    return Object.fromEntries(entries);
+}
+
+
 const dataSourceSlice = createSlice({
     name : 'dataSourceSlice',
     initialState,
@@ -26,7 +33,7 @@ const dataSourceSlice = createSlice({
         },
 
         setStoreSelectedDataSourceProperties(state,action){
-            state.selectedDataSourceProperties = action.payload;
+            state.selectedDataSourceProperties = sortPropertiesPerOrdinal(action.payload);
         },
 
         setStoreConfiguredDataSourceList(state,action){
