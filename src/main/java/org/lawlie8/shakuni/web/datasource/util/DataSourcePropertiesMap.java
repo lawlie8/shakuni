@@ -4,6 +4,12 @@ import java.util.*;
 
 import static org.lawlie8.shakuni.web.datasource.util.DataSourceConstants.*;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.*;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.ADDITIONAL_PROPERTIES;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.DATABASE;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.HOST;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.PASSWORD;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.PORT;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.USERNAME;
 
 public class DataSourcePropertiesMap {
 

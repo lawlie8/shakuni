@@ -9,3 +9,4 @@ export const DATASOURCE_TYPE_GET = "/app/datasource/type/all";
 export const DATASOURCE_CONFIGURED_GET_BY_ID = "/app/datasource/configured/type/get";
 export const DATASOURCE_PROPERTIES_GET_BY_DATASOURCE_TYPE_ID = "/app/datasource/configured/type/properties/get";
 export const DATASOURCE_CONFIGURED_DELETE_BY_ID = "/app/datasource/configured/delete";
+export const DATASOURCE_CHECK_CONNECTION = "/app/datasource/configured/check";

@@ -4,6 +4,10 @@ import org.lawlie8.shakuni.entity.datasource.ConfiguredDataSource;
 import org.lawlie8.shakuni.entity.datasource.DataSourceType;
 import org.lawlie8.shakuni.repo.ConfiguredDataSourceRepo;
 import org.lawlie8.shakuni.repo.DataSourceRepo;
+import org.lawlie8.shakuni.web.datasource.connection.DataSourceConnection;
+import org.lawlie8.shakuni.web.datasource.connection.DataSourceConnectionFactory;
+import org.lawlie8.shakuni.web.datasource.connection.DataSourceConnectionService;
+import org.lawlie8.shakuni.web.datasource.util.DataSourceConnectionObject;
 import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum;
 import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +60,11 @@ public class DataSourceService {
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+
+    public boolean checkDataSourceConnection(DataSourceConnectionObject dataSourceConnectionObject){
+        DataSourceConnection dataSourceConnection = DataSourceConnectionFactory.getDataSource(dataSourceConnectionObject.getDataSourceTypeId());
+        return dataSourceConnection.checkConnection(dataSourceConnectionObject);
     }
 
 }

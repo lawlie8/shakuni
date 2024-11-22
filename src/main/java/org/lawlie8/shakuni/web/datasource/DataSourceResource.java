@@ -2,6 +2,7 @@ package org.lawlie8.shakuni.web.datasource;
 
 import org.lawlie8.shakuni.entity.datasource.ConfiguredDataSource;
 import org.lawlie8.shakuni.entity.datasource.DataSourceType;
+import org.lawlie8.shakuni.web.datasource.util.DataSourceConnectionObject;
 import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -49,4 +50,15 @@ public class DataSourceResource {
         return ResponseEntity.ok("Deleted Successfully");
     }
 
+    @RequestMapping(path = "/datasource/configured/check",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> checkDataSourceConnection(@RequestBody DataSourceConnectionObject dataSourceConnectionObject){
+        try {
+            Boolean isCheckSuccessFull =  dataSourceService.checkDataSourceConnection(dataSourceConnectionObject);
+            return ResponseEntity.ok(isCheckSuccessFull);
+        }catch (Exception e){
+            //add logs here
+            System.out.println(e);
+        }
+        return ResponseEntity.ok("Deleted Successfully");
+    }
 }
