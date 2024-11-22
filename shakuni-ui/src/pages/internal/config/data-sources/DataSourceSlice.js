@@ -5,10 +5,10 @@ const initialState = {
     selectedDataSourceType : 0,
     selectedDataSourceTypeLabel : '',
     selectedDataSourceTypeAction : '',
-
     selectedDataSourceImageUrl : '',
     selectedDataSourceProperties : [],
     configuredDataSourceList : [],
+    selectedDataSourceValues:[],
 }
 
 function sortPropertiesPerOrdinal(props) {
@@ -36,6 +36,10 @@ const dataSourceSlice = createSlice({
             state.selectedDataSourceProperties = sortPropertiesPerOrdinal(action.payload);
         },
 
+        setStoreSelectedDataSourceValues(state,action){
+            state.selectedDataSourceValues = action.payload;
+        },
+
         setStoreConfiguredDataSourceList(state,action){
             state.configuredDataSourceList = action.payload;
         },
@@ -57,5 +61,5 @@ const dataSourceSlice = createSlice({
     }
 });
 
-export const {setStoreSelectedDataSourceType,setStoreSelectedDataSourceTypeAction,setStoreSelectedDataSourceTypeLabel,setStoreSelectedAddEditDataSourceType,setStoreSelectedDataSourceImageUrl,setStoreSelectedDataSourceProperties,setStoreConfiguredDataSourceList} = dataSourceSlice.actions;
+export const {setStoreSelectedDataSourceType,setStoreSelectedDataSourceValues,setStoreSelectedDataSourceTypeAction,setStoreSelectedDataSourceTypeLabel,setStoreSelectedAddEditDataSourceType,setStoreSelectedDataSourceImageUrl,setStoreSelectedDataSourceProperties,setStoreConfiguredDataSourceList} = dataSourceSlice.actions;
 export default dataSourceSlice.reducer;

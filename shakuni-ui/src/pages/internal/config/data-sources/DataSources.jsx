@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import './datasource-service.js';
 import './datasources.css';
-import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcePropertiesByDataSourceTypeId, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
+import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcePropertiesByDataSourceTypeId, fetchConfiguredDataSourcePropertyValuesByConfiguredDataSourceId, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
 import { Avatar, Breadcrumb, Button, Divider, Dropdown, List, notification, Popconfirm, Tooltip } from 'antd';
 import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
-import { setStoreConfiguredDataSourceList, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, setStoreSelectedDataSourceTypeLabel } from './DataSourceSlice.js';
+import { setStoreConfiguredDataSourceList, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, 
+    setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, 
+    setStoreSelectedDataSourceTypeLabel,setStoreSelectedDataSourceValues } from './DataSourceSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 export default function DataSources(params = { params }) {
 
@@ -65,12 +67,22 @@ export default function DataSources(params = { params }) {
     }
 
     function handleConfiguredDataSourceEdit(item) {
+
         dispatch(setStoreSelectedDataSourceType(item.id));
         dispatch(setStoreSelectedAddEditDataSourceType(item.id));
         dispatch(setStoreSelectedDataSourceTypeLabel(selectedDataSourceTypeLabel));
         dispatch(setStoreSelectedDataSourceTypeAction("Edit"));
 
+        fetchConfiguredDataSourcePropertiesByDataSourceTypeId(item.id)
+            .then(response => {
+                setDataSourcePropList(response.data)
+                dispatch(setStoreSelectedDataSourceProperties(response.data));
+            })
 
+        fetchConfiguredDataSourcePropertyValuesByConfiguredDataSourceId(item.id)
+        .then((response)=>{
+            dispatch(setStoreSelectedDataSourceValues(response.data))
+        })
     }
 
     function handleConfiguredDataSourceAdd(item) {

@@ -1,13 +1,15 @@
 package org.lawlie8.shakuni.web.datasource.connection;
 
+import static org.lawlie8.shakuni.web.datasource.util.DataSourceConstants.*;
+
 public class DataSourceConnectionFactory {
 
     public static DataSourceConnection getDataSource(Long id){
-        if (id == 1L) {
+        if (id == MARIADB_DATASOURCE_ID) {
             return new MariaDbDataSourceConnection();
-        } else if (id==2L) {
+        } else if (id == POSTGRES_DATASOURCE_ID) {
             return new PostgresSqlDataSourceConnection();
-        } else if (id==3L) {
+        } else if (id == MYSQL_DATASOURCE_ID) {
             return new MysqlDataSourceConnection();
         }
         return null;

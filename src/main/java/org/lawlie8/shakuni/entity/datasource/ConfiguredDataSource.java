@@ -1,7 +1,9 @@
 package org.lawlie8.shakuni.entity.datasource;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "configured_datasource")
@@ -25,7 +27,11 @@ public class ConfiguredDataSource {
     private Date creationDate;
 
     @Column(name = "datasource_type")
-    private Integer datasourceType;
+    private Long datasourceType;
+
+    @OneToMany(mappedBy = "configuredDataSource",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<DataSourceProperties> dataSourceProperties;
 
     public Long getId() {
         return id;
@@ -67,12 +73,20 @@ public class ConfiguredDataSource {
         this.creationDate = creationDate;
     }
 
-    public Integer getDatasourceType() {
+    public Long getDatasourceType() {
         return datasourceType;
     }
 
-    public void setDatasourceType(Integer datasourceType) {
+    public void setDatasourceType(Long datasourceType) {
         this.datasourceType = datasourceType;
+    }
+
+    public List<DataSourceProperties> getDataSourceProperties() {
+        return dataSourceProperties;
+    }
+
+    public void setDataSourceProperties(List<DataSourceProperties> dataSourceProperties) {
+        this.dataSourceProperties = dataSourceProperties;
     }
 
     @Override
@@ -84,6 +98,7 @@ public class ConfiguredDataSource {
                 ", createdBy='" + createdBy + '\'' +
                 ", creationDate=" + creationDate +
                 ", datasourceType=" + datasourceType +
+                ", dataSourceProperties=" + dataSourceProperties +
                 '}';
     }
 }

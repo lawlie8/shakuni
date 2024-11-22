@@ -7,16 +7,7 @@ import { useDispatch } from 'react-redux';
 
 export default function DataSourceConnection({jdbcProperties,driverProperties,id,label,actionType}){
     const dispatch = useDispatch()
-    
-    const handleTestConnection = (values)=>{
-        console.log(values);
-            ///console.log(values);
-            
-        }
-    const tabsExtraItems = {
-        right:<><Button className='datasource-connection-test-connection-button' type='submit'  form='jdbc-connection-form'>Test Connection</Button>
-        <Button className='datasource-connection-cancel-button' onClick={()=>handleCancelConnection()}>Cancel</Button></>,
-    }
+
 
     function handleCancelConnection(){
         dispatch(setStoreSelectedAddEditDataSourceType(0));

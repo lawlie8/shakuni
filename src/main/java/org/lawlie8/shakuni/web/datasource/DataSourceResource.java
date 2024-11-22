@@ -1,6 +1,7 @@
 package org.lawlie8.shakuni.web.datasource;
 
 import org.lawlie8.shakuni.entity.datasource.ConfiguredDataSource;
+import org.lawlie8.shakuni.entity.datasource.DataSourceProperties;
 import org.lawlie8.shakuni.entity.datasource.DataSourceType;
 import org.lawlie8.shakuni.web.datasource.util.DataSourceConnectionObject;
 import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum;
@@ -33,6 +34,12 @@ public class DataSourceResource {
         return ResponseEntity.ok(dataSourceTypeList);
     }
 
+    @RequestMapping(path = "/datasource/configured/value/get/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDataSourceValuesById(@PathVariable(name = "id") Long id){
+        List<DataSourceProperties> dataSourceTypeList = dataSourceService.getDataSourceValuesByConfiguredDataSourceId(id);
+        return ResponseEntity.ok(dataSourceTypeList);
+    }
+
     @RequestMapping(path = "/datasource/configured/type/properties/get/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDataSourcePropertiesById(@PathVariable(name = "id") Long id){
         Map<DataSourcePropertiesEnum, Map<String,String>> properties = dataSourceService.getDataSourcePropertiesById(id);
@@ -59,6 +66,18 @@ public class DataSourceResource {
             //add logs here
             System.out.println(e);
         }
-        return ResponseEntity.ok("Deleted Successfully");
+        return ResponseEntity.badRequest().build();
+    }
+
+    @RequestMapping(path = "/datasource/configured/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDataSourceConnection(@RequestBody DataSourceConnectionObject dataSourceConnectionObject){
+        try {
+            Boolean isCheckSuccessFull =  dataSourceService.saveDataSourceConnection(dataSourceConnectionObject);
+            return ResponseEntity.ok(isCheckSuccessFull);
+        }catch (Exception e){
+            //add logs here
+            System.out.println(e);
+        }
+        return ResponseEntity.internalServerError().build();
     }
 }

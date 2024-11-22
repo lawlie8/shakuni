@@ -1,70 +1,105 @@
-import { Button, Card, Form, Input, InputNumber, List, notification } from "antd";
+import {Card, Form, Input, InputNumber, List, notification } from "antd";
 import './datasource-jdbc-connection.css';
 import { useDispatch, useSelector } from "react-redux";
 import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
 import { setStoreSelectedAddEditDataSourceType } from '../../DataSourceSlice';
-import { checkDataSourceConnection } from "../../datasource-service";
+import { checkDataSourceConnection, saveDataSourceConnectionProperties } from "../../datasource-service";
+import { useState } from "react";
 
 export default function DataSourceJdbcConnection({ jdbcProperties }) {
 
     let storeJdbcProperties = useSelector((state) => state.dataSource.selectedDataSourceProperties)
+    let storeJdbcValues = useSelector((state) => state.dataSource.selectedDataSourceValues)
+    const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
+    const [connectionSucessFullFlag,setConnectionSuccessFullFlag] = useState(false);
+    const [propDisabled,setPropDisabled] = useState(selectedDataSourceTypeLabel === "ADD" ? false : true);
     const addEditDataSourceType = useSelector((state)=> state.dataSource.addEditDataSourceType)
     const dispatch = useDispatch();
 
     const handleTestConnection = (values) => {
-        checkDataSourceConnection(addEditDataSourceType,values).then((response)=>{
-            if(response.status === 200 && response.data === true){
-                notification.success({
-                    message:"Success",
-                    description:"Connection ok",
-                    style:{width:'200px'},
-                    duration:1,
-                })
-            }else{
-                notification.error({
-                    message:"Error",
-                    description:"Connection Failed",
-                    style:{width:'200px'},
-                })
-            }
-        })
+        console.log(values);
+        
+        if(connectionSucessFullFlag === false){
+            checkDataSourceConnection(addEditDataSourceType,values).then((response)=>{
+                if(response.status === 200 && response.data === true){
+                    notification.success({
+                        message:"Success",
+                        description:"Connection ok",
+                        style:{width:'200px'},
+                        duration:1,
+                    })
+                setConnectionSuccessFullFlag(true);
+
+                }else{
+                    notification.error({
+                        message:"Error",
+                        description:"Connection Failed",
+                        style:{width:'200px'},
+                    })
+                }
+            })
+    
+        } else {
+            saveDataSourceConnectionProperties(addEditDataSourceType,values)
+            .then((response)=>{
+                if(response.status === 200 && response.data === true){
+                    notification.success({
+                        message:"Success",
+                        description:"Connection Saved",
+                        style:{width:'200px'},
+                        duration:1,
+                    })
+                }
+                setConnectionSuccessFullFlag(false);
+            })
+        }
     }
     function handleCancelConnection() {
         dispatch(setStoreSelectedAddEditDataSourceType(0));
+        setConnectionSuccessFullFlag(false)
+    }
+
+    function getPropValueByKey(key) {
+        const property = storeJdbcValues.find(item => item.propKey === key);
+        return property ? property.propValue : null;      
+    }
+
+    function handleEdit(){
+        setPropDisabled(!propDisabled)
     }
 
 
     return <div className="datasource-connection-jdbc-segment">
-        <Form name="jdbc-connection-form" className="datasource-connection-jdbc-form" onFinish={handleTestConnection} layout="vertical">
+        <Form name="jdbc-connection-form" className="datasource-connection-jdbc-form" onFinish={handleTestConnection} initialValues={{name:'TEst'}} layout="vertical">
             <List>
                 {
                     Object.keys(storeJdbcProperties).map(e => (
-                        <Form.Item className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} required={storeJdbcProperties[e].isRequired === "true" ? true : false} name={storeJdbcProperties[e].propertyName}>
+                        <Form.Item  className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} required={storeJdbcProperties[e].isRequired === "true" ? true : false} name={storeJdbcProperties[e].propertyName}>
                             <List.Item style={{ border: 'none', margin: '0px', padding: '0px' }}>
                                 {
                                     {
                                         'Input': <><Input autoComplete="off"
                                             disabled={!storeJdbcProperties[e].isActive}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-input" /><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-input" value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></Input><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'TextArea': <><TextArea
                                             disabled={!storeJdbcProperties[e].isActive}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-text"></TextArea><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-text"  value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></TextArea><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'Input.Password': <><Input.Password
                                             autoComplete="off"
                                             disabled={!storeJdbcProperties[e].isActive}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-password"></Input.Password><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-password"  value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></Input.Password><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'InputNumber': <><InputNumber
                                            
                                             disabled={!storeJdbcProperties[e].isActive}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-number"></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
+                                            className="jdbc-connection-user-number"  value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
                                     }[storeJdbcProperties[e].dataType]
                                 }
                             </List.Item>
@@ -76,8 +111,14 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
             </List>
             <div className="form-buttons">
                 <Form.Item>
-                    <button className='datasource-connection-test-connection-button' type='submit'>Test Connection</button>
-                    <button className='datasource-connection-cancel-button' onClick={() => handleCancelConnection()}>Cancel</button>
+                    {
+                        connectionSucessFullFlag === true ? 
+                        <span style={{display:'none'}}></span>
+                        :
+                        <button className='datasource-connection-cancel-button' type="button" onClick={() => handleEdit()}>Edit</button>
+                }
+                    <button className='datasource-connection-test-connection-button' type='submit'>{connectionSucessFullFlag === true ? "Save" : "Test Connection"}</button>
+                    <button className='datasource-connection-cancel-button' type="button" onClick={() => handleCancelConnection()}>Cancel</button>
                 </Form.Item>
             </div>
         </Form>

@@ -69,7 +69,7 @@ INSERT INTO `datasource_type` (
 
 
 CREATE TABLE `configured_datasource` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `datasource_name` VARCHAR(200) NOT NULL,
   `datasource_description` VARCHAR(400) NULL,
   `created_by` VARCHAR(100) NULL,
@@ -78,7 +78,6 @@ CREATE TABLE `configured_datasource` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `datasource_name_UNIQUE` (`datasource_name` ASC) VISIBLE)
 COMMENT = 'Saved DataSources by User';
-
 
 INSERT INTO `datasource_type` (
 `id`,
@@ -99,3 +98,12 @@ INSERT INTO `datasource_type` (
 '/datasource_logo/mysql_logo.png',
 'https://www.mysql.com/',
 'MySQL');
+
+
+CREATE TABLE `datasource_properties`(
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `configured_datasource_id` INT,
+    `prop_key` VARCHAR(200),
+    `prop_value` VARCHAR(1000),
+ FOREIGN KEY (`configured_datasource_id`)
+ REFERENCES `configured_datasource`(`id`));
