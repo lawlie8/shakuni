@@ -3,23 +3,26 @@ import './datasource-jdbc-connection.css';
 import { useDispatch, useSelector } from "react-redux";
 import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
-import { setStoreSelectedAddEditDataSourceType,setStoreFormLoaded } from '../../DataSourceSlice';
+import { setStoreSelectedAddEditDataSourceType,setStoreFormLoaded, setStoreConfiguredDataSourceList,setStorePropDisabled,setStoreSelectedDataSourceTypeLabel } from '../../DataSourceSlice';
 import { checkDataSourceConnection, saveDataSourceConnectionProperties } from "../../datasource-service";
 import { useState } from "react";
 
 export default function DataSourceJdbcConnection({ jdbcProperties }) {
 
-    let storeJdbcProperties = useSelector((state) => state.dataSource.selectedDataSourceProperties)
-    let storeJdbcValues = useSelector((state) => state.dataSource.selectedDataSourceValues)
-    const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
+    const selectedDataSourceTypeAction = useSelector((state) => state.dataSource.selectedDataSourceTypeAction);
+    const storeJdbcProperties = useSelector((state) => state.dataSource.selectedDataSourceProperties)
+    const storeJdbcValues = useSelector((state) => state.dataSource.selectedDataSourceValues)
     const [connectionSucessFullFlag,setConnectionSuccessFullFlag] = useState(false);
-    const [propDisabled,setPropDisabled] = useState(selectedDataSourceTypeLabel === "ADD" ? false : true);
+    const propDisabled = useSelector((state) => state.dataSource.propDisabled)
     const formLoaded = useSelector((state) => state.dataSource.formLoaded);
+    const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
 
     const addEditDataSourceType = useSelector((state)=> state.dataSource.addEditDataSourceType)
+    const addEditDataSourceId = useSelector((state)=> state.dataSource.addEditConfiguredDataSourceId)
+
     const [form] = Form.useForm();
     const dispatch = useDispatch();
-
+    
     const handleTestConnection = (values) => {
         if(connectionSucessFullFlag === false){
             checkDataSourceConnection(addEditDataSourceType,values).then((response)=>{
@@ -42,7 +45,7 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
             })
     
         } else {
-            saveDataSourceConnectionProperties(addEditDataSourceType,values)
+            saveDataSourceConnectionProperties(addEditDataSourceType,addEditDataSourceId,selectedDataSourceTypeAction,values)
             .then((response)=>{
                 if(response.status === 200 && response.data === true){
                     notification.success({
@@ -52,8 +55,10 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
                         duration:1,
                     })
                 }
-                setPropDisabled(true)
+                dispatch(setStorePropDisabled(true));
                 setConnectionSuccessFullFlag(false);
+                dispatch(setStoreConfiguredDataSourceList(configuredDataSourceList.filter(a => a.id !== item.id)));
+
             })
         }
     }
@@ -69,7 +74,7 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
     }
 
     function handleEdit(){
-        setPropDisabled(!propDisabled)
+        dispatch(setStorePropDisabled(!propDisabled));
     }
 
 
@@ -80,30 +85,30 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
             <List>
                 {
                     Object.keys(storeJdbcProperties).map(e => (
-                        <Form.Item  name={storeJdbcProperties[e].propertyName} initialValue={getPropValueByKey(storeJdbcProperties[e].propertyName)} className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} required={storeJdbcProperties[e].isRequired === "true" ? true : false}>
+                        <Form.Item name={storeJdbcProperties[e].propertyName} initialValue={selectedDataSourceTypeAction === "Add" ? null : getPropValueByKey(storeJdbcProperties[e].propertyName)} className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} required={storeJdbcProperties[e].isRequired === "true" ? true : false}>
                             <List.Item style={{ border: 'none', margin: '0px', padding: '0px' }}>
                                 {
                                     {
                                         'Input': <><Input autoComplete="off"
                                             disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-input" defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)} ></Input><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-input" defaultValue={selectedDataSourceTypeAction === "Add" ? null : getPropValueByKey(storeJdbcProperties[e].propertyName)} ></Input><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'TextArea': <><TextArea
                                             disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-text" defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)}></TextArea><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-text" defaultValue={selectedDataSourceTypeAction === "Add" ? null :getPropValueByKey(storeJdbcProperties[e].propertyName)}></TextArea><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'Input.Password': <><Input.Password
                                             autoComplete="off"
                                             disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-password" defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)}></Input.Password><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-password" defaultValue={selectedDataSourceTypeAction === "Add" ? null :getPropValueByKey(storeJdbcProperties[e].propertyName)}></Input.Password><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'InputNumber': <><InputNumber
                                             disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-number"  defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)}></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
+                                            className="jdbc-connection-user-number"  defaultValue={selectedDataSourceTypeAction === "Add" ? null :getPropValueByKey(storeJdbcProperties[e].propertyName)}></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
                                     }[storeJdbcProperties[e].dataType]
                                 }
                             </List.Item>
@@ -116,12 +121,12 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
             <div className="form-buttons">
                 <Form.Item>
                     {
-                        connectionSucessFullFlag === true ? 
+                        (connectionSucessFullFlag || selectedDataSourceTypeAction === "Add") === true ? 
                         <span style={{display:'none'}}></span>
                         :
                         <button className='datasource-connection-cancel-button' type="button" onClick={() => handleEdit()}>Edit</button>
                 }
-                    <button className={!propDisabled === true?"datasource-connection-test-connection-button":'datasource-connection-test-connection-button-disabled'} type='submit' disabled={propDisabled === true ? true : false} >{connectionSucessFullFlag === true ? "Save" : "Test Connection"}</button>
+                    <button className={!propDisabled === true ? "datasource-connection-test-connection-button":'datasource-connection-test-connection-button-disabled'} type='submit' disabled={propDisabled === true ? true : false} >{connectionSucessFullFlag === true ? "Save" : "Test Connection"}</button>
                     <button className='datasource-connection-cancel-button' type="button" onClick={() => handleCancelConnection()}>Cancel</button>
                 </Form.Item>
             </div>

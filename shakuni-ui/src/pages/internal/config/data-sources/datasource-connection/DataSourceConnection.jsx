@@ -9,10 +9,6 @@ export default function DataSourceConnection({jdbcProperties,driverProperties,id
     const dispatch = useDispatch()
 
 
-    function handleCancelConnection(){
-        dispatch(setStoreSelectedAddEditDataSourceType(0));
-    }
-
 
     const tabItems = [{
         key:'1',

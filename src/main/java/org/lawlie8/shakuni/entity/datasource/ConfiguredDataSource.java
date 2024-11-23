@@ -29,7 +29,7 @@ public class ConfiguredDataSource {
     @Column(name = "datasource_type")
     private Long datasourceType;
 
-    @OneToMany(mappedBy = "configuredDataSource",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "configuredDataSource", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonBackReference
     private List<DataSourceProperties> dataSourceProperties;
 
@@ -98,7 +98,6 @@ public class ConfiguredDataSource {
                 ", createdBy='" + createdBy + '\'' +
                 ", creationDate=" + creationDate +
                 ", datasourceType=" + datasourceType +
-                ", dataSourceProperties=" + dataSourceProperties +
                 '}';
     }
 }

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     addEditDataSourceType : 0,
+    addEditConfiguredDataSourceId : 0,
     selectedDataSourceType : 0,
     selectedDataSourceTypeLabel : '',
     selectedDataSourceTypeAction : '',
@@ -10,6 +11,7 @@ const initialState = {
     configuredDataSourceList : [],
     selectedDataSourceValues:[],
     formLoaded:false,
+    propDisabled:false,
 }
 
 function sortPropertiesPerOrdinal(props) {
@@ -25,7 +27,10 @@ const dataSourceSlice = createSlice({
     reducers:{
         setStoreSelectedDataSourceType(state,action){
             state.selectedDataSourceType = action.payload;
-            localStorage.setItem('setStoreSelectedDataSourceType',state.selectedDataSourceType);
+        },
+
+        setStoreSelectedAddEditConfiguredDataSourceId(state,action){
+            state.addEditConfiguredDataSourceId = action.payload;
         },
 
         setStoreSelectedDataSourceImageUrl(state,action){
@@ -61,10 +66,14 @@ const dataSourceSlice = createSlice({
             state.formLoaded = action.payload;
         },
 
+        setStorePropDisabled(state,action){
+            state.propDisabled = action.payload;
+        },
+
 
 
     }
 });
 
-export const {setStoreSelectedDataSourceType,setStoreFormLoaded,setStoreSelectedDataSourceValues,setStoreSelectedDataSourceTypeAction,setStoreSelectedDataSourceTypeLabel,setStoreSelectedAddEditDataSourceType,setStoreSelectedDataSourceImageUrl,setStoreSelectedDataSourceProperties,setStoreConfiguredDataSourceList} = dataSourceSlice.actions;
+export const {setStoreSelectedDataSourceType,setStoreSelectedAddEditConfiguredDataSourceId,setStorePropDisabled,setStoreFormLoaded,setStoreSelectedDataSourceValues,setStoreSelectedDataSourceTypeAction,setStoreSelectedDataSourceTypeLabel,setStoreSelectedAddEditDataSourceType,setStoreSelectedDataSourceImageUrl,setStoreSelectedDataSourceProperties,setStoreConfiguredDataSourceList} = dataSourceSlice.actions;
 export default dataSourceSlice.reducer;

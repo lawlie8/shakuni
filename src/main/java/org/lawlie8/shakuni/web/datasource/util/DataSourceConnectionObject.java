@@ -5,6 +5,9 @@ import java.util.Map;
 public class DataSourceConnectionObject {
 
     private Long dataSourceTypeId;
+    private Long dataSourceId;
+
+    private String actionType;
     private Map<String,String> propertyValueMap;
 
     public Long getDataSourceTypeId() {
@@ -13,6 +16,22 @@ public class DataSourceConnectionObject {
 
     public void setDataSourceTypeId(Long dataSourceTypeId) {
         this.dataSourceTypeId = dataSourceTypeId;
+    }
+
+    public Long getDataSourceId() {
+        return dataSourceId;
+    }
+
+    public void setDataSourceId(Long dataSourceId) {
+        this.dataSourceId = dataSourceId;
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
     }
 
     public Map<String, String> getPropertyValueMap() {
@@ -27,7 +46,10 @@ public class DataSourceConnectionObject {
     public String toString() {
         return "DataSourceConnectionObject{" +
                 "dataSourceTypeId=" + dataSourceTypeId +
+                ", dataSourceId=" + dataSourceId +
+                ", actionType='" + actionType + '\'' +
                 ", propertyValueMap=" + propertyValueMap +
                 '}';
     }
+
 }

@@ -14,4 +14,8 @@ public interface ConfiguredDataSourceRepo extends JpaRepository<ConfiguredDataSo
     @Query(value = "select * from `configured_datasource` where `datasource_type`= :id",nativeQuery = true)
     List<ConfiguredDataSource> findConfiguredDataSourceByDataSourceTypeId(Long id);
 
+    @Query(value = "select * from `configured_datasource` where `id`= :id",nativeQuery = true)
+    ConfiguredDataSource findConfiguredDataSourceById(Long id);
+
+
 }

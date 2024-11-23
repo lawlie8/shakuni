@@ -62,7 +62,6 @@ public class DataSourceProperties {
                 "id=" + id +
                 ", propKey='" + propKey + '\'' +
                 ", propValue='" + propValue + '\'' +
-                ", configuredDataSource=" + configuredDataSource +
                 '}';
     }
 }

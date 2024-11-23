@@ -81,11 +81,20 @@ public class DataSourceService {
         return dataSourceConnection.checkConnection(dataSourceConnectionObject);
     }
 
+
+    //TODO fix issues with multiple prop save when ediditing
     public boolean saveDataSourceConnection(DataSourceConnectionObject dataSourceConnectionObject){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(dataSourceConnectionObject.getDataSourceId());
+
         try {
             ConfiguredDataSource configuredDataSource = new ConfiguredDataSource();
-            configuredDataSource.setId(1L);
+            if(dataSourceConnectionObject.getActionType().equals("Edit") && dataSourceConnectionObject.getDataSourceId() != null){
+                configuredDataSource = configuredDataSourceRepo.findConfiguredDataSourceById(dataSourceConnectionObject.getDataSourceId());
+                System.out.println(configuredDataSource);
+            }else{
+                configuredDataSource.setId(null);
+            }
             configuredDataSource.setDatasourceType(dataSourceConnectionObject.getDataSourceTypeId());
             configuredDataSource.setDatasourceName(dataSourceConnectionObject.getPropertyValueMap().get("name"));
             configuredDataSource.setCreatedBy(auth.getName());
@@ -99,6 +108,7 @@ public class DataSourceService {
                 dataSourceProperties.setPropValue(mapElement.getValue());
                 dataSourcePropertiesList.add(dataSourceProperties);
             }
+            System.out.println(configuredDataSource);
             configuredDataSource.setDataSourceProperties(dataSourcePropertiesList);
             configuredDataSourceRepo.save(configuredDataSource);
             return true;

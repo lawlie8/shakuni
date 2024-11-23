@@ -6,18 +6,19 @@ import DataSourceItem from './DataSourceItem.jsx';
 import { Avatar, Breadcrumb, Button, Divider, Dropdown, List, notification, Popconfirm, Tooltip } from 'antd';
 import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
-import { setStoreConfiguredDataSourceList, setStoreFormLoaded, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, 
+import { setStoreConfiguredDataSourceList, setStoreFormLoaded, setStorePropDisabled, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, 
     setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, 
-    setStoreSelectedDataSourceTypeLabel,setStoreSelectedDataSourceValues } from './DataSourceSlice.js';
+    setStoreSelectedDataSourceTypeLabel,setStoreSelectedDataSourceValues,setStoreSelectedAddEditConfiguredDataSourceId } from './DataSourceSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 export default function DataSources(params = { params }) {
 
     const [datasourceType, setDataSourceType] = useState([]);
     const addEditDataSourceType = useSelector((state) => state.dataSource.addEditDataSourceType);
-    const selectedDataSourceType = useSelector((state) => state.dataSource.selectedDataSourceType);
+    const selectedDataSourceTypeId = useSelector((state) => state.dataSource.selectedDataSourceType);
     const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
     const selectedDataSourceTypeAction = useSelector((state) => state.dataSource.selectedDataSourceTypeAction);
     const formLoaded = useSelector((state) => state.dataSource.formLoaded);
+    const addEditDataSourceId = useSelector((state)=> state.dataSource.addEditConfiguredDataSourceId)
 
     const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
@@ -43,19 +44,18 @@ export default function DataSources(params = { params }) {
     }
 
     function handleDatasourceItemClick(item) {
+        dispatch(setStoreSelectedDataSourceType(item.id));
+        console.log("selectedDataSourceType",selectedDataSourceTypeId,"item",item.id);
+
         if (item.active) {
             dispatch(setStoreSelectedDataSourceImageUrl(item.dataSourceImageUrl));
 
-            dispatch(setStoreSelectedDataSourceType(item.id));
             fetchConfiguredDataSourcesById(item.id)
                 .then((response) => {
                     setBreadCrumbItems([...breadCrumbItems, { title: <span><img src={item.dataSourceImageUrl} onClick={() => handleBreadCrumbDataSourceClick(item)} className='datasource-breadcrumb-image'></img>{item.dataSourceLabel}</span> }]);
                     dispatch(setStoreSelectedDataSourceTypeLabel(item.dataSourceLabel));
                     dispatch(setStoreConfiguredDataSourceList(response.data));
-                }).catch((error) => {
-                    dispatch(setStoreSelectedDataSourceType(0));
-                    dispatch(setStoreConfiguredDataSourceList([]));
-                });
+                })
         } else {
             notification.error({ message: "Error", description: 'Inactive DataSource', duration: 1, style: { width: '250px' } })
         }
@@ -70,13 +70,13 @@ export default function DataSources(params = { params }) {
     }
 
     function handleConfiguredDataSourceEdit(item) {
-
-        dispatch(setStoreSelectedDataSourceType(item.id));
-        dispatch(setStoreSelectedAddEditDataSourceType(item.id));
         dispatch(setStoreSelectedDataSourceTypeLabel(selectedDataSourceTypeLabel));
         dispatch(setStoreSelectedDataSourceTypeAction("Edit"));
+        dispatch(setStorePropDisabled(true));
+        dispatch(setStoreSelectedAddEditDataSourceType(item.datasourceType));
+        dispatch(setStoreSelectedAddEditConfiguredDataSourceId(item.id));
 
-        fetchConfiguredDataSourcePropertiesByDataSourceTypeId(item.id)
+        fetchConfiguredDataSourcePropertiesByDataSourceTypeId(item.datasourceType)
             .then(response => {
                 setDataSourcePropList(response.data)
                 dispatch(setStoreSelectedDataSourceProperties(response.data));
@@ -94,10 +94,12 @@ export default function DataSources(params = { params }) {
         dispatch(setStoreSelectedAddEditDataSourceType(item));
         dispatch(setStoreSelectedDataSourceTypeLabel(selectedDataSourceTypeLabel));
         dispatch(setStoreSelectedDataSourceTypeAction("Add"));
+        dispatch(setStorePropDisabled(false));
 
         fetchConfiguredDataSourcePropertiesByDataSourceTypeId(item)
             .then(response => {
                 setDataSourcePropList(response.data)
+                dispatch(setStoreFormLoaded(true))
                 dispatch(setStoreSelectedDataSourceProperties(response.data));
             })
 
@@ -121,8 +123,8 @@ export default function DataSources(params = { params }) {
     return <div className="datasources-main">
         <div className='datasources-view' style={{ display: addEditDataSourceType === 0 ? 'block' : 'none' }}>
             <h2 className='datasources-headline'><DatabaseFilled />  Data Sources</h2>
-            <div className='datasource-type-segment' style={{ display: selectedDataSourceType === 0 ? 'block' : 'none' }}>
-                <div className='datasource-type-list' style={{ display: selectedDataSourceType === 0 ? 'block' : 'none', marginTop: '20px' }}>
+            <div className='datasource-type-segment' style={{ display: selectedDataSourceTypeId === 0 ? 'block' : 'none' }}>
+                <div className='datasource-type-list' style={{ display: selectedDataSourceTypeId === 0 ? 'block' : 'none', marginTop: '20px' }}>
                     {
 
                         datasourceType?.map((item) => (
@@ -134,7 +136,7 @@ export default function DataSources(params = { params }) {
                 </div>
             </div>
 
-            <div className='datasources-configured-segment' style={{ display: selectedDataSourceType !== 0 ? 'block' : 'none' }}>
+            <div className='datasources-configured-segment' style={{ display: selectedDataSourceTypeId !== 0 ? 'block' : 'none' }}>
                 <Breadcrumb className='datasources-configured-segment-breadcrumb'
                     items={breadCrumbItems}
                 />
@@ -187,7 +189,7 @@ export default function DataSources(params = { params }) {
                         ))
                     }
                     <Tooltip arrow={false} placement="bottom" title={'Add New DataSource'} color='black'>
-                        <List.Item className='configured-datasource-add' onClick={() => handleConfiguredDataSourceAdd(selectedDataSourceType)}>
+                        <List.Item className='configured-datasource-add' onClick={() => handleConfiguredDataSourceAdd(selectedDataSourceTypeId)}>
                             <PlusCircleFilled className='configured-datasource-add-icon' />
                         </List.Item>
                     </Tooltip>
