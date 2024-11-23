@@ -6,7 +6,7 @@ import DataSourceItem from './DataSourceItem.jsx';
 import { Avatar, Breadcrumb, Button, Divider, Dropdown, List, notification, Popconfirm, Tooltip } from 'antd';
 import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
-import { setStoreConfiguredDataSourceList, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, 
+import { setStoreConfiguredDataSourceList, setStoreFormLoaded, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, 
     setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, 
     setStoreSelectedDataSourceTypeLabel,setStoreSelectedDataSourceValues } from './DataSourceSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ export default function DataSources(params = { params }) {
     const selectedDataSourceType = useSelector((state) => state.dataSource.selectedDataSourceType);
     const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
     const selectedDataSourceTypeAction = useSelector((state) => state.dataSource.selectedDataSourceTypeAction);
+    const formLoaded = useSelector((state) => state.dataSource.formLoaded);
 
     const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
@@ -36,6 +37,7 @@ export default function DataSources(params = { params }) {
         dispatch(setStoreSelectedDataSourceType(0));
         dispatch(setStoreSelectedAddEditDataSourceType(0));
         dispatch(setStoreSelectedDataSourceTypeLabel(''));
+        dispatch(setStoreFormLoaded(false))
 
         setBreadCrumbItems([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }])
     }
@@ -63,6 +65,7 @@ export default function DataSources(params = { params }) {
     function handleBreadCrumbDataSourceClick(item) {
         dispatch(setStoreSelectedDataSourceType(item.id));
         dispatch(setStoreSelectedAddEditDataSourceType(0));
+        dispatch(setStoreFormLoaded(false))
 
     }
 
@@ -82,6 +85,7 @@ export default function DataSources(params = { params }) {
         fetchConfiguredDataSourcePropertyValuesByConfiguredDataSourceId(item.id)
         .then((response)=>{
             dispatch(setStoreSelectedDataSourceValues(response.data))
+            dispatch(setStoreFormLoaded(true))
         })
     }
 

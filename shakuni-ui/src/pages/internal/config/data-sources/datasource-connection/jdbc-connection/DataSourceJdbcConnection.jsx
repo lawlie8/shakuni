@@ -3,7 +3,7 @@ import './datasource-jdbc-connection.css';
 import { useDispatch, useSelector } from "react-redux";
 import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
-import { setStoreSelectedAddEditDataSourceType } from '../../DataSourceSlice';
+import { setStoreSelectedAddEditDataSourceType,setStoreFormLoaded } from '../../DataSourceSlice';
 import { checkDataSourceConnection, saveDataSourceConnectionProperties } from "../../datasource-service";
 import { useState } from "react";
 
@@ -14,12 +14,13 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
     const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
     const [connectionSucessFullFlag,setConnectionSuccessFullFlag] = useState(false);
     const [propDisabled,setPropDisabled] = useState(selectedDataSourceTypeLabel === "ADD" ? false : true);
+    const formLoaded = useSelector((state) => state.dataSource.formLoaded);
+
     const addEditDataSourceType = useSelector((state)=> state.dataSource.addEditDataSourceType)
+    const [form] = Form.useForm();
     const dispatch = useDispatch();
 
     const handleTestConnection = (values) => {
-        console.log(values);
-        
         if(connectionSucessFullFlag === false){
             checkDataSourceConnection(addEditDataSourceType,values).then((response)=>{
                 if(response.status === 200 && response.data === true){
@@ -51,6 +52,7 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
                         duration:1,
                     })
                 }
+                setPropDisabled(true)
                 setConnectionSuccessFullFlag(false);
             })
         }
@@ -58,6 +60,7 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
     function handleCancelConnection() {
         dispatch(setStoreSelectedAddEditDataSourceType(0));
         setConnectionSuccessFullFlag(false)
+        dispatch(setStoreFormLoaded(false))
     }
 
     function getPropValueByKey(key) {
@@ -70,36 +73,37 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
     }
 
 
+
     return <div className="datasource-connection-jdbc-segment">
-        <Form name="jdbc-connection-form" className="datasource-connection-jdbc-form" onFinish={handleTestConnection} initialValues={{name:'TEst'}} layout="vertical">
+        {
+            formLoaded ? <Form clearOnDestroy form={form} name="jdbc-connection-form" className="datasource-connection-jdbc-form" onFinish={handleTestConnection}  layout="vertical">
             <List>
                 {
                     Object.keys(storeJdbcProperties).map(e => (
-                        <Form.Item  className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} required={storeJdbcProperties[e].isRequired === "true" ? true : false} name={storeJdbcProperties[e].propertyName}>
+                        <Form.Item  name={storeJdbcProperties[e].propertyName} initialValue={getPropValueByKey(storeJdbcProperties[e].propertyName)} className="form-left" label={storeJdbcProperties[e].propertyLabel + ":"} required={storeJdbcProperties[e].isRequired === "true" ? true : false}>
                             <List.Item style={{ border: 'none', margin: '0px', padding: '0px' }}>
                                 {
                                     {
                                         'Input': <><Input autoComplete="off"
-                                            disabled={!storeJdbcProperties[e].isActive}
+                                            disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-input" value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></Input><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-input" defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)} ></Input><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'TextArea': <><TextArea
-                                            disabled={!storeJdbcProperties[e].isActive}
+                                            disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-text"  value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></TextArea><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-text" defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)}></TextArea><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'Input.Password': <><Input.Password
                                             autoComplete="off"
-                                            disabled={!storeJdbcProperties[e].isActive}
+                                            disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-password"  value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></Input.Password><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
+                                            className="jdbc-connection-user-password" defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)}></Input.Password><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>,
 
                                         'InputNumber': <><InputNumber
-                                           
-                                            disabled={!storeJdbcProperties[e].isActive}
+                                            disabled={!storeJdbcProperties[e].isActive || propDisabled}
                                             placeholder={storeJdbcProperties[e].example}
-                                            className="jdbc-connection-user-number"  value={getPropValueByKey(storeJdbcProperties[e].propertyName)}></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
+                                            className="jdbc-connection-user-number"  defaultValue={getPropValueByKey(storeJdbcProperties[e].propertyName)}></InputNumber><span className="property-description">{storeJdbcProperties[e].propertyDescription}</span></>
                                     }[storeJdbcProperties[e].dataType]
                                 }
                             </List.Item>
@@ -117,11 +121,13 @@ export default function DataSourceJdbcConnection({ jdbcProperties }) {
                         :
                         <button className='datasource-connection-cancel-button' type="button" onClick={() => handleEdit()}>Edit</button>
                 }
-                    <button className='datasource-connection-test-connection-button' type='submit'>{connectionSucessFullFlag === true ? "Save" : "Test Connection"}</button>
+                    <button className={!propDisabled === true?"datasource-connection-test-connection-button":'datasource-connection-test-connection-button-disabled'} type='submit' disabled={propDisabled === true ? true : false} >{connectionSucessFullFlag === true ? "Save" : "Test Connection"}</button>
                     <button className='datasource-connection-cancel-button' type="button" onClick={() => handleCancelConnection()}>Cancel</button>
                 </Form.Item>
             </div>
-        </Form>
+        </Form> : "Loading Form"
+        }
+        
         <div className="datasource-connection-extra">
             <List>
                 <List.Item>

@@ -20,10 +20,20 @@
     position: sticky;
 }
 
+.datasource-connection-test-connection-button-disabled{
+    background-color: #535353;
+    color: white;
+    border: 1px solid green;
+    margin: 2px;
+    position: sticky;
+    cursor:not-allowed;
+}
+
 .datasource-connection-cancel-button{
     margin: 2px;
     background-color: #d43838;
     color: white;
     border: 1px solid red;
     position: sticky;
+    cursor: pointer;
 }
