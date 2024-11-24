@@ -4,7 +4,7 @@ import './datasources.css';
 import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcePropertiesByDataSourceTypeId, fetchConfiguredDataSourcePropertyValuesByConfiguredDataSourceId, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
 import { Avatar, Breadcrumb, Button, Divider, Dropdown, List, notification, Popconfirm, Tooltip } from 'antd';
-import { DatabaseFilled, DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleFilled } from '@ant-design/icons';
+import {DatabaseOutlined, DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
 import { setStoreConfiguredDataSourceList, setStoreFormLoaded, setStorePropDisabled, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, 
     setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, 
@@ -21,7 +21,7 @@ export default function DataSources(params = { params }) {
     const addEditDataSourceId = useSelector((state)=> state.dataSource.addEditConfiguredDataSourceId)
 
     const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
-    const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseFilled style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
+    const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseOutlined style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
     const selectedDataSourceImageUrl = useSelector((state) => state.dataSource.selectedDataSourceImageUrl);
     const [dataSourcePropList, setDataSourcePropList] = useState([]);
     const [driverPropList, setDriverPropList] = useState([]);
@@ -122,7 +122,7 @@ export default function DataSources(params = { params }) {
 
     return <div className="datasources-main">
         <div className='datasources-view' style={{ display: addEditDataSourceType === 0 ? 'block' : 'none' }}>
-            <h2 className='datasources-headline'><DatabaseFilled />  Data Sources</h2>
+            <h2 className='datasources-headline'><DatabaseOutlined />  Data Sources</h2>
             <div className='datasource-type-segment' style={{ display: selectedDataSourceTypeId === 0 ? 'block' : 'none' }}>
                 <div className='datasource-type-list' style={{ display: selectedDataSourceTypeId === 0 ? 'block' : 'none', marginTop: '20px' }}>
                     {
@@ -199,7 +199,7 @@ export default function DataSources(params = { params }) {
         </div>
 
         <div className='datasources-add-edit' style={{ display: addEditDataSourceType !== 0 ? 'block' : 'none' }}>
-            <h2 className='datasources-headline'><DatabaseFilled /> {selectedDataSourceTypeAction} <span style={{ color: 'gray' }}>{selectedDataSourceTypeLabel}</span> Data Source</h2>
+            <h2 className='datasources-headline'><DatabaseOutlined /> {selectedDataSourceTypeAction} <span style={{ color: 'gray' }}>{selectedDataSourceTypeLabel}</span> Data Source</h2>
             <div className='datasource-type-segment'>
                 <Breadcrumb className='datasources-configured-segment-breadcrumb'
                     items={breadCrumbItems}

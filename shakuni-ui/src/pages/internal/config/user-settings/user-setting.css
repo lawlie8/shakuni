@@ -1,0 +1,38 @@
+.user-main {
+    height: 100vh;
+}
+
+.user-view{
+    height: 100vh;
+}
+
+.user-add-edit{
+    height: 100vh;
+}
+
+.user-headline {
+    position: relative;
+    color: black;
+    font-size: 25px;
+    background-color: white;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.user-configured-segment {
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.user-type-segment {
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px;
+    height: calc(100% - 200px);
+    overflow-y: auto;
+
+}

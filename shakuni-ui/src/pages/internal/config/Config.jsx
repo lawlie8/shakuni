@@ -1,5 +1,5 @@
 import { Col, Menu, Row } from "antd";
-import { DatabaseFilled,EyeFilled} from '@ant-design/icons';
+import { DatabaseOutlined,UserOutlined} from '@ant-design/icons';
 import './config.css';
 import { useState } from "react";
 import DataSources from "./data-sources/DataSources";
@@ -11,12 +11,12 @@ export default function Config(params = {params}){
 
     const items = [{
         key:"1",
-        icon:<DatabaseFilled />,
+        icon:<DatabaseOutlined />,
         label:"Data Sources",
     },
     {
         key:"2",
-        icon:<EyeFilled />,
+        icon:<UserOutlined />,
         label:"User Settings",
     },]
 
