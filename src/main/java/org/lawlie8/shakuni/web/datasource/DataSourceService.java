@@ -84,8 +84,6 @@ public class DataSourceService {
 
     public boolean saveDataSourceConnection(DataSourceConnectionObject dataSourceConnectionObject){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(dataSourceConnectionObject.getDataSourceId());
-
         try {
             ConfiguredDataSource configuredDataSource = new ConfiguredDataSource();
             if(dataSourceConnectionObject.getActionType().equals("Edit") && dataSourceConnectionObject.getDataSourceId() != null){
