@@ -82,7 +82,6 @@ public class DataSourceService {
     }
 
 
-    //TODO fix issues with multiple prop save when ediditing
     public boolean saveDataSourceConnection(DataSourceConnectionObject dataSourceConnectionObject){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(dataSourceConnectionObject.getDataSourceId());
@@ -91,7 +90,6 @@ public class DataSourceService {
             ConfiguredDataSource configuredDataSource = new ConfiguredDataSource();
             if(dataSourceConnectionObject.getActionType().equals("Edit") && dataSourceConnectionObject.getDataSourceId() != null){
                 configuredDataSource = configuredDataSourceRepo.findConfiguredDataSourceById(dataSourceConnectionObject.getDataSourceId());
-                System.out.println(configuredDataSource);
             }else{
                 configuredDataSource.setId(null);
             }
@@ -101,14 +99,22 @@ public class DataSourceService {
             configuredDataSource.setDatasourceDescription(dataSourceConnectionObject.getPropertyValueMap().get("description"));
             configuredDataSource.setCreationDate(new Date());
             List<DataSourceProperties> dataSourcePropertiesList = new ArrayList<>();
-            for (Map.Entry<String,String> mapElement : dataSourceConnectionObject.getPropertyValueMap().entrySet()) {
-                DataSourceProperties dataSourceProperties = new DataSourceProperties();
-                dataSourceProperties.setPropKey(mapElement.getKey());
-                dataSourceProperties.setConfiguredDataSource(configuredDataSource);
-                dataSourceProperties.setPropValue(mapElement.getValue());
-                dataSourcePropertiesList.add(dataSourceProperties);
+
+            if(dataSourceConnectionObject.getActionType().equals("Edit") && dataSourceConnectionObject.getDataSourceId() != null){
+                dataSourcePropertiesList = configuredDataSourcePropertiesRepo.findByConfiguredDataSource_Id(dataSourceConnectionObject.getDataSourceId());
+                for(int i = 0;i<dataSourcePropertiesList.size();i++){
+                    String value = dataSourceConnectionObject.getPropertyValueMap().get(dataSourcePropertiesList.get(i).getPropKey());
+                    dataSourcePropertiesList.get(i).setPropValue(value);
+                }
+            }else{
+                for (Map.Entry<String,String> mapElement : dataSourceConnectionObject.getPropertyValueMap().entrySet()) {
+                    DataSourceProperties dataSourceProperties = new DataSourceProperties();
+                    dataSourceProperties.setPropKey(mapElement.getKey());
+                    dataSourceProperties.setConfiguredDataSource(configuredDataSource);
+                    dataSourceProperties.setPropValue(mapElement.getValue());
+                    dataSourcePropertiesList.add(dataSourceProperties);
+                }
             }
-            System.out.println(configuredDataSource);
             configuredDataSource.setDataSourceProperties(dataSourcePropertiesList);
             configuredDataSourceRepo.save(configuredDataSource);
             return true;

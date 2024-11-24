@@ -162,7 +162,7 @@ export default function DataSources(params = { params }) {
                                             :{new Date(item.creationDate).getMinutes()}
                                             :{new Date(item.creationDate).getSeconds()}</span>}
 
-                                        <Tooltip arrow={false} placement='topLeft' title={`Created By :   ${item.createdBy}`}>
+                                        <Tooltip arrow={false} placement='topLeft' title={`Last Modified By :   ${item.createdBy}`}>
                                             <Avatar className="header-user-logo-avatar"  size={30} style={{ backgroundColor: 'purple' }}>{item.createdBy?.toUpperCase()[0]}</Avatar>
                                         </Tooltip>
 

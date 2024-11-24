@@ -52,7 +52,7 @@ public class SecurityConfiguration {
     @Order(1)
     public SecurityFilterChain mainFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.httpBasic((basic) -> basic.disable()).csrf((csrf) -> csrf.disable()).authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers(AntPathRequestMatcher.antMatcher("/app/**")).permitAll();
+                    auth.requestMatchers(AntPathRequestMatcher.antMatcher("/app/**")).authenticated();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/web/**")).permitAll();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll();
 
