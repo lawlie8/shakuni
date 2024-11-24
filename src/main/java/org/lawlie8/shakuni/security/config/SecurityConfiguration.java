@@ -52,8 +52,8 @@ public class SecurityConfiguration {
     @Order(1)
     public SecurityFilterChain mainFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.httpBasic((basic) -> basic.disable()).csrf((csrf) -> csrf.disable()).authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers(AntPathRequestMatcher.antMatcher("/app/**")).authenticated();
-                    auth.requestMatchers(AntPathRequestMatcher.antMatcher("/web/**")).permitAll();
+                    auth.requestMatchers(AntPathRequestMatcher.antMatcher(SECURED_API_PATTERN)).authenticated();
+                    auth.requestMatchers(AntPathRequestMatcher.antMatcher(OPEN_API_PATTERN)).permitAll();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll();
 
                 })
@@ -62,7 +62,7 @@ public class SecurityConfiguration {
                         .rememberMeParameter(REMEMBER_ME_PARAMETER))
                 .formLogin(httpSecurityFormLoginConfigurer -> {
                     httpSecurityFormLoginConfigurer
-                            .loginPage("/web/security/logreq")
+                            .loginPage(LOGIN_REQUEST_PAGE)
                             .successHandler(authenticationSuccessHandler())
                             .failureHandler(authenticationFailureHandler())
                             .loginProcessingUrl(LOGIN_PROCESSING_URL)
