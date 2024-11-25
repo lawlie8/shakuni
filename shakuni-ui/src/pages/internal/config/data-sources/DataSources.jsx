@@ -4,11 +4,13 @@ import './datasources.css';
 import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcePropertiesByDataSourceTypeId, fetchConfiguredDataSourcePropertyValuesByConfiguredDataSourceId, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
 import { Avatar, Breadcrumb, Button, Divider, Dropdown, List, notification, Popconfirm, Tooltip } from 'antd';
-import {DatabaseOutlined, DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
+import { DatabaseOutlined, DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
-import { setStoreConfiguredDataSourceList, setStoreFormLoaded, setStorePropDisabled, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl, 
-    setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction, 
-    setStoreSelectedDataSourceTypeLabel,setStoreSelectedDataSourceValues,setStoreSelectedAddEditConfiguredDataSourceId } from './DataSourceSlice.js';
+import {
+    setStoreConfiguredDataSourceList, setStoreFormLoaded, setStorePropDisabled, setStoreSelectedAddEditDataSourceType, setStoreSelectedDataSourceImageUrl,
+    setStoreSelectedDataSourceProperties, setStoreSelectedDataSourceType, setStoreSelectedDataSourceTypeAction,
+    setStoreSelectedDataSourceTypeLabel, setStoreSelectedDataSourceValues, setStoreSelectedAddEditConfiguredDataSourceId
+} from './DataSourceSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 export default function DataSources(params = { params }) {
 
@@ -18,7 +20,7 @@ export default function DataSources(params = { params }) {
     const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
     const selectedDataSourceTypeAction = useSelector((state) => state.dataSource.selectedDataSourceTypeAction);
     const formLoaded = useSelector((state) => state.dataSource.formLoaded);
-    const addEditDataSourceId = useSelector((state)=> state.dataSource.addEditConfiguredDataSourceId)
+    const addEditDataSourceId = useSelector((state) => state.dataSource.addEditConfiguredDataSourceId)
 
     const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseOutlined style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
@@ -45,7 +47,7 @@ export default function DataSources(params = { params }) {
 
     function handleDatasourceItemClick(item) {
         dispatch(setStoreSelectedDataSourceType(item.id));
-        console.log("selectedDataSourceType",selectedDataSourceTypeId,"item",item.id);
+        console.log("selectedDataSourceType", selectedDataSourceTypeId, "item", item.id);
 
         if (item.active) {
             dispatch(setStoreSelectedDataSourceImageUrl(item.dataSourceImageUrl));
@@ -83,14 +85,14 @@ export default function DataSources(params = { params }) {
             })
 
         fetchConfiguredDataSourcePropertyValuesByConfiguredDataSourceId(item.id)
-        .then((response)=>{
-            dispatch(setStoreSelectedDataSourceValues(response.data))
-            dispatch(setStoreFormLoaded(true))
-        })
+            .then((response) => {
+                dispatch(setStoreSelectedDataSourceValues(response.data))
+                dispatch(setStoreFormLoaded(true))
+            })
     }
 
     function handleConfiguredDataSourceAdd(item) {
-        
+
         dispatch(setStoreSelectedAddEditDataSourceType(item));
         dispatch(setStoreSelectedDataSourceTypeLabel(selectedDataSourceTypeLabel));
         dispatch(setStoreSelectedDataSourceTypeAction("Add"));
@@ -146,16 +148,26 @@ export default function DataSources(params = { params }) {
                         configuredDataSourceList?.map((item, index) => (
                             <List.Item key={item.id} style={{ padding: '5px', border: '1px solid gray', borderRadius: '10px' }} className='configured-datasource-list-item'>
                                 <>
-                                    <img src={selectedDataSourceImageUrl} height='50px' width='50px' />
+
+                                        <ul style={{margin:'0px',padding:'0px',listStyle:'none'}}>
+
+                                        <li style={{display:'inline',float:'left',margin:'10px'}}>
+                                            <img src={selectedDataSourceImageUrl} height='50px' width='50px' />
+                                        </li>
+                                        <li  style={{display:'relative',float:'left',margin:'10px',paddingLeft:'10px'}}>
+                                            <h3>{item.datasourceName}</h3>
+                                        </li>
+                                        </ul>
+
+
                                     <div>
-                                        <h3 style={{ margin: '0px' }}>{item.datasourceName}</h3>
                                         <span style={{ margin: '0px', color: 'gray' }}>{item.datasourceDescription}</span>
                                     </div>
 
                                     <div className='configured-datasources-action-icons'>
 
 
-                                        {<span style={{ color: 'gray', top: '-2px', position: 'relative' ,fontStyle:'oblique',margin:'5px' }}>{new Date(item.creationDate).getMonth()}
+                                        {<span style={{ color: 'gray', top: '-2px', position: 'relative', fontStyle: 'oblique', margin: '5px' }}>{new Date(item.creationDate).getMonth()}
                                             /{new Date(item.creationDate).getDate()}
                                             /{new Date(item.creationDate).getFullYear()}
                                             -{new Date(item.creationDate).getHours()}
@@ -163,7 +175,7 @@ export default function DataSources(params = { params }) {
                                             :{new Date(item.creationDate).getSeconds()}</span>}
 
                                         <Tooltip arrow={false} placement='topLeft' title={`Last Modified By :   ${item.createdBy}`}>
-                                            <Avatar className="header-user-logo-avatar"  size={30} style={{ backgroundColor: 'purple' }}>{item.createdBy?.toUpperCase()[0]}</Avatar>
+                                            <Avatar className="header-user-logo-avatar" size={30} style={{ backgroundColor: 'purple' }}>{item.createdBy?.toUpperCase()[0]}</Avatar>
                                         </Tooltip>
 
 
