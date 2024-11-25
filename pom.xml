@@ -113,7 +113,6 @@
 			<version>3.14.0</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -126,22 +125,43 @@
 			<version>3.3.3</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
 		<version>8.0.33</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.7.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.hive</groupId>
+			<artifactId>hive-jdbc</artifactId>
+			<version>4.0.1</version>
+		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.github.eirslett/frontend-maven-plugin -->
+		<dependency>
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<version>0.21.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.hive</groupId>
+			<artifactId>hive-service</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.hive</groupId>
+			<artifactId>hive-common</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>com.github.eirslett</groupId>
 			<artifactId>frontend-maven-plugin</artifactId>

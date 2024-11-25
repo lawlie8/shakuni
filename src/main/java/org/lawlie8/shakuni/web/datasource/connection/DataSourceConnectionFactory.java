@@ -11,6 +11,8 @@ public class DataSourceConnectionFactory {
             return new PostgresSqlDataSourceConnection();
         } else if (id == MYSQL_DATASOURCE_ID) {
             return new MysqlDataSourceConnection();
+        } else if (id == HIVE_DATASOURCE_ID) {
+            return new HiveDataSourceConnection();
         }
         return null;
     }

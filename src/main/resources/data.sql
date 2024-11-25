@@ -107,3 +107,25 @@ CREATE TABLE `datasource_properties`(
     `prop_value` VARCHAR(1000),
  FOREIGN KEY (`configured_datasource_id`)
  REFERENCES `configured_datasource`(`id`));
+
+INSERT INTO `datasource_type`(
+`id`,
+`data_source_type`,
+`is_active`,
+`datasource_version`,
+`is_default_driver`,
+`driver_version`,
+`datasource_img_url`,
+`datasource_site`,
+`datasource_label``) VALUES(
+4,
+'apache_hive',
+1,
+'4.0.1',
+1,
+'4.0.1',
+'/datasource_logo/hive_logo.svg',
+'https://hive.apache.org/',
+'Apache Hive');
+
+

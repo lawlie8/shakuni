@@ -4,6 +4,7 @@ public interface DataSourceConstants {
     Long MARIADB_DATASOURCE_ID = 1L;
     Long POSTGRES_DATASOURCE_ID = 2L;
     Long MYSQL_DATASOURCE_ID = 3L;
+    Long HIVE_DATASOURCE_ID = 4L;
 
     String ORDINAL = "ordinal";
     String PROPERTY_NAME = "propertyName";
@@ -25,6 +26,9 @@ public interface DataSourceConstants {
 
     String POSTGRES_DRIVER_CLASS = "org.postgresql.Driver";
     String POSTGRES_JDBC_PREFIX = "jdbc:postgresql://";
+
+    String HIVE_DRIVER_CLASS = "org.apache.hive.jdbc.HiveDriver";
+    String HIVE_JDBC_PREFIX = "jdbc:hive2://";
 
 
     String HOST = "host";
