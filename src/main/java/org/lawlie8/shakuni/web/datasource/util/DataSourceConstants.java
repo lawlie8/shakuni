@@ -23,6 +23,10 @@ public interface DataSourceConstants {
     String MYSQL_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     String MYSQL_JDBC_PREFIX = "jdbc:mysql://";
 
+    String POSTGRES_DRIVER_CLASS = "org.postgresql.Driver";
+    String POSTGRES_JDBC_PREFIX = "jdbc:postgresql://";
+
+
     String HOST = "host";
     String COLON = ":";
     String PORT = "port";
