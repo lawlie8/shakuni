@@ -32,7 +32,6 @@ export function checkDataSourceConnection(addEditDataSourceType,values){
 }
 
 export function saveDataSourceConnectionProperties(addEditDataSourceType,addEditDataSourceId,selectedDataSourceTypeAction,values){
-    console.log(addEditDataSourceId,addEditDataSourceType,selectedDataSourceTypeAction);
     
     return instance.post(DATASOURCE_SAVE_CONNECTION,{
         dataSourceTypeId: addEditDataSourceType,

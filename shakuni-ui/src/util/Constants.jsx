@@ -13,3 +13,6 @@ export const DATASOURCE_PROPERTY_VALUES_GET_BY_CONFIGURED_DATASOURCE_ID = "/app/
 export const DATASOURCE_CONFIGURED_DELETE_BY_ID = "/app/datasource/configured/delete";
 export const DATASOURCE_CHECK_CONNECTION = "/app/datasource/configured/check";
 export const DATASOURCE_SAVE_CONNECTION = "/app/datasource/configured/save";
+
+export const USER_GET_ALL = "/app/user/all/get";
+export const USER_GET_BY_ID = "/app/user/get";
