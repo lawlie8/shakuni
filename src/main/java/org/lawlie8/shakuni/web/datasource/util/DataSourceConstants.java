@@ -5,6 +5,8 @@ public interface DataSourceConstants {
     Long POSTGRES_DATASOURCE_ID = 2L;
     Long MYSQL_DATASOURCE_ID = 3L;
     Long HIVE_DATASOURCE_ID = 4L;
+    Long DB2_DATASOURCE_ID = 5L;
+
 
     String ORDINAL = "ordinal";
     String PROPERTY_NAME = "propertyName";
@@ -29,6 +31,9 @@ public interface DataSourceConstants {
 
     String HIVE_DRIVER_CLASS = "org.apache.hive.jdbc.HiveDriver";
     String HIVE_JDBC_PREFIX = "jdbc:hive2://";
+
+    String DB2_DRIVER_CLASS = "com.ibm.db2.jdbc.app.DB2Driver";
+    String Db2_JDBC_PREFIX = "jdbc:db2://";
 
 
     String HOST = "host";
