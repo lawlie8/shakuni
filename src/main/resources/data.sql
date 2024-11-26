@@ -128,4 +128,16 @@ INSERT INTO `datasource_type`(
 'https://hive.apache.org/',
 'Apache Hive');
 
+CREATE TABLE `permissions` (
+	`id` INT auto_increment NOT NULL,
+	`user_id` INT NOT NULL,
+	`permission_name` varchar(200) NOT NULL,
+	CONSTRAINT roles_pk PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=latin1
+COLLATE=latin1_swedish_ci
+COMMENT='Roles Described for User are stored Here';
+
+
 

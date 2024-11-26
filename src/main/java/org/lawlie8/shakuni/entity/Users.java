@@ -2,6 +2,8 @@ package org.lawlie8.shakuni.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class Users {
@@ -17,8 +19,9 @@ public class Users {
     @Column(name = "password_hash")
     private String passwordHash;
 
-    @Column(name = "role")
-    private String role;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private List<Permissions> permissionsList;
 
     public Long getId() {
         return id;
@@ -44,12 +47,12 @@ public class Users {
         this.passwordHash = passwordHash;
     }
 
-    public String getRole() {
-        return role;
+    public List<Permissions> getPermissionsList() {
+        return permissionsList;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPermissionsList(List<Permissions> permissionsList) {
+        this.permissionsList = permissionsList;
     }
 
     @Override
@@ -58,16 +61,7 @@ public class Users {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
-                ", role='" + role + '\'' +
+                ", permissionsList=" + permissionsList +
                 '}';
     }
 }
-
-/*
-* CREATE TABLE `gutenberg_db`.`users` (
-  `id` INT NOT NULL,
-  `user_name` VARCHAR(200) NULL,
-  `password_hash` VARCHAR(200) NULL,
-  `role` VARCHAR(200) NULL,
-  PRIMARY KEY (`id`));
-*/

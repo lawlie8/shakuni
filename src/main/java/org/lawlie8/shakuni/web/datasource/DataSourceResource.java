@@ -8,6 +8,7 @@ import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class DataSourceResource {
         return ResponseEntity.ok("Deleted Successfully");
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(path = "/datasource/configured/check",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> checkDataSourceConnection(@RequestBody DataSourceConnectionObject dataSourceConnectionObject){
         try {
