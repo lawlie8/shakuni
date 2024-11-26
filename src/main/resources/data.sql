@@ -139,5 +139,24 @@ DEFAULT CHARSET=latin1
 COLLATE=latin1_swedish_ci
 COMMENT='Roles Described for User are stored Here';
 
+INSERT INTO `datasource_type` (
+`id`,
+`data_source_type`,
+`is_active`,
+`datasource_version`,
+`is_default_driver`,
+`driver_version`,
+`datasource_img_url`,
+`datasource_site`,
+`datasource_label`) VALUES(
+5,
+'db2',
+1,
+'12.1',
+1,
+'12.1.0.0',
+'/datasource_logo/db2_logo.svg',
+'https://www.ibm.com/db2',
+'Db2');
 
 
