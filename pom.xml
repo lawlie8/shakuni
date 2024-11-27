@@ -143,6 +143,14 @@
 			<version>4.0.1-standalone</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.ibm.db2/jcc -->
+		<dependency>
+			<groupId>com.ibm.db2</groupId>
+			<artifactId>jcc</artifactId>
+			<version>12.1.0.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.apache.thrift</groupId>
 			<artifactId>libthrift</artifactId>

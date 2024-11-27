@@ -1,13 +1,17 @@
 package org.lawlie8.shakuni.web.datasource.connection;
 
 import org.lawlie8.shakuni.web.datasource.util.DataSourceConnectionObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 import static org.lawlie8.shakuni.web.datasource.util.DataSourceConstants.*;
 
-public class HiveDataSourceConnection extends  DataSourceConnectionService{
+public class HiveDataSourceConnection extends DataSourceConnectionService {
+
+    private static final Logger log = LoggerFactory.getLogger(HiveDataSourceConnection.class);
 
 
     @Override
@@ -20,13 +24,13 @@ public class HiveDataSourceConnection extends  DataSourceConnectionService{
                     dataSourceConnectionObject.getPropertyValueMap().get(USERNAME),
                     dataSourceConnectionObject.getPropertyValueMap().get(PASSWORD));
             return con.isValid(60);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
         return false;
     }
 
-    private String generateUrl(DataSourceConnectionObject dataSourceConnectionObject){
+    private String generateUrl(DataSourceConnectionObject dataSourceConnectionObject) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(HIVE_JDBC_PREFIX)
                 .append(dataSourceConnectionObject.getPropertyValueMap().get(HOST))
@@ -36,6 +40,8 @@ public class HiveDataSourceConnection extends  DataSourceConnectionService{
                 .append(dataSourceConnectionObject.getPropertyValueMap().get(DATABASE))
                 .append(QUESTION_MARK)
                 .append(dataSourceConnectionObject.getPropertyValueMap().get(ADDITIONAL_PROPERTIES));
+        log.debug("Jdbc String for Hive is :" + stringBuilder);
+
         return stringBuilder.toString();
     }
 }

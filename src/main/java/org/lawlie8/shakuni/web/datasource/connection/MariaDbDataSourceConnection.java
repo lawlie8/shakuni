@@ -1,6 +1,8 @@
 package org.lawlie8.shakuni.web.datasource.connection;
 
 import org.lawlie8.shakuni.web.datasource.util.DataSourceConnectionObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -8,7 +10,10 @@ import java.sql.DriverManager;
 
 import static org.lawlie8.shakuni.web.datasource.util.DataSourceConstants.*;
 
-public class MariaDbDataSourceConnection extends DataSourceConnectionService{
+public class MariaDbDataSourceConnection extends DataSourceConnectionService {
+
+    private static final Logger log = LoggerFactory.getLogger(HiveDataSourceConnection.class);
+
 
     @Override
     public boolean checkConnection(DataSourceConnectionObject dataSourceConnectionObject) {
@@ -20,22 +25,24 @@ public class MariaDbDataSourceConnection extends DataSourceConnectionService{
                     dataSourceConnectionObject.getPropertyValueMap().get(USERNAME),
                     dataSourceConnectionObject.getPropertyValueMap().get(PASSWORD));
             return con.isValid(60);
-        }catch (Exception e){
-            System.out.println(e);
+        } catch (Exception e) {
+            log.error("Error Occurred While Checking Db2 Connection" + e);
         }
         return false;
     }
 
-    private String generateUrl(DataSourceConnectionObject dataSourceConnectionObject){
+    private String generateUrl(DataSourceConnectionObject dataSourceConnectionObject) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(MARIADB_JDBC_PREFIX)
-        .append(dataSourceConnectionObject.getPropertyValueMap().get(HOST))
+                .append(dataSourceConnectionObject.getPropertyValueMap().get(HOST))
                 .append(COLON)
                 .append(dataSourceConnectionObject.getPropertyValueMap().get(PORT))
                 .append(FORWARD_SLASH)
                 .append(dataSourceConnectionObject.getPropertyValueMap().get(DATABASE))
                 .append(QUESTION_MARK)
                 .append(dataSourceConnectionObject.getPropertyValueMap().get(ADDITIONAL_PROPERTIES));
+        log.debug("Jdbc String for MariaDb is :" + stringBuilder);
+
         return stringBuilder.toString();
     }
 }

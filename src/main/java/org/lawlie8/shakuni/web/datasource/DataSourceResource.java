@@ -5,6 +5,9 @@ import org.lawlie8.shakuni.entity.datasource.DataSourceProperties;
 import org.lawlie8.shakuni.entity.datasource.DataSourceType;
 import org.lawlie8.shakuni.web.datasource.util.DataSourceConnectionObject;
 import org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum;
+import org.lawlie8.shakuni.web.user.UserResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,10 @@ public class DataSourceResource {
     @Autowired
     private DataSourceService dataSourceService;
 
+    private static final Logger log = LoggerFactory.getLogger(DataSourceResource.class);
+
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(path = "/datasource/type/all",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllDataSourceType(){
         List<DataSourceType> dataSourceTypeList = dataSourceService.getAllDataSource();
