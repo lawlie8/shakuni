@@ -9,10 +9,18 @@ Database Query Executer and Scheduler
 
 Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Streaming Data Workflows and boosting Efficiency
 
+### Supported Data Sources
+- MariaDB
+- MySQL
+- Hive
+- Db2
+- Oracle
+- Postgres
+
 ## ScreenShots
 
 ### Available Data Sources to Configure
-<a href="https://ibb.co/Lgp5YQH"><img src="https://i.ibb.co/fN0vq8L/data-sources.png" alt="data-sources" border="0"></a>
+<a href="https://ibb.co/KXpvfPp"><img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></a>
 ### Multiple Configured Data Sources
 <a href="https://ibb.co/zhz6SBK"><img src="https://i.ibb.co/xSNFMBV/hive-source.png" alt="hive-source" border="0"></a>
 ### Connection Via JDBC Properties
