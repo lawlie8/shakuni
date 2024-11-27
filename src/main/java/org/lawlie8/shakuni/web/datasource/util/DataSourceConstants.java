@@ -6,6 +6,8 @@ public interface DataSourceConstants {
     Long MYSQL_DATASOURCE_ID = 3L;
     Long HIVE_DATASOURCE_ID = 4L;
     Long DB2_DATASOURCE_ID = 5L;
+    Long ORACLE_DATASOURCE_ID = 6L;
+
 
 
     String ORDINAL = "ordinal";
@@ -35,6 +37,9 @@ public interface DataSourceConstants {
     String DB2_DRIVER_CLASS = "com.ibm.db2.jcc.DB2Driver";
     String Db2_JDBC_PREFIX = "jdbc:db2://";
 
+    String ORACLE_DRIVER_CLASS = "oracle.jdbc.driver.OracleDriver";
+    String ORACLE_JDBC_PREFIX = "jdbc:oracle";
+
 
     String HOST = "host";
     String COLON = ":";
@@ -45,4 +50,8 @@ public interface DataSourceConstants {
     String ADDITIONAL_PROPERTIES = "additionalProperties";
     String USERNAME = "userName";
     String PASSWORD = "password";
+    String DRIVER_TYPE = "driverType";
+    String AT_SIGN = "@";
+    String SID = "sid";
+
 }

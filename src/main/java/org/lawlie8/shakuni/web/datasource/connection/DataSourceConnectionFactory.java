@@ -15,6 +15,8 @@ public class DataSourceConnectionFactory {
             return new HiveDataSourceConnection();
         } else if (id == DB2_DATASOURCE_ID) {
             return new Db2DataSourceConnection();
+        } else if (id == ORACLE_DATASOURCE_ID) {
+            return new OracleDataSourceConnection();
         }
         return null;
     }

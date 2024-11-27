@@ -6,9 +6,11 @@ import static org.lawlie8.shakuni.web.datasource.util.DataSourceConstants.*;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.*;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.ADDITIONAL_PROPERTIES;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.DATABASE;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.DRIVER_TYPE;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.HOST;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.PASSWORD;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.PORT;
+import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.SID;
 import static org.lawlie8.shakuni.web.datasource.util.DataSourcePropertiesEnum.USERNAME;
 
 public class DataSourcePropertiesMap {
@@ -65,8 +67,8 @@ public class DataSourcePropertiesMap {
                 HOST,
                 PORT,
                 ADDITIONAL_PROPERTIES,
-                USERNAME,
-                PASSWORD,
+                HIVE_USERNAME,
+                HIVE_PASSWORD,
                 DATABASE
         )));
 
@@ -79,6 +81,29 @@ public class DataSourcePropertiesMap {
                 USERNAME,
                 PASSWORD,
                 DATABASE
+        )));
+        props.put(DB2_DATASOURCE_ID, new ArrayList<>(Arrays.asList(
+                NAME,
+                DESCRIPTION,
+                HOST,
+                PORT,
+                ADDITIONAL_PROPERTIES,
+                USERNAME,
+                PASSWORD,
+                DATABASE
+        )));
+
+        props.put(ORACLE_DATASOURCE_ID, new ArrayList<>(Arrays.asList(
+                NAME,
+                DESCRIPTION,
+                HOST,
+                PORT,
+                ADDITIONAL_PROPERTIES,
+                USERNAME,
+                PASSWORD,
+                DATABASE,
+                SID,
+                DRIVER_TYPE
         )));
     }
 
