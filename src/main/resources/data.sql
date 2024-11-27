@@ -159,4 +159,24 @@ INSERT INTO `datasource_type` (
 'https://www.ibm.com/db2',
 'Db2');
 
+INSERT INTO `datasource_type` (
+`id`,
+`data_source_type`,
+`is_active`,
+`datasource_version`,
+`is_default_driver`,
+`driver_version`,
+`datasource_img_url`,
+`datasource_site`,
+`datasource_label`) VALUES(
+6,
+'oracle',
+1,
+'21C',
+1,
+'23.6.0.24.10',
+'/datasource_logo/oracle_logo.svg',
+'https://www.oracle.com/database/',
+'Oracle');
+
 
