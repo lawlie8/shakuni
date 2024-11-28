@@ -34,5 +34,57 @@
     border-radius: 10px;
     height: calc(100% - 200px);
     overflow-y: auto;
+    overflow-x: hidden;
+}
 
+.configured-user-list-item {
+    width: 100%;
+    padding: 0px;
+    margin-bottom: 10px;
+    height: 70px;
+    &:hover{
+        cursor: pointer;
+        box-shadow: 0px 0px 1px 0px rgba(148, 148, 148, 0.644);
+        border-radius: 10px;
+        background-color: #6868681e;
+    }
+}
+
+
+.configured-user-list {
+    margin: 20px;
+}
+
+.users-configured-segment-breadcrumb {
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+
+.user-search-div{
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.user-search-item{
+    border-bottom: 1px solid gray;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    display: block;
+    height: 35px;
+    position: relative;
+    background-color: white;
+    color: black;
+}
+
+.user-search-logo{
+    display: block;
+    font-size: 35px;
+    position: relative;
+    background-color: white;
+}
+
+.header-user-logo-avatar{
+    
 }

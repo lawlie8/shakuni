@@ -23,14 +23,6 @@ public class ShakuniApplication extends SpringBootServletInitializer {
 		SpringApplication.run(ShakuniApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("*");
-			}
-		};
-	}
+
 
 }

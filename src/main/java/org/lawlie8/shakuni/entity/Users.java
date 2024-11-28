@@ -19,6 +19,9 @@ public class Users {
     @Column(name = "password_hash")
     private String passwordHash;
 
+    @Column(name = "is_default_user")
+    private Boolean isDefaultUser;
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private List<Permissions> permissionsList;
@@ -55,12 +58,21 @@ public class Users {
         this.permissionsList = permissionsList;
     }
 
+    public Boolean getDefaultUser() {
+        return isDefaultUser;
+    }
+
+    public void setDefaultUser(Boolean defaultUser) {
+        isDefaultUser = defaultUser;
+    }
+
     @Override
     public String toString() {
         return "Users{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
+                ", isDefaultUser=" + isDefaultUser +
                 ", permissionsList=" + permissionsList +
                 '}';
     }

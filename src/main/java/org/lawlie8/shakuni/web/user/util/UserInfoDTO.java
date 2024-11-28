@@ -1,5 +1,7 @@
 package org.lawlie8.shakuni.web.user.util;
 
+import org.lawlie8.shakuni.entity.Permissions;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +10,8 @@ public class UserInfoDTO {
     private Long id;
     private String userName;
     private Date creationDate;
-    private List<String> permissionsList;
+    private Boolean isDefaultUser;
+    private List<Permissions> permissionsList;
 
     public Long getId() {
         return id;
@@ -34,12 +37,20 @@ public class UserInfoDTO {
         this.creationDate = creationDate;
     }
 
-    public List<String> getPermissionsList() {
+    public List<Permissions> getPermissionsList() {
         return permissionsList;
     }
 
-    public void setPermissionsList(List<String> permissionsList) {
+    public void setPermissionsList(List<Permissions> permissionsList) {
         this.permissionsList = permissionsList;
+    }
+
+    public Boolean getDefaultUser() {
+        return isDefaultUser;
+    }
+
+    public void setDefaultUser(Boolean defaultUser) {
+        isDefaultUser = defaultUser;
     }
 
     @Override
@@ -48,6 +59,7 @@ public class UserInfoDTO {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", creationDate=" + creationDate +
+                ", isDefaultUser=" + isDefaultUser +
                 ", permissionsList=" + permissionsList +
                 '}';
     }
