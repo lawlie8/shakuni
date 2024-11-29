@@ -4,3 +4,7 @@ import { USER_GET_ALL } from "../../../../util/Constants";
 export function getAllUsers(){
     return instance.get(`${USER_GET_ALL}`)
 }
+
+export function getAllUserRoleOptions(){
+    return instance.get(`${USER_GET_ALL}`)
+}

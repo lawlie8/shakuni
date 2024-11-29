@@ -41,11 +41,12 @@
     width: 100%;
     padding: 0px;
     margin-bottom: 10px;
+    background-color: #6868681e;
+
     &:hover{
         cursor: pointer;
         box-shadow: 0px 0px 1px 0px rgba(148, 148, 148, 0.644);
         border-radius: 10px;
-        background-color: #6868681e;
     }
 }
 
@@ -114,3 +115,39 @@
     float: right;
     width: 233px;
  }
+
+ .user-detail{
+    height: 100%;
+ }
+
+.user-form-col{
+    padding: 10px;
+    margin-top:10px;
+    border-radius: 10px;
+    border: 1px solid #dfdfdf;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+
+    &:hover{
+        background-color: #dfdfdf83;
+    }   
+}
+
+.user-form-row{
+    width:50%;
+    left:50%;
+    position:relative;
+    transform:translateX(-50%);
+    border-radius: 10px;
+
+}
+
+.user-form-col p {
+    margin: 0px;
+}
+
+.form-description{
+    position: relative;
+    float: left;
+    color: black;
+    margin: 0px;
+}

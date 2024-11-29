@@ -146,7 +146,7 @@ export default function DataSources(params = { params }) {
                 <List className='configured-datasource-list'>
                     {
                         configuredDataSourceList?.map((item, index) => (
-                            <List.Item key={item.id} style={{ padding: '5px', border: '1px solid gray', borderRadius: '10px' }} className='configured-datasource-list-item'>
+                            <List.Item key={item.id} style={{ padding: '5px', border: '1px solid gray',boxShadow:'0px 0px 1px 0px gray', borderRadius: '10px' }} className='configured-datasource-list-item'>
                                 <>
 
                                         <ul style={{margin:'0px',padding:'0px',listStyle:'none'}}>
