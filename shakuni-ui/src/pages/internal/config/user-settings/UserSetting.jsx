@@ -1,24 +1,31 @@
-import { DeleteFilled, DeleteOutlined, DownOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getAllUsers,getAllUserRoleOptions } from "./user-setting-service";
+import { getAllUsers, getAllUserRoleOptions } from "./user-setting-service";
 import { setStoreSelectedUserSetting } from "./UserSettingSlice";
-import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Row, Select, Space, Tooltip } from "antd";
+import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Row, Select, Space, Tooltip, Upload } from "antd";
 export default function UserSetting(params = { params }) {
 
     const [allUserInfo, setAllUserInfo] = useState([])
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><UserOutlined style={{ color: 'black' }} onClick={() => { handleBreadCrumbUserConfigureClick() }} /></>) }]);
     const [activeId, setActiveId] = useState(null)
     const [newUserFormActive, setNewUserFormActive] = useState(false)
-    const [roleOptions,setRoleOptions] = [];
+    const [roleOptions, setRoleOptions] = [];
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState("");
     const dispatch = useDispatch();
-
+    const uploadButton = (
+        <button style={{ border: 0, background: 'none',color:'black' }} type="button">
+          {loading ? <LoadingOutlined /> : <PlusCircleOutlined />}
+          <div style={{ marginTop: 8 }}>Upload</div>
+        </button>
+      );
     useEffect(() => {
         getAllUsers().then((response) => {
             setAllUserInfo(response.data)
         })
-        getAllUserRoleOptions().then((response)=>{
+        getAllUserRoleOptions().then((response) => {
             setRoleOptions(response.data)
         })
 
@@ -26,8 +33,8 @@ export default function UserSetting(params = { params }) {
 
     const handleChange = (value) => {
         console.log(`selected ${value}`);
-      };
-    
+    };
+
     function handleNewUserFormActive() {
         setNewUserFormActive(!newUserFormActive)
     }
@@ -38,6 +45,14 @@ export default function UserSetting(params = { params }) {
     }
 
     function handleNewUserFormComplete(values) {
+
+    }
+
+    function beforeUpload(){
+
+    }
+
+    function handleImageChange(){
 
     }
 
@@ -108,13 +123,33 @@ export default function UserSetting(params = { params }) {
                     ))
                 }
                 <List.Item>
-                    <Row style={{ border: '1px solid gray',overflowY:newUserFormActive === true ? 'scroll' : 'hidden', boxShadow: newUserFormActive === true ? '0px 0px 1px 0px gray' : 'none', overflow: 'hidden', marginTop: '0px', width: '100%', borderRadius: '10px', transition: "height 0.3s ease", height: newUserFormActive === true ? '70vh' : '0px' }}>
+                    <Row style={{ border: '1px solid gray', overflowY: newUserFormActive === true ? 'scroll' : 'hidden', boxShadow: newUserFormActive === true ? '0px 0px 1px 0px gray' : 'none', overflow: 'hidden', marginTop: '0px', width: '100%', borderRadius: '10px', transition: "height 0.3s ease", height: newUserFormActive === true ? '70vh' : '0px' }}>
                         <Col span={24}>
                             <div className="user-detail">
                                 <h3>Add New User</h3>
                                 <Divider />
 
                                 <Form onFinish={() => handleNewUserFormComplete()} layout="vertical">
+
+                                    <Row className="user-form-row" >
+                                        <Col span={24} className="user-form-col">
+                                            <Upload
+                                            name="avatar"
+                                            listType="picture-circle"
+                                            className="avatar-uploader"
+                                            showUploadList={false}
+                                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                                            beforeUpload={beforeUpload}
+                                            onChange={handleImageChange}
+                                          >
+                                            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                          </Upload>
+                                          <div className="form-description">
+                                                <p>Upload Profile Image</p>
+                                            </div>
+                                        </Col>
+                                    </Row>
+
                                     <Row className="user-form-row" >
                                         <Col span={24} className="user-form-col">
                                             <Form.Item label="Name" required={true}>
@@ -126,7 +161,7 @@ export default function UserSetting(params = { params }) {
                                         </Col>
                                     </Row>
 
-                                    <Row  className="user-form-row">
+                                    <Row className="user-form-row">
                                         <Col span={24} className="user-form-col">
                                             <Form.Item label="Last Name" required={true}>
                                                 <Input type="text" placeholder="ex. Hamilton"></Input>
@@ -137,7 +172,7 @@ export default function UserSetting(params = { params }) {
                                         </Col>
                                     </Row>
 
-                                    <Row  className="user-form-row">
+                                    <Row className="user-form-row">
                                         <Col span={24} className="user-form-col">
                                             <Form.Item label="Email" required={true}>
                                                 <Input type="email" placeholder="ex. alexander.hamilton@broadway.com"></Input>
@@ -148,9 +183,9 @@ export default function UserSetting(params = { params }) {
                                         </Col>
                                     </Row>
 
-                                    
+
                                     <Row className="user-form-row" justify={'space-between'}>
-                                        <Col span={11} className="user-form-col" style={{float:'left',position:'relative'}}>
+                                        <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative' }}>
                                             <Form.Item label="Password" required={true}>
                                                 <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
                                             </Form.Item>
@@ -172,15 +207,15 @@ export default function UserSetting(params = { params }) {
                                         <Col span={24} className="user-form-col">
                                             <Form.Item label="Role" required={true}>
                                                 <Select
-                                                mode="multiple"
-                                                allowClear
-                                                style={{
-                                                    width: '100%',
-                                                  }}
-                                                placeholder="select Roles"
-                                                defaultValue={['ROLE_USER']}
-                                                onChange={handleChange}
-                                                options={roleOptions}
+                                                    mode="multiple"
+                                                    allowClear
+                                                    style={{
+                                                        width: '100%',
+                                                    }}
+                                                    placeholder="select Roles"
+                                                    defaultValue={['ROLE_USER']}
+                                                    onChange={handleChange}
+                                                    options={roleOptions}
                                                 >
 
                                                 </Select>
