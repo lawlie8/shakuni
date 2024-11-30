@@ -1,4 +1,4 @@
-import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -7,11 +7,11 @@ import { setStoreSelectedUserSetting } from "./UserSettingSlice";
 import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Row, Select, Space, Tooltip, Upload } from "antd";
 export default function UserSetting(params = { params }) {
 
-    const [allUserInfo, setAllUserInfo] = useState([])
+    const [allUserInfo, setAllUserInfo] = useState([]);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><UserOutlined style={{ color: 'black' }} onClick={() => { handleBreadCrumbUserConfigureClick() }} /></>) }]);
     const [activeId, setActiveId] = useState(null)
     const [newUserFormActive, setNewUserFormActive] = useState(false)
-    const [roleOptions, setRoleOptions] = [];
+    const [roleOptions, setRoleOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
     const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export default function UserSetting(params = { params }) {
             setAllUserInfo(response.data)
         })
         getAllUserRoleOptions().then((response) => {
-            setRoleOptions(response.data)
+            setRoleOptions(response.data.permissionList)
         })
 
     }, [])
@@ -45,7 +45,10 @@ export default function UserSetting(params = { params }) {
     }
 
     function handleNewUserFormComplete(values) {
-
+        values.roleList = roleOptions;
+        console.log(values);
+        
+        
     }
 
     function beforeUpload(){
@@ -129,7 +132,7 @@ export default function UserSetting(params = { params }) {
                                 <h3>Add New User</h3>
                                 <Divider />
 
-                                <Form onFinish={() => handleNewUserFormComplete()} layout="vertical">
+                                <Form onFinish={handleNewUserFormComplete} layout="vertical">
 
                                     <Row className="user-form-row" >
                                         <Col span={24} className="user-form-col">
@@ -152,7 +155,7 @@ export default function UserSetting(params = { params }) {
 
                                     <Row className="user-form-row" >
                                         <Col span={24} className="user-form-col">
-                                            <Form.Item label="Name" required={true}>
+                                            <Form.Item name="name"  label="Name" required={true}>
                                                 <Input type="text" placeholder="ex. Alexander"></Input>
                                             </Form.Item>
                                             <div className="form-description">
@@ -163,7 +166,7 @@ export default function UserSetting(params = { params }) {
 
                                     <Row className="user-form-row">
                                         <Col span={24} className="user-form-col">
-                                            <Form.Item label="Last Name" required={true}>
+                                            <Form.Item name="lastName" label="Last Name" required={true}>
                                                 <Input type="text" placeholder="ex. Hamilton"></Input>
                                             </Form.Item>
                                             <div className="form-description">
@@ -174,7 +177,7 @@ export default function UserSetting(params = { params }) {
 
                                     <Row className="user-form-row">
                                         <Col span={24} className="user-form-col">
-                                            <Form.Item label="Email" required={true}>
+                                            <Form.Item name="email" label="Email" required={true}>
                                                 <Input type="email" placeholder="ex. alexander.hamilton@broadway.com"></Input>
                                             </Form.Item>
                                             <div className="form-description">
@@ -186,7 +189,7 @@ export default function UserSetting(params = { params }) {
 
                                     <Row className="user-form-row" justify={'space-between'}>
                                         <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative' }}>
-                                            <Form.Item label="Password" required={true}>
+                                            <Form.Item name="password" label="Password" required={true}>
                                                 <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
                                             </Form.Item>
                                             <div className="form-description">
@@ -194,7 +197,7 @@ export default function UserSetting(params = { params }) {
                                             </div>
                                         </Col>
                                         <Col span={11} offset={2} className="user-form-col">
-                                            <Form.Item label="ReType Password" required={true}>
+                                            <Form.Item name="rePassword" label="ReType Password" required={true}>
                                                 <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
                                             </Form.Item>
                                             <div className="form-description">
@@ -205,7 +208,7 @@ export default function UserSetting(params = { params }) {
 
                                     <Row className="user-form-row" >
                                         <Col span={24} className="user-form-col">
-                                            <Form.Item label="Role" required={true}>
+                                            <Form.Item name="roleList" label="Role" required={true}>
                                                 <Select
                                                     mode="multiple"
                                                     allowClear
@@ -225,6 +228,20 @@ export default function UserSetting(params = { params }) {
                                             </div>
                                         </Col>
                                     </Row>
+                                    
+                                    <Row className="user-form-row" justify={"space-around"}>
+                                        {/* <Col span={11}>
+                                            <Form.Item required={true}>
+                                            <button className="new-user-button" type="primary" iconPosition={"start"}><UserAddOutlined /> New User</button>
+                                            </Form.Item>
+                                        </Col> */}
+                                        <Col span={22} offset={2}>
+                                            <Form.Item required={true}>
+                                            <button className="new-user-button" type="primary" iconPosition={"start"}><UserAddOutlined style={{fontSize:'20px'}} /> Save User</button>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+
 
                                 </Form>
                             </div>
