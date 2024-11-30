@@ -26,4 +26,4 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 ### Connection Via JDBC Properties
 <a href="https://ibb.co/TWcZ88P"><img src="https://i.ibb.co/y40Dyyg/hive-props.png" alt="hive-props" border="0"></a>
 ### Permission based User Management
-<a href="https://ibb.co/3fRdpxT"><img src="https://i.ibb.co/f8DFk3X/Screenshot-2024-11-29-224412.png" alt="Screenshot-2024-11-29-224412" border="0"></a>
+<a href="https://ibb.co/S3H8ZZt"><img src="https://i.ibb.co/MCK4JJc/Screenshot-2024-11-30-124439.png" alt="Screenshot-2024-11-30-124439" border="0"></a>
