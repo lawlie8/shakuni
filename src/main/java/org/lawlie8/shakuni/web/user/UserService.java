@@ -1,8 +1,10 @@
 package org.lawlie8.shakuni.web.user;
 
+import org.lawlie8.shakuni.entity.User.PermissionList;
 import org.lawlie8.shakuni.entity.User.Users;
 import org.lawlie8.shakuni.entity.User.Role;
 
+import org.lawlie8.shakuni.repo.PermissionListRepo;
 import org.lawlie8.shakuni.repo.RoleRepo;
 import org.lawlie8.shakuni.repo.UserRepo;
 import org.lawlie8.shakuni.web.user.util.UserInfoDTO;
@@ -26,6 +28,9 @@ public class UserService {
     @Autowired
     private RoleRepo roleRepo;
 
+    @Autowired
+    private PermissionListRepo permissionListRepo;
+
 
     public List<UserInfoDTO> fetchAllUsers(){
 
@@ -48,12 +53,24 @@ public class UserService {
         return userInfoDTOList;
     }
 
-    public List<Role> fetchALlRoles(){
+    public List<Role> fetchAllRoles(){
 
         List<Role> roleList = new ArrayList<>();
         try {
             log.info("Fetching Configured Role List");
             roleList = roleRepo.findAll();
+        }catch (Exception e){
+            log.error("Exception Occurred While Fetching Role List");
+        }
+        return roleList;
+    }
+
+    public List<PermissionList> fetchAllPermission(){
+
+        List<PermissionList> roleList = new ArrayList<>();
+        try {
+            log.info("Fetching Configured Role List");
+            roleList = permissionListRepo.findAll();
         }catch (Exception e){
             log.error("Exception Occurred While Fetching Role List");
         }
