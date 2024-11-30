@@ -1,9 +1,7 @@
 package org.lawlie8.shakuni.security.config;
 
 
-import org.hibernate.Hibernate;
-import org.lawlie8.shakuni.entity.Permissions;
-import org.lawlie8.shakuni.entity.Users;
+import org.lawlie8.shakuni.entity.User.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 @Component
 public class CustomUserDetails implements UserDetails {
@@ -57,11 +53,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> simpleGrantedAuthorityList = new ArrayList<>();
-        Hibernate.initialize(users.getPermissionsList());
-        for(int i=0;i< users.getPermissionsList().size();i++){
-            SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(users.getPermissionsList().get(i).getPermissionName());
-            simpleGrantedAuthorityList.add(simpleGrantedAuthority);
-        }
+//        for(int i=0;i< users.getRole().getPermissionsList().size();i++){
+//            //SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(users.getRole().getPermissionsList().get(i).getPermissionName());
+//            //simpleGrantedAuthorityList.add(simpleGrantedAuthority);
+//        }
         return simpleGrantedAuthorityList;
     }
 

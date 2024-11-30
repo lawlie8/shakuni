@@ -16,3 +16,6 @@ export const DATASOURCE_SAVE_CONNECTION = "/app/datasource/configured/save";
 
 export const USER_GET_ALL = "/app/user/all/get";
 export const USER_GET_BY_ID = "/app/user/get";
+
+export const ROLE_GET_ALL = "/app/user/role/all/get";
+export const PERMISSION_GET_ALL = "/app/user/permission/all/get";

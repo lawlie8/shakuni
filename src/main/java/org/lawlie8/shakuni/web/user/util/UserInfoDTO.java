@@ -1,6 +1,6 @@
 package org.lawlie8.shakuni.web.user.util;
 
-import org.lawlie8.shakuni.entity.Permissions;
+import org.lawlie8.shakuni.entity.User.Permissions;
 
 import java.util.Date;
 import java.util.List;

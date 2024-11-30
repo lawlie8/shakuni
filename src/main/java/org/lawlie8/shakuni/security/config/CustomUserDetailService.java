@@ -1,7 +1,7 @@
 package org.lawlie8.shakuni.security.config;
 
 
-import org.lawlie8.shakuni.entity.Users;
+import org.lawlie8.shakuni.entity.User.Users;
 import org.lawlie8.shakuni.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -179,4 +179,17 @@ INSERT INTO `datasource_type` (
 'https://www.oracle.com/database/',
 'Oracle');
 
+//Roles
+
+CREATE TABLE `roles` (
+	`id` INTEGER auto_increment NOT NULL,
+	`role_name` varchar(100) NOT NULL,
+	CONSTRAINT roles_pk PRIMARY KEY (id),
+	CONSTRAINT roles_unique UNIQUE KEY (role_name)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=latin1
+COLLATE=latin1_swedish_ci
+COMMENT='Table Contains User Roles';
+
 

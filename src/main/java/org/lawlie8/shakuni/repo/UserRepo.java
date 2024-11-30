@@ -1,6 +1,6 @@
 package org.lawlie8.shakuni.repo;
 
-import org.lawlie8.shakuni.entity.Users;
+import org.lawlie8.shakuni.entity.User.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

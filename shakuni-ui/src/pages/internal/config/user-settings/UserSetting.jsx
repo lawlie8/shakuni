@@ -1,10 +1,10 @@
-import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlined, PlusCircleOutlined, SearchOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlined, PlusCircleOutlined, SaveOutlined, SearchOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllUsers, getAllUserRoleOptions } from "./user-setting-service";
 import { setStoreSelectedUserSetting } from "./UserSettingSlice";
-import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Row, Select, Space, Tooltip, Upload } from "antd";
+import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
 export default function UserSetting(params = { params }) {
 
     const [allUserInfo, setAllUserInfo] = useState([]);
@@ -13,22 +13,35 @@ export default function UserSetting(params = { params }) {
     const [newUserFormActive, setNewUserFormActive] = useState(false)
     const [roleOptions, setRoleOptions] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [customRole, setCustomRole] = useState(false);
+
+    const [apiLoaded, setApiLoaded] = useState(false);
+
     const [imageUrl, setImageUrl] = useState("");
     const dispatch = useDispatch();
     const uploadButton = (
-        <button style={{ border: 0, background: 'none',color:'black' }} type="button">
-          {loading ? <LoadingOutlined /> : <PlusCircleOutlined />}
-          <div style={{ marginTop: 8 }}>Upload</div>
+        <button style={{ border: 0, background: 'none', color: 'black' }} type="button">
+            {loading ? <LoadingOutlined /> : <PlusCircleOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
         </button>
-      );
+    );
+
     useEffect(() => {
         getAllUsers().then((response) => {
             setAllUserInfo(response.data)
         })
-        getAllUserRoleOptions().then((response) => {
-            setRoleOptions(response.data.permissionList)
-        })
 
+        getAllUserRoleOptions().then((response) => {
+            setRoleOptions([]);
+            response.data.map((item) => {
+
+                setRoleOptions(arr => [...arr, {
+                    value: item.roleName,
+                    label: item.roleName
+                }]);
+            })
+        })
+        setApiLoaded(true);
     }, [])
 
     const handleChange = (value) => {
@@ -47,16 +60,20 @@ export default function UserSetting(params = { params }) {
     function handleNewUserFormComplete(values) {
         values.roleList = roleOptions;
         console.log(values);
-        
-        
-    }
 
-    function beforeUpload(){
 
     }
 
-    function handleImageChange(){
+    function beforeUpload() {
 
+    }
+
+    function handleImageChange() {
+
+    }
+
+    function handleCustomRoleAction() {
+        setCustomRole(!customRole)
     }
 
     return <div className="user-main">
@@ -125,129 +142,175 @@ export default function UserSetting(params = { params }) {
                         </List.Item>
                     ))
                 }
-                <List.Item>
-                    <Row style={{ border: '1px solid gray', overflowY: newUserFormActive === true ? 'scroll' : 'hidden', boxShadow: newUserFormActive === true ? '0px 0px 1px 0px gray' : 'none', overflow: 'hidden', marginTop: '0px', width: '100%', borderRadius: '10px', transition: "height 0.3s ease", height: newUserFormActive === true ? '70vh' : '0px' }}>
-                        <Col span={24}>
-                            <div className="user-detail">
-                                <h3>Add New User</h3>
-                                <Divider />
+                {
+                    apiLoaded ? <List.Item>
+                        <Row style={{ border: '1px solid gray', overflowY: newUserFormActive === true ? 'scroll' : 'hidden', boxShadow: newUserFormActive === true ? '0px 0px 1px 0px gray' : 'none', overflow: 'hidden', marginTop: '0px', width: '100%', borderRadius: '10px', transition: "height 0.3s ease", height: newUserFormActive === true ? '70vh' : '0px' }}>
+                            <Col span={24}>
+                                <div className="user-detail">
+                                    <h3>Add New User</h3>
+                                    <Divider />
 
-                                <Form onFinish={handleNewUserFormComplete} layout="vertical">
+                                    <Form onFinish={handleNewUserFormComplete} layout="vertical">
 
-                                    <Row className="user-form-row" >
-                                        <Col span={24} className="user-form-col">
-                                            <Upload
-                                            name="avatar"
-                                            listType="picture-circle"
-                                            className="avatar-uploader"
-                                            showUploadList={false}
-                                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                                            beforeUpload={beforeUpload}
-                                            onChange={handleImageChange}
-                                          >
-                                            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                                          </Upload>
-                                          <div className="form-description">
-                                                <p>Upload Profile Image</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="user-form-row" >
-                                        <Col span={24} className="user-form-col">
-                                            <Form.Item name="name"  label="Name" required={true}>
-                                                <Input type="text" placeholder="ex. Alexander"></Input>
-                                            </Form.Item>
-                                            <div className="form-description">
-                                                <p>Enter Your Name</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="user-form-row">
-                                        <Col span={24} className="user-form-col">
-                                            <Form.Item name="lastName" label="Last Name" required={true}>
-                                                <Input type="text" placeholder="ex. Hamilton"></Input>
-                                            </Form.Item>
-                                            <div className="form-description">
-                                                <p>Enter Your Last Name</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="user-form-row">
-                                        <Col span={24} className="user-form-col">
-                                            <Form.Item name="email" label="Email" required={true}>
-                                                <Input type="email" placeholder="ex. alexander.hamilton@broadway.com"></Input>
-                                            </Form.Item>
-                                            <div className="form-description">
-                                                <p>Enter Your Email</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-
-                                    <Row className="user-form-row" justify={'space-between'}>
-                                        <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative' }}>
-                                            <Form.Item name="password" label="Password" required={true}>
-                                                <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
-                                            </Form.Item>
-                                            <div className="form-description">
-                                                <p>Enter Secured Password</p>
-                                            </div>
-                                        </Col>
-                                        <Col span={11} offset={2} className="user-form-col">
-                                            <Form.Item name="rePassword" label="ReType Password" required={true}>
-                                                <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
-                                            </Form.Item>
-                                            <div className="form-description">
-                                                <p>Re Enter Secured Password</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="user-form-row" >
-                                        <Col span={24} className="user-form-col">
-                                            <Form.Item name="roleList" label="Role" required={true}>
-                                                <Select
-                                                    mode="multiple"
-                                                    allowClear
-                                                    style={{
-                                                        width: '100%',
-                                                    }}
-                                                    placeholder="select Roles"
-                                                    defaultValue={['ROLE_USER']}
-                                                    onChange={handleChange}
-                                                    options={roleOptions}
+                                        <Row className="user-form-row" >
+                                            <Col span={24} className="user-form-col">
+                                                <Upload
+                                                    name="avatar"
+                                                    listType="picture-circle"
+                                                    className="avatar-uploader"
+                                                    showUploadList={false}
+                                                    action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                                                    beforeUpload={beforeUpload}
+                                                    onChange={handleImageChange}
                                                 >
+                                                    {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                                </Upload>
+                                                <div className="form-description">
+                                                    <p>Upload Profile Picture</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
 
-                                                </Select>
-                                            </Form.Item>
-                                            <div className="form-description">
-                                                <p>Enter User Roles</p>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    
-                                    <Row className="user-form-row" justify={"space-around"}>
-                                        {/* <Col span={11}>
+                                        <Row className="user-form-row" >
+                                            <Col span={24} className="user-form-col">
+                                                <Form.Item name="name" label="Name" required={true}>
+                                                    <Input type="text" placeholder="ex. Alexander"></Input>
+                                                </Form.Item>
+                                                <div className="form-description">
+                                                    <p>Enter Your Name</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <Row className="user-form-row">
+                                            <Col span={24} className="user-form-col">
+                                                <Form.Item name="lastName" label="Last Name" required={true}>
+                                                    <Input type="text" placeholder="ex. Hamilton"></Input>
+                                                </Form.Item>
+                                                <div className="form-description">
+                                                    <p>Enter Your Last Name</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <Row className="user-form-row">
+                                            <Col span={24} className="user-form-col">
+                                                <Form.Item name="email" label="Email" required={true}>
+                                                    <Input type="email" placeholder="ex. alexander.hamilton@lawlie8.org"></Input>
+                                                </Form.Item>
+                                                <div className="form-description">
+                                                    <p>Enter Your Email</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+
+                                        <Row className="user-form-row" justify={'space-between'}>
+                                            <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative' }}>
+                                                <Form.Item name="password" label="Password" required={true}>
+                                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
+                                                </Form.Item>
+                                                <div className="form-description">
+                                                    <p>Enter Secured Password</p>
+                                                </div>
+                                            </Col>
+                                            <Col span={11} offset={2} className="user-form-col">
+                                                <Form.Item name="rePassword" label="ReType Password" required={true}>
+                                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
+                                                </Form.Item>
+                                                <div className="form-description">
+                                                    <p>Re Enter Secured Password</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <Row className="user-form-row" >
+                                            <Col span={24} className="user-form-col">
+                                                <Form.Item name="role" label="Role" required={true}>
+                                                    <Row>
+                                                        {
+                                                            customRole ?
+                                                                <Col span={22}>
+                                                                    <Input name="customRole" placeholder="Create New Role"></Input>
+                                                                </Col>
+
+                                                                :
+                                                                <Col span={22}>
+                                                                    <Select
+                                                                        showSearch
+                                                                        allowClear
+                                                                        style={{
+                                                                            width: '100%',
+                                                                        }}
+                                                                        placeholder="Select Roles"
+                                                                        onChange={handleChange}
+                                                                        options={roleOptions}
+                                                                    />
+                                                                </Col>
+
+                                                        }
+
+                                                        <Col span={2}>
+                                                            <Tooltip title={customRole ? "Select Existing Role" : "Create Custom Role"}>
+                                                                <Button onClick={() => handleCustomRoleAction()} ><PlusCircleOutlined style={{ fontSize: '20px', transform: customRole ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }} /></Button>
+                                                            </Tooltip>
+                                                        </Col>
+                                                    </Row>
+                                                </Form.Item>
+
+                                                <div className="form-description">
+                                                    <p>Enter User Roles</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        {
+                                            <Row className="user-form-row" >
+                                                <Col span={24} className="user-form-col" style={{backgroundColor: !customRole ? '#dfdfdf' : 'white' }}>
+                                                    <Form.Item name="permissionList" label="Permission List" required={true}>
+
+                                                        <Select
+                                                            disabled={!customRole}
+                                                            mode="multiple"
+                                                            showSearch
+                                                            allowClear
+                                                            style={{
+                                                                width: '100%',
+                                                            }}
+                                                            placeholder={!customRole ? "Disabled" : "Select Permission List"}
+                                                            onChange={handleChange}
+                                                            options={roleOptions}
+                                                        />
+
+
+                                                    </Form.Item>
+                                                    <div className="form-description">
+                                                        <p>Select Required Permission</p>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        }
+
+                                        <Row className="user-form-row" justify={"space-around"}>
+                                            {/* <Col span={11}>
                                             <Form.Item required={true}>
                                             <button className="new-user-button" type="primary" iconPosition={"start"}><UserAddOutlined /> New User</button>
                                             </Form.Item>
                                         </Col> */}
-                                        <Col span={22} offset={2}>
-                                            <Form.Item required={true}>
-                                            <button className="new-user-button" type="primary" iconPosition={"start"}><UserAddOutlined style={{fontSize:'20px'}} /> Save User</button>
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
+                                            <Col span={22} offset={2}>
+                                                <Form.Item required={true}>
+                                                    <button className="new-user-button" type="primary" iconPosition={"start"}><SaveOutlined style={{ fontSize: '20px' }} /> Save User</button>
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
 
 
-                                </Form>
-                            </div>
-                        </Col>
-                    </Row>
-                </List.Item>
+                                    </Form>
+                                </div>
+                            </Col>
+                        </Row>
+                    </List.Item> : <div></div>
+                }
+
             </List>
         </div>
     </div>

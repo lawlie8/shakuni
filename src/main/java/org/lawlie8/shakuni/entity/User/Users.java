@@ -1,8 +1,6 @@
-package org.lawlie8.shakuni.entity;
+package org.lawlie8.shakuni.entity.User;
 
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,9 +20,9 @@ public class Users {
     @Column(name = "is_default_user")
     private Boolean isDefaultUser;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
-    @JoinColumn(name = "user_id")
-    private List<Permissions> permissionsList;
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
+    @JoinColumn(name = "id")
+    private Role role;
 
     public Long getId() {
         return id;
@@ -50,12 +48,12 @@ public class Users {
         this.passwordHash = passwordHash;
     }
 
-    public List<Permissions> getPermissionsList() {
-        return permissionsList;
+    public Role getRole() {
+        return role;
     }
 
-    public void setPermissionsList(List<Permissions> permissionsList) {
-        this.permissionsList = permissionsList;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Boolean getDefaultUser() {
@@ -73,7 +71,7 @@ public class Users {
                 ", userName='" + userName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 ", isDefaultUser=" + isDefaultUser +
-                ", permissionsList=" + permissionsList +
+                ", role=" + role +
                 '}';
     }
 }
