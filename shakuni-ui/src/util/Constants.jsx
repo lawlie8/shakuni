@@ -20,4 +20,7 @@ export const USER_GET_BY_ID = "/app/user/get";
 export const ROLE_GET_ALL = "/app/user/role/all/get";
 export const PERMISSION_GET_ALL = "/app/user/permission/all/get";
 export const PERMISSION_GET_BY_NAME = "/app/user/permission/name/get";
+export const SAVE_NEW_USER = "/app/user/save";
+
+
 

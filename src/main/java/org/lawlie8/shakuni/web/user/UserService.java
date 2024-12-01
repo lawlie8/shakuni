@@ -8,6 +8,7 @@ import org.lawlie8.shakuni.repo.PermissionListRepo;
 import org.lawlie8.shakuni.repo.PermissionRepo;
 import org.lawlie8.shakuni.repo.RoleRepo;
 import org.lawlie8.shakuni.repo.UserRepo;
+import org.lawlie8.shakuni.web.user.util.SaveUserDTO;
 import org.lawlie8.shakuni.web.user.util.UserInfoDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +103,11 @@ public class UserService {
             log.error("Exception Occurred While Fetching Role List");
         }
         return roleList;
+    }
+
+    public Boolean saveNewUser(SaveUserDTO saveUserDTO){
+        log.info(saveUserDTO.toString());
+        return true;
     }
 
 }

@@ -2,6 +2,7 @@ package org.lawlie8.shakuni.web.user;
 
 import org.lawlie8.shakuni.entity.User.PermissionList;
 import org.lawlie8.shakuni.entity.User.Role;
+import org.lawlie8.shakuni.web.user.util.SaveUserDTO;
 import org.lawlie8.shakuni.web.user.util.UserInfoDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +78,21 @@ public class UserResource {
             return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(roleList,HttpStatus.OK);
-
     }
+
+
+    @RequestMapping(value = "/user/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>  saveNewUser(@RequestBody SaveUserDTO saveUserDTO){
+        Boolean isUserSaved = false;
+        try {
+            log.info("Rest Call to Save User");
+            isUserSaved =  userService.saveNewUser(saveUserDTO);
+        }catch (Exception e){
+            log.error("Error Occurred While Saving User",e.getStackTrace());
+            return new ResponseEntity<>("Error While Saving User Roles",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(isUserSaved,HttpStatus.OK);
+    }
+
 
 }

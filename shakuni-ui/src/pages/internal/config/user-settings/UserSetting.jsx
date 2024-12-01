@@ -2,7 +2,7 @@ import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlin
 import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions, getAllPermissionOptionsByRoleName } from "./user-setting-service";
+import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions, getAllPermissionOptionsByRoleName, saveUser } from "./user-setting-service";
 import { setStoreSelectedUserSetting } from "./UserSettingSlice";
 import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, notification, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
 export default function UserSetting(params = { params }) {
@@ -89,18 +89,26 @@ export default function UserSetting(params = { params }) {
             values.role = selectedRole;
         }
 
-        if(customRole === true && values.permissionList.length === 0){
+        if (customRole === true && values.permissionList.length === 0) {
             notification.error({
-                message:'User Not Saved',
-                description:'Permission List Cannot be Empty',
-                duration:1,
-                style:{width:'250px'}
+                message: 'Error',
+                description: 'Permission List Cannot be Empty',
+                duration: 1,
+                style: { width: '250px' }
             })
-        }else{
-            console.log("saving Form",values);
-            
+        } else {
+            saveUser(values).then((response) => {
+                if (response.status === 200) {
+                    notification.success({
+                        message: 'Sucess',
+                        description: 'User Saved',
+                        duration: 2,
+                        style: { width: '250px' }
+                    })
+                }
+            })
         }
-        
+
     }
 
     function beforeUpload() {
@@ -297,14 +305,14 @@ export default function UserSetting(params = { params }) {
                                                                         defaultValue={[selectedRole]}
                                                                     />
                                                                 </Col>
-                                                                
+
                                                                 <Col span={2}>
                                                                     <Tooltip title={customRole ? "Select Existing Role" : "Create Custom Role"}>
                                                                         <Button onClick={() => handleCustomRoleAction()} ><PlusCircleOutlined style={{ fontSize: '20px', transform: customRole ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }} /></Button>
                                                                     </Tooltip>
                                                                 </Col>
                                                             </Row>
-                                                            </Form.Item>
+                                                        </Form.Item>
 
                                                 }
 
@@ -332,7 +340,7 @@ export default function UserSetting(params = { params }) {
                                                                         width: '100%',
                                                                     }}
                                                                     placeholder={!customRole ? "" : "Select Permission List"}
-                                                                    onChange={()=>{}}
+                                                                    onChange={() => { }}
                                                                     options={permissionOptions}
                                                                     defaultValue={['sdsd']}
 
