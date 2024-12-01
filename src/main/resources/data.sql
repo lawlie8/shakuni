@@ -28,15 +28,6 @@ CREATE TABLE `configured_datasource` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
-
-LOCK TABLES `configured_datasource` WRITE;
-/*!40000 ALTER TABLE `configured_datasource` DISABLE KEYS */;
-INSERT INTO `configured_datasource` VALUES (1,'maraiadbasdd','MariaDB Localhost 3306','admin@lawlie8.org','2024-11-27 09:47:35',1),(2,'MariaDb3','This is Description for Mariadb Testing Database not 2','anonymousUser','2024-11-25 20:35:46',1),(3,'Mysql 1 ','Mysql dataSource','anonymousUser','2024-11-25 20:39:21',3),(4,'Postgres','Postgres Database','admin@lawlie8.org','2024-11-27 10:01:56',2),(5,'Hive','hive datasoirce','admin@lawlie8.org','2024-11-27 10:01:33',4),(6,'Hive Docker Internal','Docker based installation for Hive DataSource','anonymousUser','2024-11-26 17:22:51',4),(7,'Db2',NULL,'anonymousUser','2024-11-27 18:14:46',5),(8,'Oracle',NULL,'anonymousUser','2024-11-27 23:53:07',6);
-/*!40000 ALTER TABLE `configured_datasource` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-
 DROP TABLE IF EXISTS `datasource_properties`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -50,14 +41,6 @@ CREATE TABLE `datasource_properties` (
   CONSTRAINT `datasource_properties_ibfk_1` FOREIGN KEY (`configured_datasource_id`) REFERENCES `configured_datasource` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
-
-
-LOCK TABLES `datasource_properties` WRITE;
-/*!40000 ALTER TABLE `datasource_properties` DISABLE KEYS */;
-INSERT INTO `datasource_properties` VALUES (1,1,'name','maraiadbasdd'),(2,1,'description','MariaDB Localhost 3306'),(3,1,'host','localhost'),(4,1,'port','3306'),(5,1,'userName','reader'),(6,1,'password','readerpass'),(7,1,'database','shakuni_db'),(8,1,'additionalProperties','TrustCertificate=false;'),(9,2,'name','MariaDb3'),(10,2,'description','This is Description for Mariadb Testing Database not 2'),(11,2,'host','localhost'),(12,2,'port','3306'),(13,2,'userName','reader'),(14,2,'password','readerpass'),(15,2,'database','shakuni_db'),(16,2,'additionalProperties',NULL),(17,3,'name','Mysql 1 '),(18,3,'description','Mysql dataSource'),(19,3,'host','localhost'),(20,3,'port','3306'),(21,3,'userName','reader'),(22,3,'password','readerpass'),(23,3,'database','shakuni_db'),(24,3,'additionalProperties',NULL),(25,4,'name','Postgres'),(26,4,'description','Postgres Database'),(27,4,'host','localhost'),(28,4,'port','5432'),(29,4,'userName','postgres'),(30,4,'password','password'),(31,4,'database','postgres'),(32,4,'additionalProperties',NULL),(33,5,'name','Hive'),(34,5,'description','hive datasoirce'),(35,5,'host','localhost'),(36,5,'port','10000'),(37,5,'userName',' hive'),(38,5,'password','hive'),(39,5,'database','default'),(40,5,'additionalProperties',NULL),(41,6,'name','Hive Docker Internal'),(42,6,'description','Docker based installation for Hive DataSource'),(43,6,'host','localhost'),(44,6,'port','10000'),(45,6,'userName','hive'),(46,6,'password','hive'),(47,6,'database','default'),(48,6,'additionalProperties',NULL),(49,7,'name','Db2'),(50,7,'description',NULL),(51,7,'host','localhost'),(52,7,'port','50000'),(53,7,'userName','db2inst1'),(54,7,'password','password'),(55,7,'database','testdb'),(56,7,'additionalProperties',NULL),(57,8,'name','Oracle'),(58,8,'description',NULL),(59,8,'host','localhost'),(60,8,'port','1521'),(61,8,'userName','system'),(62,8,'password','welcome123'),(63,8,'database',''),(64,8,'additionalProperties',NULL),(65,8,'driverType','thin'),(66,8,'sid','xe');
-/*!40000 ALTER TABLE `datasource_properties` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 DROP TABLE IF EXISTS `datasource_type`;
