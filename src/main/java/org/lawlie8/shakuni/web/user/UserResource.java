@@ -1,5 +1,6 @@
 package org.lawlie8.shakuni.web.user;
 
+import org.lawlie8.shakuni.entity.User.PermissionList;
 import org.lawlie8.shakuni.entity.User.Role;
 import org.lawlie8.shakuni.web.user.util.UserInfoDTO;
 import org.slf4j.Logger;
@@ -43,7 +44,21 @@ public class UserResource {
         List<Role> roleList = new ArrayList<>();
         try {
             log.info("Rest Call to Fetch All Roles");
-            roleList =  userService.fetchALlRoles();
+            roleList =  userService.fetchAllRoles();
+        }catch (Exception e){
+            log.error("Error Occurred While Fetching Roles",e.getStackTrace());
+            return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(roleList,HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/user/permission/all/get",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>  getAllPermission(){
+        List<PermissionList> roleList = new ArrayList<>();
+        try {
+            log.info("Rest Call to Fetch All Roles");
+            roleList =  userService.fetchAllPermission();
         }catch (Exception e){
             log.error("Error Occurred While Fetching Roles",e.getStackTrace());
             return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);

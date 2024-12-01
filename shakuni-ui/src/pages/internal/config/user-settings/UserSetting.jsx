@@ -2,7 +2,7 @@ import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlin
 import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getAllUsers, getAllUserRoleOptions } from "./user-setting-service";
+import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions } from "./user-setting-service";
 import { setStoreSelectedUserSetting } from "./UserSettingSlice";
 import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
 export default function UserSetting(params = { params }) {
@@ -12,6 +12,8 @@ export default function UserSetting(params = { params }) {
     const [activeId, setActiveId] = useState(null)
     const [newUserFormActive, setNewUserFormActive] = useState(false)
     const [roleOptions, setRoleOptions] = useState([]);
+    const [permissionOptions, setPermissionOptions] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [customRole, setCustomRole] = useState(false);
 
@@ -34,17 +36,30 @@ export default function UserSetting(params = { params }) {
         getAllUserRoleOptions().then((response) => {
             setRoleOptions([]);
             response.data.map((item) => {
-
                 setRoleOptions(arr => [...arr, {
                     value: item.roleName,
                     label: item.roleName
                 }]);
             })
         })
+
+        getAllPermissionOptions().then((response)=>{
+            setPermissionOptions([])
+            response.data.map((item)=>{
+                setPermissionOptions(arr => [...arr, {
+                    value: item.permissionName,
+                    label: item.permissionName
+                }]);
+            })
+        })
+
         setApiLoaded(true);
+
     }, [])
 
     const handleChange = (value) => {
+        //Fetch Role Permission Based On User Role
+        //and add to default values of Select Permission List
         console.log(`selected ${value}`);
     };
 
@@ -278,8 +293,9 @@ export default function UserSetting(params = { params }) {
                                                             }}
                                                             placeholder={!customRole ? "Disabled" : "Select Permission List"}
                                                             onChange={handleChange}
-                                                            options={roleOptions}
-                                                        />
+                                                            options={permissionOptions}
+                                                            defaultValue={customRole ? permissionOptions : []}
+                                                        /> 
 
 
                                                     </Form.Item>
