@@ -20,6 +20,9 @@ public class Users {
     @Column(name = "is_default_user")
     private Boolean isDefaultUser;
 
+    @Column(name = "role_id")
+    private Long roleId;
+
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @JoinColumn(name = "id")
     private Role role;
@@ -64,6 +67,14 @@ public class Users {
         isDefaultUser = defaultUser;
     }
 
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public String toString() {
         return "Users{" +
@@ -71,6 +82,7 @@ public class Users {
                 ", userName='" + userName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 ", isDefaultUser=" + isDefaultUser +
+                ", roleId=" + roleId +
                 ", role=" + role +
                 '}';
     }

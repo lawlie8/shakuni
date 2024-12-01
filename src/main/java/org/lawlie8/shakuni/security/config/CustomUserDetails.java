@@ -1,7 +1,15 @@
 package org.lawlie8.shakuni.security.config;
 
 
+import org.lawlie8.shakuni.entity.User.PermissionList;
+import org.lawlie8.shakuni.entity.User.Permissions;
 import org.lawlie8.shakuni.entity.User.Users;
+import org.lawlie8.shakuni.web.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,20 +17,29 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Component
 public class CustomUserDetails implements UserDetails {
 
     private Users users;
 
-    public CustomUserDetails(){
+    private static final Logger log = LoggerFactory.getLogger(CustomUserDetails.class);
 
+    @Autowired
+    private UserService userService;
+
+    public CustomUserDetails(){
     }
 
     public CustomUserDetails(Users users) {
         super();
         this.users = users;
+    }
 
+    public CustomUserDetails(Users users, UserService userService) {
+        this.users = users;
+        this.userService = userService;
     }
 
     @Override
@@ -53,11 +70,18 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> simpleGrantedAuthorityList = new ArrayList<>();
-//        for(int i=0;i< users.getRole().getPermissionsList().size();i++){
-//            //SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(users.getRole().getPermissionsList().get(i).getPermissionName());
-//            //simpleGrantedAuthorityList.add(simpleGrantedAuthority);
-//        }
+        List<PermissionList> permissionsList = userService.fetchPermissionByRoleList(users.getRoleId());
+        for(PermissionList permission : permissionsList){
+            log.debug("Adding Permission to User "+ permission.getPermissionName());
+            SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("PER_"+permission.getPermissionName());
+            simpleGrantedAuthorityList.add(simpleGrantedAuthority);
+        }
         return simpleGrantedAuthorityList;
+    }
+
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("PER");
     }
 
     @Override

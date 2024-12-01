@@ -24,35 +24,35 @@ public class DataSourceResource {
     private static final Logger log = LoggerFactory.getLogger(DataSourceResource.class);
 
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('VIEW_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_VIEW_DATASOURCE')")
     @RequestMapping(path = "/datasource/type/all",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllDataSourceType(){
         List<DataSourceType> dataSourceTypeList = dataSourceService.getAllDataSource();
         return ResponseEntity.ok(dataSourceTypeList);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('VIEW_DATASOURCE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_VIEW_DATASOURCE')")
     @RequestMapping(path = "/datasource/configured/type/get/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDataSourceById(@PathVariable(name = "id") Long id){
         List<ConfiguredDataSource> dataSourceTypeList = dataSourceService.getDataSourceByDataSourceTypeId(id);
         return ResponseEntity.ok(dataSourceTypeList);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('VIEW_DATASOURCE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_VIEW_DATASOURCE')")
     @RequestMapping(path = "/datasource/configured/value/get/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDataSourceValuesById(@PathVariable(name = "id") Long id){
         List<DataSourceProperties> dataSourceTypeList = dataSourceService.getDataSourceValuesByConfiguredDataSourceId(id);
         return ResponseEntity.ok(dataSourceTypeList);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('VIEW_DATASOURCE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_VIEW_DATASOURCE')")
     @RequestMapping(path = "/datasource/configured/type/properties/get/{id}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDataSourcePropertiesById(@PathVariable(name = "id") Long id){
         Map<DataSourcePropertiesEnum, Map<String,String>> properties = dataSourceService.getDataSourcePropertiesById(id);
         return ResponseEntity.ok(properties);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('DELETE_DATASOURCE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_DELETE_DATASOURCE')")
     @RequestMapping(path = "/datasource/configured/delete/{id}",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteDataSourceById(@PathVariable(name = "id") Long id){
         try {
@@ -63,7 +63,7 @@ public class DataSourceResource {
         return ResponseEntity.ok("Deleted Successfully");
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('CHECK_DATASOURCE_CONNECTION')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_CHECK_DATASOURCE_CONNECTION')")
     @RequestMapping(path = "/datasource/configured/check",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> checkDataSourceConnection(@RequestBody DataSourceConnectionObject dataSourceConnectionObject){
         try {
@@ -75,7 +75,7 @@ public class DataSourceResource {
         return ResponseEntity.badRequest().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('SAVE_DATASOURCE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_SAVE_DATASOURCE')")
     @RequestMapping(path = "/datasource/configured/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDataSourceConnection(@RequestBody DataSourceConnectionObject dataSourceConnectionObject){
         try {
