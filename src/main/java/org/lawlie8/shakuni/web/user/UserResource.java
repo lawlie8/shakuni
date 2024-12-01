@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +60,21 @@ public class UserResource {
         try {
             log.info("Rest Call to Fetch All Roles");
             roleList =  userService.fetchAllPermission();
+        }catch (Exception e){
+            log.error("Error Occurred While Fetching Roles",e.getStackTrace());
+            return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(roleList,HttpStatus.OK);
+
+    }
+
+
+    @RequestMapping(value = "/user/permission/name/get/{roleName}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>  getPermissionByRoleName(@PathVariable String roleName){
+        List<PermissionList> roleList = new ArrayList<>();
+        try {
+            log.info("Rest Call to Fetch All Roles");
+            roleList =  userService.fetchPermissionByRoleName(roleName);
         }catch (Exception e){
             log.error("Error Occurred While Fetching Roles",e.getStackTrace());
             return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);

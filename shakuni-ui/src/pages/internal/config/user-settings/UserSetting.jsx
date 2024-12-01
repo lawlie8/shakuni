@@ -2,7 +2,7 @@ import { DeleteFilled, DeleteOutlined, DownOutlined, LoadingOutlined, MoreOutlin
 import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions } from "./user-setting-service";
+import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions, getAllPermissionOptionsByRoleName } from "./user-setting-service";
 import { setStoreSelectedUserSetting } from "./UserSettingSlice";
 import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
 export default function UserSetting(params = { params }) {
@@ -13,14 +13,15 @@ export default function UserSetting(params = { params }) {
     const [newUserFormActive, setNewUserFormActive] = useState(false)
     const [roleOptions, setRoleOptions] = useState([]);
     const [permissionOptions, setPermissionOptions] = useState([]);
-
+    const [defaultRoleOptions, setDefaultRoleOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [customRole, setCustomRole] = useState(false);
-
+    let index = 0;
     const [apiLoaded, setApiLoaded] = useState(false);
 
     const [imageUrl, setImageUrl] = useState("");
     const dispatch = useDispatch();
+
     const uploadButton = (
         <button style={{ border: 0, background: 'none', color: 'black' }} type="button">
             {loading ? <LoadingOutlined /> : <PlusCircleOutlined />}
@@ -43,9 +44,9 @@ export default function UserSetting(params = { params }) {
             })
         })
 
-        getAllPermissionOptions().then((response)=>{
+        getAllPermissionOptions().then((response) => {
             setPermissionOptions([])
-            response.data.map((item)=>{
+            response.data.map((item) => {
                 setPermissionOptions(arr => [...arr, {
                     value: item.permissionName,
                     label: item.permissionName
@@ -61,6 +62,14 @@ export default function UserSetting(params = { params }) {
         //Fetch Role Permission Based On User Role
         //and add to default values of Select Permission List
         console.log(`selected ${value}`);
+        getAllPermissionOptionsByRoleName(value).then((response) => {
+
+            setDefaultRoleOptions([]);
+            response.data.map((item) => {
+                setDefaultRoleOptions(arr => [...arr, { value: item.permissionName, label: item.permissionName }]);
+            })
+        })
+
     };
 
     function handleNewUserFormActive() {
@@ -73,7 +82,6 @@ export default function UserSetting(params = { params }) {
     }
 
     function handleNewUserFormComplete(values) {
-        values.roleList = roleOptions;
         console.log(values);
 
 
@@ -280,27 +288,44 @@ export default function UserSetting(params = { params }) {
                                         </Row>
                                         {
                                             <Row className="user-form-row" >
-                                                <Col span={24} className="user-form-col" style={{backgroundColor: !customRole ? '#dfdfdf' : 'white' }}>
+                                                <Col span={24} className="user-form-col" style={{ backgroundColor: !customRole ? '#dfdfdf' : 'white', height: '146px' }}>
+
+
                                                     <Form.Item name="permissionList" label="Permission List" required={true}>
+                                                        {
+                                                            customRole ?
 
-                                                        <Select
-                                                            disabled={!customRole}
-                                                            mode="multiple"
-                                                            showSearch
-                                                            allowClear
-                                                            style={{
-                                                                width: '100%',
-                                                            }}
-                                                            placeholder={!customRole ? "Disabled" : "Select Permission List"}
-                                                            onChange={handleChange}
-                                                            options={permissionOptions}
-                                                            defaultValue={customRole ? permissionOptions : []}
-                                                        /> 
+                                                                <Select
+                                                                    disabled={!customRole}
+                                                                    mode="multiple"
+                                                                    showSearch
+                                                                    allowClear
+                                                                    style={{
+                                                                        width: '100%',
+                                                                    }}
+                                                                    placeholder={!customRole ? "" : "Select Permission List"}
+                                                                    onChange={handleChange}
+                                                                    options={permissionOptions}
 
-
+                                                                />
+                                                                :
+                                                                
+                                                                    defaultRoleOptions?.map((item) => (
+                                                                        <div className="default-select-item">
+                                                                            {item.label}
+                                                                        </div>
+                                                                    ))
+                                                                }
                                                     </Form.Item>
+
+
+
+
+
                                                     <div className="form-description">
-                                                        <p>Select Required Permission</p>
+                                                        <p>
+                                                            {customRole ? "Select Permissions" : "Available Permissions"}
+                                                        </p>
                                                     </div>
                                                 </Col>
                                             </Row>

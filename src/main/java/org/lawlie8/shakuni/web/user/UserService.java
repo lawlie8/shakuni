@@ -92,4 +92,16 @@ public class UserService {
         return roleList;
     }
 
+    public List<PermissionList> fetchPermissionByRoleName(String roleName){
+
+        List<PermissionList> roleList = new ArrayList<>();
+        try {
+            log.info("Fetching Configured Role List");
+            roleList = permissionListRepo.getPermissionListByRoleName(roleName);
+        }catch (Exception e){
+            log.error("Exception Occurred While Fetching Role List");
+        }
+        return roleList;
+    }
+
 }

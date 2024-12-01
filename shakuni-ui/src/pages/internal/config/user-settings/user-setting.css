@@ -149,3 +149,14 @@
     color: black;
     margin: 0px;
 }
+
+.default-select-item{
+    display: inline-flex;
+    float: left;
+    position: relative;
+    background-color: #6e6e6e;
+    margin: 2px;
+    padding: 2px;
+    border-radius:3px ;
+}
+
