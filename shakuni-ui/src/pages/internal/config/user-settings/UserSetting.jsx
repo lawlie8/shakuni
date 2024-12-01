@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions, getAllPermissionOptionsByRoleName } from "./user-setting-service";
 import { setStoreSelectedUserSetting } from "./UserSettingSlice";
-import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
+import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, notification, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
 export default function UserSetting(params = { params }) {
 
     const [allUserInfo, setAllUserInfo] = useState([]);
@@ -17,6 +17,8 @@ export default function UserSetting(params = { params }) {
     const [loading, setLoading] = useState(false);
     const [customRole, setCustomRole] = useState(false);
     let index = 0;
+    const [selectedRole, setSelectedRole] = useState("");
+
     const [apiLoaded, setApiLoaded] = useState(false);
 
     const [imageUrl, setImageUrl] = useState("");
@@ -59,11 +61,10 @@ export default function UserSetting(params = { params }) {
     }, [])
 
     const handleChange = (value) => {
+        setSelectedRole(value)
         //Fetch Role Permission Based On User Role
         //and add to default values of Select Permission List
-        console.log(`selected ${value}`);
         getAllPermissionOptionsByRoleName(value).then((response) => {
-
             setDefaultRoleOptions([]);
             response.data.map((item) => {
                 setDefaultRoleOptions(arr => [...arr, { value: item.permissionName, label: item.permissionName }]);
@@ -82,9 +83,24 @@ export default function UserSetting(params = { params }) {
     }
 
     function handleNewUserFormComplete(values) {
-        console.log(values);
+        values.customRole = customRole;
+        if (customRole === false) {
+            values.permissionList = [];
+            values.role = selectedRole;
+        }
 
-
+        if(customRole === true && values.permissionList.length === 0){
+            notification.error({
+                message:'User Not Saved',
+                description:'Permission List Cannot be Empty',
+                duration:1,
+                style:{width:'250px'}
+            })
+        }else{
+            console.log("saving Form",values);
+            
+        }
+        
     }
 
     function beforeUpload() {
@@ -197,7 +213,7 @@ export default function UserSetting(params = { params }) {
                                         <Row className="user-form-row" >
                                             <Col span={24} className="user-form-col">
                                                 <Form.Item name="name" label="Name" required={true}>
-                                                    <Input type="text" placeholder="ex. Alexander"></Input>
+                                                    <Input type="text" placeholder="ex. Alexander" required={true}></Input>
                                                 </Form.Item>
                                                 <div className="form-description">
                                                     <p>Enter Your Name</p>
@@ -208,7 +224,7 @@ export default function UserSetting(params = { params }) {
                                         <Row className="user-form-row">
                                             <Col span={24} className="user-form-col">
                                                 <Form.Item name="lastName" label="Last Name" required={true}>
-                                                    <Input type="text" placeholder="ex. Hamilton"></Input>
+                                                    <Input type="text" placeholder="ex. Hamilton" required={true}></Input>
                                                 </Form.Item>
                                                 <div className="form-description">
                                                     <p>Enter Your Last Name</p>
@@ -219,7 +235,7 @@ export default function UserSetting(params = { params }) {
                                         <Row className="user-form-row">
                                             <Col span={24} className="user-form-col">
                                                 <Form.Item name="email" label="Email" required={true}>
-                                                    <Input type="email" placeholder="ex. alexander.hamilton@lawlie8.org"></Input>
+                                                    <Input type="email" placeholder="ex. alexander.hamilton@lawlie8.org" required={true}></Input>
                                                 </Form.Item>
                                                 <div className="form-description">
                                                     <p>Enter Your Email</p>
@@ -231,7 +247,7 @@ export default function UserSetting(params = { params }) {
                                         <Row className="user-form-row" justify={'space-between'}>
                                             <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative' }}>
                                                 <Form.Item name="password" label="Password" required={true}>
-                                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
+                                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" required={true}></Input>
                                                 </Form.Item>
                                                 <div className="form-description">
                                                     <p>Enter Secured Password</p>
@@ -239,7 +255,7 @@ export default function UserSetting(params = { params }) {
                                             </Col>
                                             <Col span={11} offset={2} className="user-form-col">
                                                 <Form.Item name="rePassword" label="ReType Password" required={true}>
-                                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"></Input>
+                                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" required={true}></Input>
                                                 </Form.Item>
                                                 <div className="form-description">
                                                     <p>Re Enter Secured Password</p>
@@ -249,17 +265,27 @@ export default function UserSetting(params = { params }) {
 
                                         <Row className="user-form-row" >
                                             <Col span={24} className="user-form-col">
-                                                <Form.Item name="role" label="Role" required={true}>
-                                                    <Row>
-                                                        {
-                                                            customRole ?
-                                                                <Col span={22}>
-                                                                    <Input name="customRole" placeholder="Create New Role"></Input>
-                                                                </Col>
 
-                                                                :
+                                                {
+                                                    customRole ?
+                                                        <Form.Item name="role" label="Role" required={true}>
+                                                            <Row>
+                                                                <Col span={22}>
+                                                                    <Input name="customRole" placeholder="Create New Role" required={true}></Input>
+                                                                </Col>
+                                                                <Col span={2}>
+                                                                    <Tooltip title={customRole ? "Select Existing Role" : "Create Custom Role"}>
+                                                                        <Button onClick={() => handleCustomRoleAction()} ><PlusCircleOutlined style={{ fontSize: '20px', transform: customRole ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }} /></Button>
+                                                                    </Tooltip>
+                                                                </Col>
+                                                            </Row>
+                                                        </Form.Item>
+                                                        :
+                                                        <Form.Item name="role" label="Role" required={true}>
+                                                            <Row>
                                                                 <Col span={22}>
                                                                     <Select
+                                                                        required={true}
                                                                         showSearch
                                                                         allowClear
                                                                         style={{
@@ -268,18 +294,20 @@ export default function UserSetting(params = { params }) {
                                                                         placeholder="Select Roles"
                                                                         onChange={handleChange}
                                                                         options={roleOptions}
+                                                                        defaultValue={[selectedRole]}
                                                                     />
                                                                 </Col>
+                                                                
+                                                                <Col span={2}>
+                                                                    <Tooltip title={customRole ? "Select Existing Role" : "Create Custom Role"}>
+                                                                        <Button onClick={() => handleCustomRoleAction()} ><PlusCircleOutlined style={{ fontSize: '20px', transform: customRole ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }} /></Button>
+                                                                    </Tooltip>
+                                                                </Col>
+                                                            </Row>
+                                                            </Form.Item>
 
-                                                        }
+                                                }
 
-                                                        <Col span={2}>
-                                                            <Tooltip title={customRole ? "Select Existing Role" : "Create Custom Role"}>
-                                                                <Button onClick={() => handleCustomRoleAction()} ><PlusCircleOutlined style={{ fontSize: '20px', transform: customRole ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }} /></Button>
-                                                            </Tooltip>
-                                                        </Col>
-                                                    </Row>
-                                                </Form.Item>
 
                                                 <div className="form-description">
                                                     <p>Enter User Roles</p>
@@ -304,18 +332,19 @@ export default function UserSetting(params = { params }) {
                                                                         width: '100%',
                                                                     }}
                                                                     placeholder={!customRole ? "" : "Select Permission List"}
-                                                                    onChange={handleChange}
+                                                                    onChange={()=>{}}
                                                                     options={permissionOptions}
+                                                                    defaultValue={['sdsd']}
 
                                                                 />
                                                                 :
-                                                                
-                                                                    defaultRoleOptions?.map((item) => (
-                                                                        <div className="default-select-item">
-                                                                            {item.label}
-                                                                        </div>
-                                                                    ))
-                                                                }
+
+                                                                defaultRoleOptions?.map((item) => (
+                                                                    <div className="default-select-item">
+                                                                        {item.label}
+                                                                    </div>
+                                                                ))
+                                                        }
                                                     </Form.Item>
 
 

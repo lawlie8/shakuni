@@ -154,9 +154,11 @@
     display: inline-flex;
     float: left;
     position: relative;
-    background-color: #6e6e6e;
+    background-color: #c1c1c1;
     margin: 2px;
     padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
     border-radius:3px ;
 }
 
