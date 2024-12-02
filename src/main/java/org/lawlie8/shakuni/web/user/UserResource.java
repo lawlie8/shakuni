@@ -24,74 +24,78 @@ public class UserResource {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/user/all/get",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>  getAllUsers(){
+    @RequestMapping(value = "/user/all/get", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllUsers() {
         List<UserInfoDTO> usersList = new ArrayList<>();
         try {
             log.info("Rest Call to Fetch All Users");
-            usersList =  userService.fetchAllUsers();
-        }catch (Exception e){
-            log.error("Error Occurred While Fetching Users",e.getStackTrace());
-            return new ResponseEntity<>("Error While Fetching Users",HttpStatus.INTERNAL_SERVER_ERROR);
+            usersList = userService.fetchAllUsers();
+        } catch (Exception e) {
+            log.error("Error Occurred While Fetching Users", e.getStackTrace());
+            return new ResponseEntity<>("Error While Fetching Users", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(usersList,HttpStatus.OK);
+        return new ResponseEntity<>(usersList, HttpStatus.OK);
 
     }
 
-    @RequestMapping(value = "/user/role/all/get",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>  getAllRoles(){
+    @RequestMapping(value = "/user/role/all/get", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllRoles() {
         List<Role> roleList = new ArrayList<>();
         try {
             log.info("Rest Call to Fetch All Roles");
-            roleList =  userService.fetchAllRoles();
-        }catch (Exception e){
-            log.error("Error Occurred While Fetching Roles",e.getStackTrace());
-            return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);
+            roleList = userService.fetchAllRoles();
+        } catch (Exception e) {
+            log.error("Error Occurred While Fetching Roles", e.getStackTrace());
+            return new ResponseEntity<>("Error While Fetching Roles", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(roleList,HttpStatus.OK);
+        return new ResponseEntity<>(roleList, HttpStatus.OK);
 
     }
 
-    @RequestMapping(value = "/user/permission/all/get",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>  getAllPermission(){
+    @RequestMapping(value = "/user/permission/all/get", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllPermission() {
         List<PermissionList> roleList = new ArrayList<>();
         try {
             log.info("Rest Call to Fetch All Roles");
-            roleList =  userService.fetchAllPermission();
-        }catch (Exception e){
-            log.error("Error Occurred While Fetching Roles",e.getStackTrace());
-            return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);
+            roleList = userService.fetchAllPermission();
+        } catch (Exception e) {
+            log.error("Error Occurred While Fetching Roles", e.getStackTrace());
+            return new ResponseEntity<>("Error While Fetching Roles", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(roleList,HttpStatus.OK);
+        return new ResponseEntity<>(roleList, HttpStatus.OK);
 
     }
 
 
-    @RequestMapping(value = "/user/permission/name/get/{roleName}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>  getPermissionByRoleName(@PathVariable String roleName){
+    @RequestMapping(value = "/user/permission/name/get/{roleName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPermissionByRoleName(@PathVariable String roleName) {
         List<PermissionList> roleList = new ArrayList<>();
         try {
             log.info("Rest Call to Fetch All Roles");
-            roleList =  userService.fetchPermissionByRoleName(roleName);
-        }catch (Exception e){
-            log.error("Error Occurred While Fetching Roles",e.getStackTrace());
-            return new ResponseEntity<>("Error While Fetching Roles",HttpStatus.INTERNAL_SERVER_ERROR);
+            roleList = userService.fetchPermissionByRoleName(roleName);
+        } catch (Exception e) {
+            log.error("Error Occurred While Fetching Roles", e.getStackTrace());
+            return new ResponseEntity<>("Error While Fetching Roles", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(roleList,HttpStatus.OK);
+        return new ResponseEntity<>(roleList, HttpStatus.OK);
     }
 
 
-    @RequestMapping(value = "/user/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>  saveNewUser(@RequestBody SaveUserDTO saveUserDTO){
+    @RequestMapping(value = "/user/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveNewUser(@RequestBody SaveUserDTO saveUserDTO) {
         Boolean isUserSaved = false;
         try {
             log.info("Rest Call to Save User");
-            isUserSaved =  userService.saveNewUser(saveUserDTO);
-        }catch (Exception e){
-            log.error("Error Occurred While Saving User",e.getStackTrace());
-            return new ResponseEntity<>("Error While Saving User Roles",HttpStatus.INTERNAL_SERVER_ERROR);
+            if (saveUserDTO.getPassword().equals(saveUserDTO.getRePassword())) {
+                isUserSaved = userService.saveNewUser(saveUserDTO);
+            } else {
+                return new ResponseEntity<>("Password Must Match", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            log.error("Error Occurred While Saving User", e.getStackTrace());
+            return new ResponseEntity<>("Error While Saving User Roles", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(isUserSaved,HttpStatus.OK);
+        return new ResponseEntity<>(isUserSaved, HttpStatus.OK);
     }
 
 

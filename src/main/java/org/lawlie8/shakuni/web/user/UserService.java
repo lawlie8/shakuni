@@ -105,6 +105,7 @@ public class UserService {
         return roleList;
     }
 
+    //users.setPasswordHash(getPasswordHash(saveUserDTO.getPassword()));
     public Boolean saveNewUser(SaveUserDTO saveUserDTO){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 

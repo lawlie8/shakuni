@@ -1,5 +1,6 @@
 import instance from "../../../../util/axios";
 import { USER_GET_ALL,ROLE_GET_ALL,PERMISSION_GET_ALL,PERMISSION_GET_BY_NAME, SAVE_NEW_USER } from "../../../../util/Constants";
+import { Buffer } from 'buffer';
 
 export function getAllUsers(){
     return instance.get(`${USER_GET_ALL}`)
@@ -19,12 +20,14 @@ export function getAllPermissionOptionsByRoleName(roleName){
 }
 
 export function saveUser(formValues){
+    let password = Buffer.from(formValues.password).toString('base64');
+    let rePassword = Buffer.from(formValues.rePassword).toString('base64');
     return instance.post(SAVE_NEW_USER,{
         name:formValues.name,
         lastName:formValues.lastName,
         email:formValues.email,
-        password:formValues.password,
-        rePassword:formValues.rePassword,
+        password:password,
+        rePassword:rePassword,
         role:formValues.role,
         customRole:formValues.customRole,
         permissionList:formValues.permissionList
