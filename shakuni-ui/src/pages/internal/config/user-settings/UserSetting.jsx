@@ -342,7 +342,7 @@ export default function UserSetting(params = { params }) {
                                                                     placeholder={!customRole ? "" : "Select Permission List"}
                                                                     onChange={() => { }}
                                                                     options={permissionOptions}
-                                                                    defaultValue={['sdsd']}
+                                                                    defaultValue={['VIEW_JOBS']}
 
                                                                 />
                                                                 :
