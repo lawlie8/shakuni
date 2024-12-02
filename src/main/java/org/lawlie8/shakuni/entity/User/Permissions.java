@@ -40,4 +40,13 @@ public class Permissions {
     public void setPermissionId(Long permissionId) {
         this.permissionId = permissionId;
     }
+
+    @Override
+    public String toString() {
+        return "Permissions{" +
+                "id=" + id +
+                ", roleId=" + roleId +
+                ", permissionId=" + permissionId +
+                '}';
+    }
 }

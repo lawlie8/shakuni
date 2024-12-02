@@ -70,7 +70,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> simpleGrantedAuthorityList = new ArrayList<>();
-        List<PermissionList> permissionsList = userService.fetchPermissionByRoleList(users.getRoleId());
+        List<PermissionList> permissionsList = userService.fetchPermissionByRoleList(users.getRole().getId());
         for(PermissionList permission : permissionsList){
             log.debug("Adding Permission to User "+ permission.getPermissionName());
             SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("PER_"+permission.getPermissionName());

@@ -16,7 +16,6 @@ export default function UserSetting(params = { params }) {
     const [defaultRoleOptions, setDefaultRoleOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [customRole, setCustomRole] = useState(false);
-    let index = 0;
     const [selectedRole, setSelectedRole] = useState("");
 
     const [apiLoaded, setApiLoaded] = useState(false);
@@ -67,7 +66,7 @@ export default function UserSetting(params = { params }) {
         getAllPermissionOptionsByRoleName(value).then((response) => {
             setDefaultRoleOptions([]);
             response.data.map((item) => {
-                setDefaultRoleOptions(arr => [...arr, { value: item.permissionName, label: item.permissionName }]);
+                setDefaultRoleOptions(arr => [...arr, { value: item.id, label: item.permissionName }]);
             })
         })
 
@@ -354,10 +353,6 @@ export default function UserSetting(params = { params }) {
                                                                 ))
                                                         }
                                                     </Form.Item>
-
-
-
-
 
                                                     <div className="form-description">
                                                         <p>

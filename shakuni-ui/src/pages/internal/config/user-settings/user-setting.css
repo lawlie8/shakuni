@@ -141,11 +141,13 @@
 
 .user-form-col p {
     margin: 0px;
+    min-height: 20px;
 }
 
 .form-description{
-    position: relative;
+    position: absolute;
     float: left;
+    bottom: 5px;
     color: black;
     margin: 0px;
 }

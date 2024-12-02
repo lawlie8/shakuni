@@ -2,6 +2,8 @@ package org.lawlie8.shakuni.entity.User;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class Users {
@@ -20,12 +22,15 @@ public class Users {
     @Column(name = "is_default_user")
     private Boolean isDefaultUser;
 
-    @Column(name = "role_id")
-    private Long roleId;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
-    @JoinColumn(name = "id")
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private List<UserProperty> userPropertyList;
 
     public Long getId() {
         return id;
@@ -67,12 +72,14 @@ public class Users {
         isDefaultUser = defaultUser;
     }
 
-    public Long getRoleId() {
-        return roleId;
+
+
+    public List<UserProperty> getUserPropertyList() {
+        return userPropertyList;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setUserPropertyList(List<UserProperty> userPropertyList) {
+        this.userPropertyList = userPropertyList;
     }
 
     @Override
@@ -82,8 +89,8 @@ public class Users {
                 ", userName='" + userName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 ", isDefaultUser=" + isDefaultUser +
-                ", roleId=" + roleId +
                 ", role=" + role +
+                ", userPropertyList=" + userPropertyList +
                 '}';
     }
 }
