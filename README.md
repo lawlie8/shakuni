@@ -19,6 +19,8 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 
 ## ScreenShots
 
+### Authentication is provided by default for the organization.
+<a href="https://ibb.co/6nGN58r"><img src="https://i.ibb.co/BzvwRGc/auth-portal.png" alt="auth-portal" border="0"></a>
 ### Available Data Sources to Configure
 <a href="https://ibb.co/KXpvfPp"><img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></a>
 ### Multiple Configured Data Sources
