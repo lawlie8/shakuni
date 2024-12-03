@@ -21,11 +21,11 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 
 ### Authentication is provided by default for the organization.
 <a href="https://ibb.co/6nGN58r"><img src="https://i.ibb.co/BzvwRGc/auth-portal.png" alt="auth-portal" border="0"></a>
-### Available Data Sources to Configure
+### Supported Integrations for Data Sources.
 <a href="https://ibb.co/KXpvfPp"><img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></a>
-### Multiple Configured Data Sources
+### Integrate Multiple Data Sources.
 <a href="https://ibb.co/zhz6SBK"><img src="https://i.ibb.co/xSNFMBV/hive-source.png" alt="hive-source" border="0"></a>
-### Connection Via JDBC Properties
+### Establish Connection via JDBC Properties.
 <a href="https://ibb.co/QdkMbdz"><img src="https://i.ibb.co/ZmSxLmt/edit-datasource.png" alt="edit-datasource" border="0"></a>
-### Permission based User Management
+### Role-based access control (RBAC) system for managing user permissions.
 <a href="https://ibb.co/S3H8ZZt"><img src="https://i.ibb.co/MCK4JJc/Screenshot-2024-11-30-124439.png" alt="Screenshot-2024-11-30-124439" border="0"></a>
