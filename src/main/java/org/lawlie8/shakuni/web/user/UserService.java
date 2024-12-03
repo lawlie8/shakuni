@@ -52,13 +52,27 @@ public class UserService {
                 userInfoDTO.setId(user.getId());
                 userInfoDTO.setDefaultUser(user.getDefaultUser());
                 userInfoDTO.setCreationDate(new Date());
-                userInfoDTO.setPermissionsList(user.getRole().getPermissionsList());
+                userInfoDTO.setRoles(user.getRole());
+                userInfoDTO.setUserPropertyList(fetchUserPropertyByUserName(user.getId()));
+                userInfoDTO.setPermissionListList(fetchPermissionListByPermissionId(user.getRole()));
                 userInfoDTOList.add(userInfoDTO);
             }
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching All Users", e.getStackTrace());
         }
         return userInfoDTOList;
+    }
+
+    private List<PermissionList> fetchPermissionListByPermissionId(Role role){
+        List<PermissionList> permissionListList = new ArrayList<>();
+        permissionListList = permissionListRepo.getPermissionListByRoleName(role.getRoleName());
+        return permissionListList;
+    }
+
+    private List<UserProperty> fetchUserPropertyByUserName(Long userId){
+        List<UserProperty> userPropertyList = new ArrayList<>();
+        userPropertyList = userPropertyRepo.fetchUserPropertyListByUserId(userId);
+        return userPropertyList;
     }
 
     public List<Role> fetchAllRoles() {
@@ -122,8 +136,8 @@ public class UserService {
                     roleId = roleRepo.findByRoleName(saveUserDTO.getRole()).get().getId();
                 }
                 savePermissionNative(saveUserDTO.getPermissionList(), roleId);
-                saveNewUserNative(saveUserDTO.getEmail(), saveUserDTO.getPassword(), roleId);
-                saveUserProperty(saveUserDTO);
+                Long userId = saveNewUserAndReturnId(saveUserDTO.getEmail(), saveUserDTO.getPassword(), roleId);
+                saveUserProperty(userId,saveUserDTO);
                 return true;
             } else {
                 log.error("User Already Exists");
@@ -148,11 +162,13 @@ public class UserService {
     }
 
     @Transactional
-    private void saveNewUserNative(String email, String password, Long roleId) {
+    private Long saveNewUserAndReturnId(String email, String password, Long roleId) {
         try {
             userRepo.saveNewUserNative(email, getPasswordHashed(password), false, roleId);
+            return userRepo.findByUserNameNative(email).getId();
         } catch (Exception e) {
             log.error("Exception Occurred While Saving New User" + e);
+            return 0L;
         }
     }
 
@@ -170,22 +186,24 @@ public class UserService {
     }
 
     @Transactional
-    private List<UserProperty> saveUserProperty(SaveUserDTO saveUserDTO) {
+    private List<UserProperty> saveUserProperty(Long userId,SaveUserDTO saveUserDTO) {
         List<UserProperty> userPropertyList = new ArrayList<>();
-        userPropertyList.add(addPropertyName(saveUserDTO.getName()));
-        userPropertyList.add(addLastName(saveUserDTO.getLastName()));
+        userPropertyList.add(addPropertyName(userId,saveUserDTO.getName()));
+        userPropertyList.add(addLastName(userId,saveUserDTO.getLastName()));
         return userPropertyRepo.saveAll(userPropertyList);
     }
 
-    private UserProperty addPropertyName(String name) {
+    private UserProperty addPropertyName(Long userId,String name) {
         UserProperty userProperty = new UserProperty();
+        userProperty.setUserId(userId);
         userProperty.setPropertyKey("name");
         userProperty.setPropertyValue(name);
         return userProperty;
     }
 
-    private UserProperty addLastName(String lastName) {
+    private UserProperty addLastName(Long userId,String lastName) {
         UserProperty userProperty = new UserProperty();
+        userProperty.setUserId(userId);
         userProperty.setPropertyKey("lastName");
         userProperty.setPropertyValue(lastName);
         return userProperty;

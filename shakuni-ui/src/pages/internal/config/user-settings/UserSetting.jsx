@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions, getAllPermissionOptionsByRoleName, saveUser } from "./user-setting-service";
 import { setStoreSelectedUserSetting } from "./UserSettingSlice";
 import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, notification, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
+import UserDetails from "./user-details/UserDetails";
 export default function UserSetting(params = { params }) {
 
     const [allUserInfo, setAllUserInfo] = useState([]);
@@ -159,7 +160,7 @@ export default function UserSetting(params = { params }) {
                                             <div className="user-icons">
                                                 <Row style={{ width: '100%' }}>
                                                     <Col span={24}>
-                                                        <PlusCircleOutlined onClick={() => handleActiveId(item.id)} style={{ fontSize: '20px', marginRight: '5px', borderRadius: '100%', padding: '10px', alignContent: 'center', boxShadow: ' 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)', transform: activeId === item.id ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}></PlusCircleOutlined>
+                                                        <PlusCircleOutlined onClick={() => handleActiveId(item.id)} style={{ display:item.defaultUser ? 'none' : '', fontSize: '20px', marginRight: '5px', borderRadius: '100%', padding: '10px', alignContent: 'center', boxShadow: ' 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)', transform: activeId === item.id ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}></PlusCircleOutlined>
                                                     </Col>
                                                 </Row>
                                             </div>
@@ -171,16 +172,7 @@ export default function UserSetting(params = { params }) {
                             <Row key={item.id} style={{ backgroundColor: 'white', overflow: 'hidden', marginTop: activeId === item.id ? '2px' : '0px', width: '100%', borderRadius: '10px', transition: "height 0.3s ease", height: activeId === item.id ? '90vh' : '0px' }}>
                                 <Col span={24}>
                                     <div className="user-detail">
-                                        <Row style={{ width: '100%', height: '50px' }} justify={'space-between'}>
-                                            <Col span={8} offset={16}>
-                                                <button style={{ float: 'right', margin: '10px', backgroundColor: '#d43838', filter: item.defaultUser ? 'grayscale(1)' : 'none' }}>
-                                                    <Tooltip title={item.defaultUser ? "User Cannot be Deleted" : "Delete User"} placement={"topLeft"}>
-                                                        <DeleteOutlined style={{ fontSize: '17px' }} />
-                                                    </Tooltip>
-
-                                                </button>
-                                            </Col>
-                                        </Row>
+                                        <UserDetails item={item} />
                                     </div>
                                 </Col>
                             </Row>

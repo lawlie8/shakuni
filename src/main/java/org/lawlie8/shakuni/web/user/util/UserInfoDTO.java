@@ -1,6 +1,9 @@
 package org.lawlie8.shakuni.web.user.util;
 
+import org.lawlie8.shakuni.entity.User.PermissionList;
 import org.lawlie8.shakuni.entity.User.Permissions;
+import org.lawlie8.shakuni.entity.User.Role;
+import org.lawlie8.shakuni.entity.User.UserProperty;
 
 import java.util.Date;
 import java.util.List;
@@ -11,7 +14,9 @@ public class UserInfoDTO {
     private String userName;
     private Date creationDate;
     private Boolean isDefaultUser;
-    private List<Permissions> permissionsList;
+    private Role role;
+    private List<PermissionList> permissionListList;
+    private List<UserProperty> userPropertyList;
 
     public Long getId() {
         return id;
@@ -37,12 +42,12 @@ public class UserInfoDTO {
         this.creationDate = creationDate;
     }
 
-    public List<Permissions> getPermissionsList() {
-        return permissionsList;
+    public Role getRoles() {
+        return role;
     }
 
-    public void setPermissionsList(List<Permissions> permissionsList) {
-        this.permissionsList = permissionsList;
+    public void setRoles(Role role) {
+        this.role = role;
     }
 
     public Boolean getDefaultUser() {
@@ -53,6 +58,22 @@ public class UserInfoDTO {
         isDefaultUser = defaultUser;
     }
 
+    public List<UserProperty> getUserPropertyList() {
+        return userPropertyList;
+    }
+
+    public void setUserPropertyList(List<UserProperty> userPropertyList) {
+        this.userPropertyList = userPropertyList;
+    }
+
+    public List<PermissionList> getPermissionListList() {
+        return permissionListList;
+    }
+
+    public void setPermissionListList(List<PermissionList> permissionListList) {
+        this.permissionListList = permissionListList;
+    }
+
     @Override
     public String toString() {
         return "UserInfoDTO{" +
@@ -60,7 +81,9 @@ public class UserInfoDTO {
                 ", userName='" + userName + '\'' +
                 ", creationDate=" + creationDate +
                 ", isDefaultUser=" + isDefaultUser +
-                ", permissionsList=" + permissionsList +
+                ", role=" + role +
+                ", permissionListList=" + permissionListList +
+                ", userPropertyList=" + userPropertyList +
                 '}';
     }
 }
