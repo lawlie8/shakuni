@@ -1,11 +1,9 @@
 package org.lawlie8.shakuni.web.user;
 
+import jakarta.transaction.Transactional;
 import org.lawlie8.shakuni.entity.User.*;
 
-import org.lawlie8.shakuni.repo.PermissionListRepo;
-import org.lawlie8.shakuni.repo.PermissionRepo;
-import org.lawlie8.shakuni.repo.RoleRepo;
-import org.lawlie8.shakuni.repo.UserRepo;
+import org.lawlie8.shakuni.repo.*;
 import org.lawlie8.shakuni.web.user.util.SaveUserDTO;
 import org.lawlie8.shakuni.web.user.util.UserInfoDTO;
 import org.slf4j.Logger;
@@ -13,9 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -36,13 +37,16 @@ public class UserService {
     @Autowired
     private PermissionRepo permissionRepo;
 
-    public List<UserInfoDTO> fetchAllUsers(){
+    @Autowired
+    private UserPropertyRepo userPropertyRepo;
+
+    public List<UserInfoDTO> fetchAllUsers() {
 
         List<Users> usersList = userRepo.findAll();
         List<UserInfoDTO> userInfoDTOList = new ArrayList<>();
 
         try {
-            for(Users user : usersList){
+            for (Users user : usersList) {
                 UserInfoDTO userInfoDTO = new UserInfoDTO();
                 userInfoDTO.setUserName(user.getUserName());
                 userInfoDTO.setId(user.getId());
@@ -51,120 +55,151 @@ public class UserService {
                 userInfoDTO.setPermissionsList(user.getRole().getPermissionsList());
                 userInfoDTOList.add(userInfoDTO);
             }
-        }catch (Exception e){
-            log.error("Exception Occurred While Fetching All Users",e.getStackTrace());
+        } catch (Exception e) {
+            log.error("Exception Occurred While Fetching All Users", e.getStackTrace());
         }
         return userInfoDTOList;
     }
 
-    public List<Role> fetchAllRoles(){
+    public List<Role> fetchAllRoles() {
 
         List<Role> roleList = new ArrayList<>();
         try {
             log.info("Fetching Configured Role List");
             roleList = roleRepo.findAll();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Exception Occurred While Fetching Role List");
         }
         return roleList;
     }
 
-    public List<PermissionList> fetchAllPermission(){
+    public List<PermissionList> fetchAllPermission() {
 
         List<PermissionList> roleList = new ArrayList<>();
         try {
             log.info("Fetching Configured Role List");
             roleList = permissionListRepo.findAll();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Exception Occurred While Fetching Role List");
         }
         return roleList;
     }
 
-    public List<PermissionList> fetchPermissionByRoleList(Long roleId){
+    public List<PermissionList> fetchPermissionByRoleList(Long roleId) {
 
         List<PermissionList> roleList = new ArrayList<>();
         try {
             log.info("Fetching Configured Role List");
             roleList = permissionListRepo.getPermissionListByRoleId(roleId);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Exception Occurred While Fetching Role List");
         }
         return roleList;
     }
 
-    public List<PermissionList> fetchPermissionByRoleName(String roleName){
+    public List<PermissionList> fetchPermissionByRoleName(String roleName) {
 
         List<PermissionList> roleList = new ArrayList<>();
         try {
             log.info("Fetching Configured Role List");
             roleList = permissionListRepo.getPermissionListByRoleName(roleName);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Exception Occurred While Fetching Role List");
         }
         return roleList;
     }
 
-    //users.setPasswordHash(getPasswordHash(saveUserDTO.getPassword()));
-    public Boolean saveNewUser(SaveUserDTO saveUserDTO){
+    @Transactional
+    public Boolean saveNewUser(SaveUserDTO saveUserDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        Users users = new Users();
-        users.setUserName(saveUserDTO.getEmail());
-        users.setDefaultUser(false);
-        Role role;
-        if(saveUserDTO.getCustomRole() == true){
-            role = roleRepo.findByRoleName(saveUserDTO.getRole()).orElseGet(() -> {
-                        Role newRole = new Role();
-                        newRole.setCreationDate(new Date());
-                        newRole.setCreatedBy(auth.getName());
-                        newRole.setRoleName(saveUserDTO.getRole());
-                        newRole = roleRepo.save(newRole); // Save new role
-                        newRole.setPermissionsList(setPermissionList(saveUserDTO.getPermissionList(), newRole));
-                        return newRole;
-            });
-        }else{
-            role = roleRepo.findByRoleName(saveUserDTO.getRole())
-                    .orElseThrow(() -> new IllegalArgumentException("Role not found: " + saveUserDTO.getRole()));
+        Long roleId = 0L;
+        try {
+            if (userRepo.checkIfUserAlreadyExists(saveUserDTO.getEmail()) > 0) {
+                if (saveUserDTO.getCustomRole()) {
+                    roleId = saveNewRoleAndReturnId(saveUserDTO.getRole(), auth.getName(), new Date());
+                } else {
+                    //Role Already Exist
+                    roleId = roleRepo.findByRoleName(saveUserDTO.getRole()).get().getId();
+                }
+                savePermissionNative(saveUserDTO.getPermissionList(), roleId);
+                saveNewUserNative(saveUserDTO.getEmail(), saveUserDTO.getPassword(), roleId);
+                saveUserProperty(saveUserDTO);
+                return true;
+            } else {
+                log.error("User Already Exists");
+                return false;
+            }
+        } catch (Exception e) {
+            log.error("User Not Saved");
+            return false;
         }
-        users.setUserPropertyList(setUserProperty(saveUserDTO));
-        users.setRole(role);
-        userRepo.save(users);
-        return true;
+
     }
 
-    private List<Permissions> setPermissionList(List<String> permissions,Role role){
+    @Transactional
+    public Long saveNewRoleAndReturnId(String roleName, String createdBy, Date creationDate) {
+        try {
+            roleRepo.saveNewRoleNative(roleName, createdBy, creationDate);
+            return roleRepo.findByRoleName(roleName).get().getId();
+        } catch (Exception e) {
+            log.error("Exception Occurred While Creating New Role" + e);
+            return 0L;
+        }
+    }
+
+    @Transactional
+    private void saveNewUserNative(String email, String password, Long roleId) {
+        try {
+            userRepo.saveNewUserNative(email, getPasswordHashed(password), false, roleId);
+        } catch (Exception e) {
+            log.error("Exception Occurred While Saving New User" + e);
+        }
+    }
+
+    @Transactional
+    private void savePermissionNative(List<String> permissions, Long roleId) {
         List<Permissions> permissionsList = new ArrayList<>();
         List<PermissionList> permissionListList = permissionListRepo.getPermissionListByPermissionNames(permissions);
-        for(PermissionList pl : permissionListList){
+        for (PermissionList pl : permissionListList) {
             Permissions permissions1 = new Permissions();
-            permissions1.setRoleId(role.getId());
+            permissions1.setRoleId(roleId);
             permissions1.setPermissionId(pl.getId());
             permissionsList.add(permissions1);
         }
-
-        return permissionsList;
+        permissionRepo.saveAll(permissionsList);
     }
 
-    private List<UserProperty> setUserProperty(SaveUserDTO saveUserDTO){
+    @Transactional
+    private List<UserProperty> saveUserProperty(SaveUserDTO saveUserDTO) {
         List<UserProperty> userPropertyList = new ArrayList<>();
         userPropertyList.add(addPropertyName(saveUserDTO.getName()));
         userPropertyList.add(addLastName(saveUserDTO.getLastName()));
-        return userPropertyList;
+        return userPropertyRepo.saveAll(userPropertyList);
     }
 
-    private UserProperty addPropertyName(String name){
-        UserProperty userProperty =  new UserProperty();
+    private UserProperty addPropertyName(String name) {
+        UserProperty userProperty = new UserProperty();
         userProperty.setPropertyKey("name");
         userProperty.setPropertyValue(name);
         return userProperty;
     }
 
-    private UserProperty addLastName(String lastName){
-        UserProperty userProperty =  new UserProperty();
+    private UserProperty addLastName(String lastName) {
+        UserProperty userProperty = new UserProperty();
         userProperty.setPropertyKey("lastName");
         userProperty.setPropertyValue(lastName);
         return userProperty;
     }
 
+    private String getPasswordHashed(String password) {
+        return passwordEncoder()
+                .encode(new String(
+                        Base64.getDecoder()
+                                .decode(password)));
+
+    }
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
