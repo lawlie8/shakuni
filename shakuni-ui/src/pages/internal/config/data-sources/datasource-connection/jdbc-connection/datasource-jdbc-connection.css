@@ -3,19 +3,19 @@
 }
 
 .jdbc-connection-user-input {
-    width: 250px;
+    width: 100%
 }
 
 .jdbc-connection-user-text {
-    width: 250px;
+    width: 100%
 }
 
 .jdbc-connection-user-password {
-    width: 250px;
+    width: 100%
 }
 
 .jdbc-connection-user-number {
-    width: 250px;
+    width: 100%
 }
 
 .datasource-jdbc-properties-table {
@@ -36,7 +36,6 @@
     position: relative;
     top: 0px;
     width: 100%;
-    left: 200px;
 }
 
 .datasource-connection-extra{
@@ -48,16 +47,40 @@
     padding: 10px;
 }
 
-.property-description{
-    position: absolute;
-    margin: 5px;
-    padding-left: 10px;
-    left: 250px;
-    color:gray;
-}
+
 
 .form-buttons{
     position: absolute;
-    right: 200px;
-    top: -75px;
+    right: 0px;
+    top: -65px;
+}
+
+.datasource-form-row{
+    width:50%;
+    left:50%;
+    position:relative;
+    transform:translateX(-50%);
+    border-radius: 10px;
+    min-height: 150px;
+}
+
+.datasource-form-col{
+    padding: 10px;
+    margin-bottom:15px;
+    border-radius: 10px;
+    border: 1px solid #dfdfdf;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+.datasource-form-col p {
+    margin: 0px;
+}
+
+.datasource-form-description{
+    position: absolute;
+    float: left;
+    bottom: 2px;
+    color: #444;
+    margin: 0px;
+    margin-top:10px ;
 }

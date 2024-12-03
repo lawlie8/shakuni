@@ -197,7 +197,6 @@ export default function UserSetting(params = { params }) {
                                     <Divider />
 
                                     <Form onFinish={handleNewUserFormComplete} layout="vertical">
-
                                         <Row className="user-form-row" >
                                             <Col span={24} className="user-form-col">
                                                 <Upload
