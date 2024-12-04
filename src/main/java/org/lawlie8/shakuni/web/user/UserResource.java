@@ -38,6 +38,7 @@ public class UserResource {
 
     }
 
+    //TODO fetch list of permissions in this API to reduce permissionByRoleName Calls
     @RequestMapping(value = "/user/role/all/get", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllRoles() {
         List<Role> roleList = new ArrayList<>();
