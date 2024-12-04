@@ -28,6 +28,11 @@
     overflow-x: hidden;
 }
 
+.user-details-segment{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .user-type-segment {
     background-color: white;
     margin: 20px;

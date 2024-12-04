@@ -1,7 +1,7 @@
-import { Button, Col, Form, Input, Row, Select, Tooltip } from "antd";
+import { Button, Col, Form, Input, Row, Select, Tooltip, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { getAllPermissionOptions, getAllPermissionOptionsByRoleName, getAllUserRoleOptions } from "../user-setting-service";
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 export default function UserDetails({item}) {
@@ -12,10 +12,18 @@ export default function UserDetails({item}) {
     const roleOptions = useSelector((state)=>state.userStoreSetting.allRoles);
     const [selectedPermission, setSelectedPermission] = useState([]);
     const [selectedRole, setSelectedRole] = useState(item.roles.roleName);
-    const [editUserDisabled, setEditUserDisabled] = useState(false);
+    const [editUserDisabled, setEditUserDisabled] = useState(true);
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
-    
+    const [imageUrl, setImageUrl] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const uploadButton = (
+        <button style={{ border: 0, background: 'none', color: 'black' }} type="button">
+            {loading ? <LoadingOutlined /> : <PlusCircleOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </button>
+    );
     useEffect(()=>{
         setUserDetailsLoaded(false)
         item.userPropertyList.map((item)=>{
@@ -45,6 +53,13 @@ export default function UserDetails({item}) {
     function handleCustomRoleAction() {
         setCustomRole(!customRole)
     }
+    function beforeUpload() {
+
+    }
+
+    function handleImageChange() {
+
+    }
 
 
     const handleChange = (value) => {
@@ -66,22 +81,38 @@ export default function UserDetails({item}) {
         {
             userDetailsLoaded ?
             <Form onFinish={handleUserEditComplete} layout="vertical" disabled={editUserDisabled} style={{filter: item.defaultUser ? 'grayscale(1)' : 'none'}}>
-            <Row style={{ width: '100%', height: '50px' }} justify={'space-between'}>
-                <Col span={1} offset={22} >
-                    <button type="primary" onClick={()=>handleUserEditChange()} style={{ float: 'right', margin: '10px', backgroundColor: item.defaultUser || !editUserDisabled ? '#585858' : '#000', filter: item.defaultUser ? 'grayscale(1)' : 'none' }}>
+            <Row style={{ width: '100%', height: '50px' }} justify={'end'}>
+                <Col span={4} offset={20} style={{display:'flex',position:'absolute',alignItems:'end',marginTop:'10px',marginRight:'5px'}}>
+                    <button type="primary" onClick={()=>handleUserEditChange()} style={{ float: 'right', margin:'5px',backgroundColor: item.defaultUser || !editUserDisabled ? '#585858' : '#000', filter: item.defaultUser ? 'grayscale(1)' : 'none' }}>
                         <Tooltip title={item.defaultUser ? "Can't Edit User" : "Edit User"} placement={"topRight"}>
                             <EditOutlined style={{ fontSize: '17px' }} />
                         </Tooltip>
                     </button>
-                </Col>
-                <Col span={1}>
-                    <button style={{ float: 'right', margin: '10px', backgroundColor: '#d43838', filter: item.defaultUser ? 'grayscale(1)' : 'none' }}>
+                    <button style={{ float: 'right', margin:'5px',backgroundColor: '#d43838', filter: item.defaultUser ? 'grayscale(1)' : 'none' }}>
                         <Tooltip title={item.defaultUser ? "Can't Edit User" : "Delete User"} placement={"topLeft"}>
                             <DeleteOutlined style={{ fontSize: '17px' }} />
                         </Tooltip>
                     </button>
                 </Col>
             </Row>
+            <Row className="user-form-row" >
+                                            <Col span={24} className="user-form-col">
+                                                <Upload
+                                                    name="avatar"
+                                                    listType="picture-circle"
+                                                    className="avatar-uploader"
+                                                    showUploadList={false}
+                                                    action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                                                    beforeUpload={beforeUpload}
+                                                    onChange={handleImageChange}
+                                                >
+                                                    {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                                </Upload>
+                                                <div className="form-description">
+                                                    <p>Upload Profile Picture</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
             <Row className="user-form-row"  >
                 <Col span={24} className="user-form-col" style={{ filter: editUserDisabled ? 'grayscale(1)' :'none'}}>
                     <Form.Item name="name" label="Name" required={true}>
@@ -184,11 +215,9 @@ export default function UserDetails({item}) {
                     </div>
                 </Col>
             </Row>
-            {
+            
                 <Row className="user-form-row" >
                     <Col span={24} className="user-form-col" style={{ backgroundColor: !customRole ? '#d6d6d6' : 'white', height: '146px' }}>
-
-
                         <Form.Item name="permissionList" label="Permission List" required={true}>
                             {
                                 customRole ?
@@ -224,7 +253,14 @@ export default function UserDetails({item}) {
                         </div>
                     </Col>
                 </Row>
-            }
+                <Row className="user-form-row" justify={"space-around"}>
+                        <Col span={22} offset={2}>
+                            <Form.Item required={true}>
+                                <button className="new-user-button" type="primary" iconPosition={"start"}><SaveOutlined style={{ fontSize: '20px' }} /> Save User</button>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+             
         </Form>
          : "Loading"   
         }

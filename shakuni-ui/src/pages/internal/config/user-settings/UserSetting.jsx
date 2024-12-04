@@ -175,11 +175,9 @@ export default function UserSetting(params = { params }) {
                                     </Row>
                                 </Col>
                             </Row>
-                            <Row key={item.id} style={{ backgroundColor: 'white', overflow: 'hidden', marginTop: activeId === item.id ? '2px' : '0px', width: '100%', borderRadius: '10px', transition: "height 0.3s ease", height: activeId === item.id ? '90vh' : '0px' }}>
+                            <Row key={item.id} style={{ backgroundColor: 'white', overflow: 'auto', marginTop: activeId === item.id ? '2px' : '0px', width: '100%', borderRadius: '10px', transition: "height 0.3s ease", height: activeId === item.id ? '90vh' : '0px' }}>
                                 <Col span={24}>
-                                    <div className="user-detail">
                                         <UserDetails item={item} />
-                                    </div>
                                 </Col>
                             </Row>
 
@@ -361,11 +359,7 @@ export default function UserSetting(params = { params }) {
                                         }
 
                                         <Row className="user-form-row" justify={"space-around"}>
-                                            {/* <Col span={11}>
-                                            <Form.Item required={true}>
-                                            <button className="new-user-button" type="primary" iconPosition={"start"}><UserAddOutlined /> New User</button>
-                                            </Form.Item>
-                                        </Col> */}
+                                            
                                             <Col span={22} offset={2}>
                                                 <Form.Item required={true}>
                                                     <button className="new-user-button" type="primary" iconPosition={"start"}><SaveOutlined style={{ fontSize: '20px' }} /> Save User</button>

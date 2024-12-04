@@ -151,6 +151,34 @@ public class UserService {
     }
 
     @Transactional
+    public Boolean editExistingUser(SaveUserDTO saveUserDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long roleId = 0L;
+        try {
+            if (userRepo.checkIfUserAlreadyExists(saveUserDTO.getEmail()) > 0) {
+                if (saveUserDTO.getCustomRole()) {
+                    roleId = saveNewRoleAndReturnId(saveUserDTO.getRole(), auth.getName(), new Date());
+                } else {
+                    //Role Already Exist
+                    roleId = roleRepo.findByRoleName(saveUserDTO.getRole()).get().getId();
+                }
+                savePermissionNative(saveUserDTO.getPermissionList(), roleId);
+                Long userId = saveNewUserAndReturnId(saveUserDTO.getEmail(), saveUserDTO.getPassword(), roleId);
+                saveUserProperty(userId,saveUserDTO);
+                return true;
+            } else {
+                log.error("User Already Exists");
+                return false;
+            }
+        } catch (Exception e) {
+            log.error("User Not Saved");
+            return false;
+        }
+
+    }
+
+
+    @Transactional
     public Long saveNewRoleAndReturnId(String roleName, String createdBy, Date creationDate) {
         try {
             roleRepo.saveNewRoleNative(roleName, createdBy, creationDate);

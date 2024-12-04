@@ -99,5 +99,22 @@ public class UserResource {
         return new ResponseEntity<>(isUserSaved, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/user/edit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> editExistingUser(@RequestBody SaveUserDTO saveUserDTO) {
+        Boolean isUserEdited = false;
+        try {
+            log.info("Rest Call to Edit User");
+            if (saveUserDTO.getPassword().equals(saveUserDTO.getRePassword())) {
+                isUserEdited = userService.editExistingUser(saveUserDTO);
+            } else {
+                return new ResponseEntity<>("Password Must Match", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            log.error("Error Occurred While Editing User", e.getStackTrace());
+            return new ResponseEntity<>("Error While Editing User Roles", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(isUserEdited, HttpStatus.OK);
+    }
+
 
 }
