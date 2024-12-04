@@ -15,16 +15,16 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function DataSources(params = { params }) {
 
     const [datasourceType, setDataSourceType] = useState([]);
-    const addEditDataSourceType = useSelector((state) => state.dataSource.addEditDataSourceType);
-    const selectedDataSourceTypeId = useSelector((state) => state.dataSource.selectedDataSourceType);
-    const selectedDataSourceTypeLabel = useSelector((state) => state.dataSource.selectedDataSourceTypeLabel);
-    const selectedDataSourceTypeAction = useSelector((state) => state.dataSource.selectedDataSourceTypeAction);
-    const formLoaded = useSelector((state) => state.dataSource.formLoaded);
-    const addEditDataSourceId = useSelector((state) => state.dataSource.addEditConfiguredDataSourceId)
+    const addEditDataSourceType = useSelector((state) => state.dataStoreSource.addEditDataSourceType);
+    const selectedDataSourceTypeId = useSelector((state) => state.dataStoreSource.selectedDataSourceType);
+    const selectedDataSourceTypeLabel = useSelector((state) => state.dataStoreSource.selectedDataSourceTypeLabel);
+    const selectedDataSourceTypeAction = useSelector((state) => state.dataStoreSource.selectedDataSourceTypeAction);
+    const formLoaded = useSelector((state) => state.dataStoreSource.formLoaded);
+    const addEditDataSourceId = useSelector((state) => state.dataStoreSource.addEditConfiguredDataSourceId)
 
-    const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
+    const configuredDataSourceList = useSelector((state) => state.dataStoreSource.configuredDataSourceList);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><DatabaseOutlined style={{ color: 'black' }} onClick={() => { handleBreadCrumbDatabaseClick() }} /></>) }]);
-    const selectedDataSourceImageUrl = useSelector((state) => state.dataSource.selectedDataSourceImageUrl);
+    const selectedDataSourceImageUrl = useSelector((state) => state.dataStoreSource.selectedDataSourceImageUrl);
     const [dataSourcePropList, setDataSourcePropList] = useState([]);
     const [driverPropList, setDriverPropList] = useState([]);
     const dispatch = useDispatch();

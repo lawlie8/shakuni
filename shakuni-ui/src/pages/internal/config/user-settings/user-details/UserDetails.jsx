@@ -1,14 +1,15 @@
 import { Button, Col, Form, Input, Row, Select, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import { getAllPermissionOptionsByRoleName, getAllUserRoleOptions } from "../user-setting-service";
+import { getAllPermissionOptions, getAllPermissionOptionsByRoleName, getAllUserRoleOptions } from "../user-setting-service";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 export default function UserDetails({item}) {
     const [userDetailsLoaded, setUserDetailsLoaded] = useState(false);
     const [customRole, setCustomRole] = useState(false);
-    const [permissionOptions, setPermissionOptions] = useState([]);
+    const permissionOptions =  useSelector((state)=>state.userStoreSetting.allPermissionOptions);
     const [defaultRoleOptions, setDefaultRoleOptions] = useState([]);
-    const [roleOptions, setRoleOptions] = useState([]);
+    const roleOptions = useSelector((state)=>state.userStoreSetting.allRoles);
     const [selectedPermission, setSelectedPermission] = useState([]);
     const [selectedRole, setSelectedRole] = useState(item.roles.roleName);
     const [editUserDisabled, setEditUserDisabled] = useState(false);
@@ -25,16 +26,6 @@ export default function UserDetails({item}) {
             }
         })
         
-        getAllUserRoleOptions().then((response) => {
-            setRoleOptions([]);
-            response.data.map((item) => {
-                setRoleOptions(arr => [...arr, {
-                    value: item.roleName,
-                    label: item.roleName
-                }]);
-            })
-        })
-
         getAllPermissionOptionsByRoleName(selectedRole).then((response) => {
             setDefaultRoleOptions([]);
             response.data.map((item) => {
@@ -150,7 +141,7 @@ export default function UserDetails({item}) {
                             <Form.Item name="role" label="Role" required={true}>
                                 <Row>
                                     <Col span={22}>
-                                        <Input name="customRole" placeholder="Create New Role" required={true} defaultValue={item.roles.roleName}></Input>
+                                        <Input name="customRole" placeholder="Create New Role" required={true} ></Input>
                                     </Col>
                                     <Col span={2}>
                                         <Tooltip title={customRole ? "Select Existing Role" : "Create Custom Role"}>

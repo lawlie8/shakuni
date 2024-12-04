@@ -3,7 +3,7 @@ import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions, getAllPermissionOptionsByRoleName, saveUser } from "./user-setting-service";
-import { setStoreSelectedUserSetting } from "./UserSettingSlice";
+import { setStoreAllRoles, setStorePermissionOptions, setStoreSelectedUserSetting } from "./UserSettingSlice";
 import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, notification, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
 import UserDetails from "./user-details/UserDetails";
 export default function UserSetting(params = { params }) {
@@ -12,8 +12,8 @@ export default function UserSetting(params = { params }) {
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><UserOutlined style={{ color: 'black' }} onClick={() => { handleBreadCrumbUserConfigureClick() }} /></>) }]);
     const [activeId, setActiveId] = useState(null)
     const [newUserFormActive, setNewUserFormActive] = useState(false)
-    const [roleOptions, setRoleOptions] = useState([]);
-    const [permissionOptions, setPermissionOptions] = useState([]);
+    const [roleOptions, setRoleOptions] = useSelector((state)=> state.userStoreSetting.allRoles);
+    const permissionOptions =  useSelector((state)=>state.userStoreSetting.allPermissionOptions);
     const [defaultRoleOptions, setDefaultRoleOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [customRole, setCustomRole] = useState(false);
@@ -37,23 +37,29 @@ export default function UserSetting(params = { params }) {
         })
 
         getAllUserRoleOptions().then((response) => {
-            setRoleOptions([]);
+            let userAr = [];
+            dispatch(setStoreAllRoles([]))
             response.data.map((item) => {
-                setRoleOptions(arr => [...arr, {
+                userAr.push( {
                     value: item.roleName,
                     label: item.roleName
-                }]);
+                });
             })
+            dispatch(setStoreAllRoles(userAr))
         })
 
         getAllPermissionOptions().then((response) => {
-            setPermissionOptions([])
+            let permissionAr = [];
+
+            dispatch(setStorePermissionOptions([]))
             response.data.map((item) => {
-                setPermissionOptions(arr => [...arr, {
+                permissionAr.push({
                     value: item.permissionName,
                     label: item.permissionName
-                }]);
+                })
             })
+            dispatch(setStorePermissionOptions(permissionAr))
+
         })
 
         setApiLoaded(true);

@@ -9,16 +9,16 @@ import { useState } from "react";
 
 export default function DataSourceJdbcConnection({ jdbcProperties }) {
 
-    const selectedDataSourceTypeAction = useSelector((state) => state.dataSource.selectedDataSourceTypeAction);
-    const storeJdbcProperties = useSelector((state) => state.dataSource.selectedDataSourceProperties)
-    const storeJdbcValues = useSelector((state) => state.dataSource.selectedDataSourceValues)
+    const selectedDataSourceTypeAction = useSelector((state) => state.dataStoreSource.selectedDataSourceTypeAction);
+    const storeJdbcProperties = useSelector((state) => state.dataStoreSource.selectedDataSourceProperties)
+    const storeJdbcValues = useSelector((state) => state.dataStoreSource.selectedDataSourceValues)
     const [connectionSucessFullFlag, setConnectionSuccessFullFlag] = useState(false);
-    const propDisabled = useSelector((state) => state.dataSource.propDisabled)
-    const formLoaded = useSelector((state) => state.dataSource.formLoaded);
-    const configuredDataSourceList = useSelector((state) => state.dataSource.configuredDataSourceList);
+    const propDisabled = useSelector((state) => state.dataStoreSource.propDisabled)
+    const formLoaded = useSelector((state) => state.dataStoreSource.formLoaded);
+    const configuredDataSourceList = useSelector((state) => state.dataStoreSource.configuredDataSourceList);
 
-    const addEditDataSourceType = useSelector((state) => state.dataSource.addEditDataSourceType)
-    const addEditDataSourceId = useSelector((state) => state.dataSource.addEditConfiguredDataSourceId)
+    const addEditDataSourceType = useSelector((state) => state.dataStoreSource.addEditDataSourceType)
+    const addEditDataSourceId = useSelector((state) => state.dataStoreSource.addEditConfiguredDataSourceId)
 
     const [form] = Form.useForm();
     const dispatch = useDispatch();

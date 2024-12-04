@@ -4,8 +4,8 @@ import dataSourceSlice from '../pages/internal/config/data-sources/DataSourceSli
 import userSettingSlice from '../pages/internal/config/user-settings/UserSettingSlice';
 export default configureStore({
   reducer: {
-    login:loginSlice,
-    dataSource:dataSourceSlice,
-    userSetting:userSettingSlice,
+    loginStore:loginSlice,
+    dataStoreSource:dataSourceSlice,
+    userStoreSetting:userSettingSlice,
   },
 })

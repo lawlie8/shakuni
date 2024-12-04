@@ -8,7 +8,7 @@ import { setStoreSelectedDataSourceType,setStoreSelectedAddEditDataSourceType } 
 export default function GlobalHeader() {
 
     const headerList = [{name:'Dashboard',url:"/dashboard"},{name:'Jobs',url:"/jobs"}, {name:'Config',url:"/config"}, {name:'Management',url:"/management"}];
-    const email = useSelector((state) => state.login.userName);
+    const email = useSelector((state) => state.loginStore.userName);
     const emailFromLocalStorage = localStorage.getItem("userName");
     
     const navigate = useNavigate();
