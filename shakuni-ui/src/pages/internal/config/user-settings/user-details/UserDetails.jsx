@@ -1,19 +1,20 @@
 import { Button, Col, Form, Input, Row, Select, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import { getAllPermissionOptionsByRoleName } from "../user-setting-service";
+import { getAllPermissionOptionsByRoleName, getAllUserRoleOptions } from "../user-setting-service";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 export default function UserDetails({item}) {
     const [userDetailsLoaded, setUserDetailsLoaded] = useState(false);
-    const [customRole, setCustomRole] = useState(true);
+    const [customRole, setCustomRole] = useState(false);
     const [permissionOptions, setPermissionOptions] = useState([]);
     const [defaultRoleOptions, setDefaultRoleOptions] = useState([]);
     const [roleOptions, setRoleOptions] = useState([]);
-    const [selectedRole, setSelectedRole] = useState("");
+    const [selectedPermission, setSelectedPermission] = useState([]);
+    const [selectedRole, setSelectedRole] = useState(item.roles.roleName);
     const [editUserDisabled, setEditUserDisabled] = useState(false);
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
-
+    
     useEffect(()=>{
         setUserDetailsLoaded(false)
         item.userPropertyList.map((item)=>{
@@ -23,6 +24,23 @@ export default function UserDetails({item}) {
                 setLastName(item.propertyValue);
             }
         })
+        
+        getAllUserRoleOptions().then((response) => {
+            setRoleOptions([]);
+            response.data.map((item) => {
+                setRoleOptions(arr => [...arr, {
+                    value: item.roleName,
+                    label: item.roleName
+                }]);
+            })
+        })
+
+        getAllPermissionOptionsByRoleName(selectedRole).then((response) => {
+            setDefaultRoleOptions([]);
+            response.data.map((item) => {
+                setDefaultRoleOptions(arr => [...arr, { value: item.id, label: item.permissionName }]);
+            })
+        })
         setUserDetailsLoaded(true);
     },[])
 
@@ -30,7 +48,6 @@ export default function UserDetails({item}) {
     }
 
     function handleUserEditChange(){
-        
         setEditUserDisabled(!editUserDisabled);
     }
 
@@ -38,18 +55,6 @@ export default function UserDetails({item}) {
         setCustomRole(!customRole)
     }
 
-    function getUserName() {
-        console.log(userProperty);
-        
-        // const property = userProperty.find(item => item.propKey === key);
-        // return property ? property.propValue : null;
-    }
-
-
-    function getPropValueByKey(userProperty) {
-        const property = userProperty.find(item => item.propKey === key);
-        return property ? property.propValue : null;
-    }
 
     const handleChange = (value) => {
         setSelectedRole(value)
@@ -71,8 +76,8 @@ export default function UserDetails({item}) {
             userDetailsLoaded ?
             <Form onFinish={handleUserEditComplete} layout="vertical" disabled={editUserDisabled} style={{filter: item.defaultUser ? 'grayscale(1)' : 'none'}}>
             <Row style={{ width: '100%', height: '50px' }} justify={'space-between'}>
-                <Col span={1} offset={22}>
-                    <button onClick={()=>handleUserEditChange()} style={{ float: 'right', margin: '10px', backgroundColor: item.defaultUser ? '#585858' : '#000', filter: item.defaultUser ? 'grayscale(1)' : 'none' }}>
+                <Col span={1} offset={22} >
+                    <button type="primary" onClick={()=>handleUserEditChange()} style={{ float: 'right', margin: '10px', backgroundColor: item.defaultUser || !editUserDisabled ? '#585858' : '#000', filter: item.defaultUser ? 'grayscale(1)' : 'none' }}>
                         <Tooltip title={item.defaultUser ? "Can't Edit User" : "Edit User"} placement={"topRight"}>
                             <EditOutlined style={{ fontSize: '17px' }} />
                         </Tooltip>
@@ -86,8 +91,8 @@ export default function UserDetails({item}) {
                     </button>
                 </Col>
             </Row>
-            <Row className="user-form-row" >
-                <Col span={24} className="user-form-col">
+            <Row className="user-form-row"  >
+                <Col span={24} className="user-form-col" style={{ filter: editUserDisabled ? 'grayscale(1)' :'none'}}>
                     <Form.Item name="name" label="Name" required={true}>
                         <Input type="text" placeholder="ex. Alexander" required={true} defaultValue={name}></Input>
                     </Form.Item>
@@ -97,7 +102,7 @@ export default function UserDetails({item}) {
                 </Col>
             </Row>
             <Row className="user-form-row">
-                <Col span={24} className="user-form-col">
+                <Col span={24} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white'}}>
                     <Form.Item name="lastName" label="Last Name" required={true}>
                         <Input type="text" placeholder="ex. Hamilton" required={true} defaultValue={lastName}></Input>
                     </Form.Item>
@@ -108,9 +113,9 @@ export default function UserDetails({item}) {
             </Row>
 
             <Row className="user-form-row">
-                <Col span={24} className="user-form-col">
+                <Col span={24} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white'}}>
                     <Form.Item name="email" label="Email" required={true}>
-                        <Input type="email" placeholder="ex. alexander.hamilton@lawlie8.org" defaultValue={item.userName} required={true}></Input>
+                        <Input type="email" placeholder="ex. alexander.hamilton@lawlie8.org" readOnly defaultValue={item.userName} required={true}></Input>
                     </Form.Item>
                     <div className="form-description">
                         <p>Enter Your Email</p>
@@ -120,17 +125,17 @@ export default function UserDetails({item}) {
 
 
             <Row className="user-form-row" justify={'space-between'}>
-                <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative' }}>
-                    <Form.Item name="password" label="Password" required={true}>
-                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" required={true}></Input>
+                <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative',filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
+                    <Form.Item name="password" label="New Password" required={true}>
+                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
                     </Form.Item>
                     <div className="form-description">
                         <p>Enter Secured Password</p>
                     </div>
                 </Col>
-                <Col span={11} offset={2} className="user-form-col">
-                    <Form.Item name="rePassword" label="ReType Password" required={true}>
-                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" required={true}></Input>
+                <Col span={11} offset={2} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white'}}>
+                    <Form.Item name="rePassword" label="ReType New Password" required={true}>
+                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
                     </Form.Item>
                     <div className="form-description">
                         <p>Re Enter Secured Password</p>
@@ -138,7 +143,7 @@ export default function UserDetails({item}) {
                 </Col>
             </Row>
             <Row className="user-form-row" >
-                <Col span={24} className="user-form-col">
+                <Col span={24} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white'}}>
 
                     {
                         customRole ?
@@ -190,7 +195,7 @@ export default function UserDetails({item}) {
             </Row>
             {
                 <Row className="user-form-row" >
-                    <Col span={24} className="user-form-col" style={{ backgroundColor: !customRole ? '#dfdfdf' : 'white', height: '146px' }}>
+                    <Col span={24} className="user-form-col" style={{ backgroundColor: !customRole ? '#d6d6d6' : 'white', height: '146px' }}>
 
 
                         <Form.Item name="permissionList" label="Permission List" required={true}>
