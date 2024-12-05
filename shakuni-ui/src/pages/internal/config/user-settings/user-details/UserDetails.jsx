@@ -185,7 +185,7 @@ export default function UserDetails({ item }) {
                             <Row className="user-form-row" justify={'space-between'} >
                                 <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative', filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
                                     <Form.Item name="password" label="New Password" required={true}>
-                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
+                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"  required={true}></Input>
                                     </Form.Item>
                                     <div className="form-description">
                                         <p>Enter Secured Password</p>
@@ -193,7 +193,7 @@ export default function UserDetails({ item }) {
                                 </Col>
                                 <Col span={11} offset={2} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
                                     <Form.Item name="rePassword" label="ReType New Password" required={true}>
-                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
+                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"  required={true}></Input>
                                     </Form.Item>
                                     <div className="form-description">
                                         <p>Re Enter Secured Password</p>
