@@ -1,6 +1,6 @@
-import { Button, Col, Form, Input, Row, Select, Tooltip, Upload } from "antd";
+import { Button, Col, Form, Input, Row, Select, Switch, Tag, Tooltip, Upload } from "antd";
 import { useEffect, useState } from "react";
-import { getAllPermissionOptions, getAllPermissionOptionsByRoleName, getAllUserRoleOptions } from "../user-setting-service";
+import { editUser, getAllPermissionOptions, getAllPermissionOptionsByRoleName, getAllUserRoleOptions } from "../user-setting-service";
 import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ export default function UserDetails({ item }) {
     const [lastName, setLastName] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [loading, setLoading] = useState(false);
+    const [passwordSwitch, setPaswordSwitch] = useState(false);
 
     const uploadButton = (
         <button style={{ border: 0, background: 'none', color: 'black' }} type="button">
@@ -44,6 +45,31 @@ export default function UserDetails({ item }) {
     }, [])
 
     function handleUserEditComplete(values) {
+        values.customRole = customRole;
+        if (customRole === false) {
+            values.permissionList = [];
+            values.role = selectedRole;
+        }
+
+        if (customRole === true && values.permissionList.length === 0) {
+            notification.error({
+                message: 'Error',
+                description: 'Permission List Cannot be Empty',
+                duration: 1,
+                style: { width: '250px' }
+            })
+        } else {
+            editUser(values).then((response) => {
+                if (response.status === 200) {
+                    notification.success({
+                        message: 'Sucess',
+                        description: 'User Saved',
+                        duration: 2,
+                        style: { width: '250px' }
+                    })
+                }
+            })
+        }
         console.log(values);
     }
 
@@ -140,33 +166,42 @@ export default function UserDetails({ item }) {
                         <Row className="user-form-row">
                             <Col span={24} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
                                 <Form.Item name="email" label="Email" required={true} initialValue={item.userName}>
-                                    <Input type="email" placeholder="ex. alexander.hamilton@lawlie8.org" readOnly defaultValue={item.userName} required={true}></Input>
+                                    <Input type="email" placeholder="ex. alexander.hamilton@lawlie8.org" readOnly required={true}></Input>
                                 </Form.Item>
                                 <div className="form-description">
-                                    <p>Enter Your Email</p>
+                                    <Tag color="error" >Email Cannot Be Updated</Tag>
                                 </div>
                             </Col>
                         </Row>
 
-
-                        <Row className="user-form-row" justify={'space-between'}>
-                            <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative', filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
-                                <Form.Item name="password" label="New Password" required={true}>
-                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
-                                </Form.Item>
-                                <div className="form-description">
-                                    <p>Enter Secured Password</p>
-                                </div>
-                            </Col>
-                            <Col span={11} offset={2} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
-                                <Form.Item name="rePassword" label="ReType New Password" required={true}>
-                                    <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
-                                </Form.Item>
-                                <div className="form-description">
-                                    <p>Re Enter Secured Password</p>
-                                </div>
+                        <Row justify={'start'} className="user-form-row" style={{ marginBottom: '10px' }}>
+                            <Col span={12} style={{ margin: '10px', display: 'inline-flex', position: 'relative', float: 'right' }}>
+                                <Switch onChange={() => { setPaswordSwitch(!passwordSwitch) }} />
+                                <Tag color="warning" style={{ marginLeft: '10px' }}>Change Password</Tag>
                             </Col>
                         </Row>
+
+                        <div className="user-edit-password-seg" style={{ height: passwordSwitch ? '124px' : '0px', opacity: passwordSwitch ? '1' : '0', transition: "height 0.3s ease" }}>
+                            <Row className="user-form-row" justify={'space-between'} >
+                                <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative', filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
+                                    <Form.Item name="password" label="New Password" required={true}>
+                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
+                                    </Form.Item>
+                                    <div className="form-description">
+                                        <p>Enter Secured Password</p>
+                                    </div>
+                                </Col>
+                                <Col span={11} offset={2} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
+                                    <Form.Item name="rePassword" label="ReType New Password" required={true}>
+                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" readOnly required={true}></Input>
+                                    </Form.Item>
+                                    <div className="form-description">
+                                        <p>Re Enter Secured Password</p>
+                                    </div>
+                                </Col>
+                            </Row>
+
+                        </div>
                         <Row className="user-form-row" >
                             <Col span={24} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
 

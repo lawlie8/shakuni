@@ -104,13 +104,18 @@ public class UserResource {
         Boolean isUserEdited = false;
         try {
             log.info("Rest Call to Edit User");
-            if (saveUserDTO.getPassword().equals(saveUserDTO.getRePassword())) {
-                isUserEdited = userService.editExistingUser(saveUserDTO);
+            if(saveUserDTO.getPassword() == null && saveUserDTO.getRePassword() == null){
+                log.debug("Password will not be Updated for User {}",saveUserDTO.getEmail());
+                isUserEdited = userService.editExistingUser(saveUserDTO,false);
+            }
+            else if (saveUserDTO.getPassword().equals(saveUserDTO.getRePassword())) {
+                log.debug("Password will be Updated for User {}",saveUserDTO.getEmail());
+                isUserEdited = userService.editExistingUser(saveUserDTO,true);
             } else {
                 return new ResponseEntity<>("Password Must Match", HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            log.error("Error Occurred While Editing User", e.getStackTrace());
+            log.error("Error Occurred While Editing User {}", e);
             return new ResponseEntity<>("Error While Editing User Roles", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(isUserEdited, HttpStatus.OK);

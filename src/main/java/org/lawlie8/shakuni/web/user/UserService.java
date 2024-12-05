@@ -151,24 +151,27 @@ public class UserService {
     }
 
     @Transactional
-    public Boolean editExistingUser(SaveUserDTO saveUserDTO) {
+    public Boolean editExistingUser(SaveUserDTO saveUserDTO,Boolean changePassword) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Long roleId = 0L;
         try {
             if (userRepo.checkIfUserAlreadyExists(saveUserDTO.getEmail()) > 0) {
-                if (saveUserDTO.getCustomRole()) {
-                    roleId = saveNewRoleAndReturnId(saveUserDTO.getRole(), auth.getName(), new Date());
-                } else {
-                    //Role Already Exist
-                    roleId = roleRepo.findByRoleName(saveUserDTO.getRole()).get().getId();
-                }
-                savePermissionNative(saveUserDTO.getPermissionList(), roleId);
-                Long userId = saveNewUserAndReturnId(saveUserDTO.getEmail(), saveUserDTO.getPassword(), roleId);
-                saveUserProperty(userId,saveUserDTO);
-                return true;
-            } else {
-                log.error("User Already Exists");
+                log.error("User Does Not Exist");
                 return false;
+            } else {
+                log.info("Updating User with id : {}",saveUserDTO.getEmail());
+                if(changePassword){
+                    Users users = userRepo.findByUserNameNative(saveUserDTO.getEmail());
+                    users.setPasswordHash(getPasswordHashed(saveUserDTO.getPassword()));
+                    if(users.getRole().getRoleName().equals(saveUserDTO.getRole())){
+                        log.debug("Role will not be Updated");
+
+                    }else{
+                        //TODO check if Role Already Exist else Create New Role with Permissions
+
+                    }
+                }
+                return true;
             }
         } catch (Exception e) {
             log.error("User Not Saved");
