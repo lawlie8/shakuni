@@ -15,10 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -154,23 +151,37 @@ public class UserService {
     public Boolean editExistingUser(SaveUserDTO saveUserDTO,Boolean changePassword) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Long roleId = 0L;
+        String passwordHash = "";
+        Optional<Users> users = userRepo.findByUserNameNative(saveUserDTO.getEmail());
+
         try {
-            if (userRepo.checkIfUserAlreadyExists(saveUserDTO.getEmail()) > 0) {
+            if (users.isEmpty()) {
                 log.error("User Does Not Exist");
                 return false;
             } else {
                 log.info("Updating User with id : {}",saveUserDTO.getEmail());
                 if(changePassword){
-                    Users users = userRepo.findByUserNameNative(saveUserDTO.getEmail());
-                    users.setPasswordHash(getPasswordHashed(saveUserDTO.getPassword()));
-                    if(users.getRole().getRoleName().equals(saveUserDTO.getRole())){
-                        log.debug("Role will not be Updated");
-
+                    passwordHash = getPasswordHashed(saveUserDTO.getPassword());
+                }else{
+                    passwordHash = users.get().getPasswordHash();
+                }
+                if(users.get().getRole().getRoleName().equals(saveUserDTO.getRole())){
+                    log.debug("Role will not be Updated");
+                    roleId = users.get().getRole().getId();
+                }else{
+                    //TODO check if Role Already Exist else Create New Role with Permissions
+                    Optional<Role> role = roleRepo.findByRoleName(saveUserDTO.getRole());
+                    if(role.isPresent()){
+                        log.debug("Role Already Exists Changing Role to : {}",saveUserDTO.getRole());
+                        roleId = role.get().getId();
                     }else{
-                        //TODO check if Role Already Exist else Create New Role with Permissions
-
+                        log.debug("Role Does Not Exists, Creating New Role with name : {}",saveUserDTO.getRole());
+                        roleId = saveNewRoleAndReturnId(saveUserDTO.getRole(), auth.getName(),new Date());
+                        savePermissionNative(saveUserDTO.getPermissionList(),roleId);
                     }
                 }
+                editUserProperty(users.get().getId(),saveUserDTO);
+                userRepo.editUserNative(saveUserDTO.getEmail(),passwordHash,roleId);
                 return true;
             }
         } catch (Exception e) {
@@ -196,7 +207,7 @@ public class UserService {
     private Long saveNewUserAndReturnId(String email, String password, Long roleId) {
         try {
             userRepo.saveNewUserNative(email, getPasswordHashed(password), false, roleId);
-            return userRepo.findByUserNameNative(email).getId();
+            return userRepo.findByUserNameNative(email).get().getId();
         } catch (Exception e) {
             log.error("Exception Occurred While Saving New User" + e);
             return 0L;
@@ -223,6 +234,21 @@ public class UserService {
         userPropertyList.add(addLastName(userId,saveUserDTO.getLastName()));
         return userPropertyRepo.saveAll(userPropertyList);
     }
+
+    @Transactional
+    private void editUserProperty(Long userId,SaveUserDTO saveUserDTO) {
+       updateUserPropertyName(userId,"name",saveUserDTO.getName());
+       updateUserPropertyLastName(userId,"lastName",saveUserDTO.getLastName());
+    }
+
+    private void updateUserPropertyName(Long userId,String propertyName,String propertyValue){
+        userPropertyRepo.editUserProperty(propertyName,propertyValue,userId);
+    }
+
+    private void updateUserPropertyLastName(Long userId,String propertyName,String propertyValue){
+        userPropertyRepo.editUserProperty(propertyName,propertyValue,userId);
+    }
+
 
     private UserProperty addPropertyName(Long userId,String name) {
         UserProperty userProperty = new UserProperty();

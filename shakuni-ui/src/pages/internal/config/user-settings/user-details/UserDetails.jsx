@@ -184,16 +184,16 @@ export default function UserDetails({ item }) {
                         <div className="user-edit-password-seg" style={{ height: passwordSwitch ? '124px' : '0px', opacity: passwordSwitch ? '1' : '0', transition: "height 0.3s ease" }}>
                             <Row className="user-form-row" justify={'space-between'} >
                                 <Col span={11} className="user-form-col" style={{ float: 'left', position: 'relative', filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
-                                    <Form.Item name="password" label="New Password" required={true}>
-                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"  required={true}></Input>
+                                    <Form.Item name="password" label="New Password" required={passwordSwitch ? true : false}>
+                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F" ></Input>
                                     </Form.Item>
                                     <div className="form-description">
                                         <p>Enter Secured Password</p>
                                     </div>
                                 </Col>
                                 <Col span={11} offset={2} className="user-form-col" style={{ filter: editUserDisabled ? '#d6d6d6' : 'white' }}>
-                                    <Form.Item name="rePassword" label="ReType New Password" required={true}>
-                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"  required={true}></Input>
+                                    <Form.Item name="rePassword" label="ReType New Password" required={passwordSwitch ? true : false}>
+                                        <Input type="password" placeholder="ex. U=/8!zLm*a}9Pv-RtBb$+F"  ></Input>
                                     </Form.Item>
                                     <div className="form-description">
                                         <p>Re Enter Secured Password</p>
@@ -207,10 +207,10 @@ export default function UserDetails({ item }) {
 
                                 {
                                     customRole ?
-                                        <Form.Item name="role" label="Role" required={true}>
+                                        <Form.Item name="role" label="Role" required={!customRole ? true : false}>
                                             <Row>
                                                 <Col span={22}>
-                                                    <Input name="customRole" placeholder="Create New Role" required={true} ></Input>
+                                                    <Input name="customRole" placeholder="Create New Role" />
                                                 </Col>
                                                 <Col span={2}>
                                                     <Tooltip title={customRole ? "Select Existing Role" : "Create Custom Role"}>
@@ -220,11 +220,10 @@ export default function UserDetails({ item }) {
                                             </Row>
                                         </Form.Item>
                                         :
-                                        <Form.Item name="role" label="Role" required={true} initialValue={[selectedRole]}>
+                                        <Form.Item name="role" label="Role" initialValue={[selectedRole]}>
                                             <Row>
                                                 <Col span={22}>
                                                     <Select
-                                                        required={true}
                                                         showSearch
                                                         allowClear
                                                         style={{
