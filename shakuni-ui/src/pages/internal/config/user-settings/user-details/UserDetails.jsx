@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Select, Switch, Tag, Tooltip, Upload } from "antd";
+import { Button, Col, Form, Input, notification, Row, Select, Switch, Tag, Tooltip, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { editUser, getAllPermissionOptions, getAllPermissionOptionsByRoleName, getAllUserRoleOptions } from "../user-setting-service";
 import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusCircleOutlined, SaveOutlined } from "@ant-design/icons";
@@ -70,7 +70,6 @@ export default function UserDetails({ item }) {
                 }
             })
         }
-        console.log(values);
     }
 
     function handleUserEditChange() {

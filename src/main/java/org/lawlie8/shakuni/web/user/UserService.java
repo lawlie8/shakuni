@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.lawlie8.shakuni.entity.User.*;
 
 import org.lawlie8.shakuni.repo.*;
+import org.lawlie8.shakuni.security.config.CustomUserDetails;
 import org.lawlie8.shakuni.web.user.util.SaveUserDTO;
 import org.lawlie8.shakuni.web.user.util.UserInfoDTO;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,9 @@ public class UserService {
 
     @Autowired
     private UserPropertyRepo userPropertyRepo;
+
+    @Autowired
+    private SessionExpireService sessionExpireService;
 
     public List<UserInfoDTO> fetchAllUsers() {
 
@@ -182,13 +187,13 @@ public class UserService {
                 }
                 editUserProperty(users.get().getId(),saveUserDTO);
                 userRepo.editUserNative(saveUserDTO.getEmail(),passwordHash,roleId);
+                sessionExpireService.expireUserSessionByUserName(saveUserDTO.getEmail());
                 return true;
             }
         } catch (Exception e) {
             log.error("User Not Saved");
             return false;
         }
-
     }
 
 

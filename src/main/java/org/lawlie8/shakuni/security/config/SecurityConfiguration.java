@@ -69,7 +69,7 @@ public class SecurityConfiguration {
     @Order(1)
     public SecurityFilterChain mainFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.httpBasic((basic) -> basic.disable()).csrf((csrf) -> csrf.disable()).authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers(AntPathRequestMatcher.antMatcher(SECURED_API_PATTERN)).permitAll();
+                    auth.requestMatchers(AntPathRequestMatcher.antMatcher(SECURED_API_PATTERN)).authenticated();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher(OPEN_API_PATTERN)).permitAll();
                     auth.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll();
 
@@ -77,6 +77,7 @@ public class SecurityConfiguration {
                 .rememberMe(rememberMe -> rememberMe.key(REMEMBER_ME_SECRET)
                         .tokenValiditySeconds(REMEMBER_ME_DURATION)
                         .rememberMeParameter(REMEMBER_ME_PARAMETER))
+                .sessionManagement((session)->session.maximumSessions(1).sessionRegistry(sessionRegistry()))
                 .formLogin(httpSecurityFormLoginConfigurer -> {
                     httpSecurityFormLoginConfigurer
                             .loginPage(LOGIN_REQUEST_PAGE)

@@ -13,7 +13,8 @@ const instance = axios.create({
 
 instance.interceptors.response.use(
     response => {
-        if(response.status === 302 || response.status === 403 || response.status === 404){
+        console.log("sucess", Math.round(response.status / 100));
+        if(response.status === 302 || response.status === 403 || response.status === 404 || response.status === 401){
             notification.error({
                 message:"Error",
                 duration:1,
@@ -25,18 +26,20 @@ instance.interceptors.response.use(
 
     return response
     },error =>{
-    //     if(error.response.status === 403){
-    //         notification.error({
-    //         message:error.response.status,
-    //         duration:1,
-    //         description:"Login Required",
-    //         style: { width: '250px' }
-    //     })
-    //     const delayFucnt = setTimeout(() => {
-    //        window.location.href = "/"
-    //     }, 1000);
+        console.log("error",error.response.status);
+        if(error.response.status === 403 || error.response.status === 401){
+            notification.error({
+            message:error.response.status,
+            duration:1,
+            description:"Login Required",
+            style: { width: '250px' }
+        })
 
-    // }
+        const delayFucnt = setTimeout(() => {
+           window.location.href = "/"
+        }, 1000);
+
+    }
 
     return error
 

@@ -2,7 +2,6 @@ package org.lawlie8.shakuni.security.config;
 
 
 import org.lawlie8.shakuni.entity.User.PermissionList;
-import org.lawlie8.shakuni.entity.User.Permissions;
 import org.lawlie8.shakuni.entity.User.Users;
 import org.lawlie8.shakuni.web.user.UserService;
 import org.slf4j.Logger;
