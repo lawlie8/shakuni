@@ -12,9 +12,8 @@ const instance = axios.create({
 })
 
 instance.interceptors.response.use(
-    response => {
-        console.log("sucess", Math.round(response.status / 100));
-        if(response.status === 302 || response.status === 403 || response.status === 404 || response.status === 401){
+    function(response) {
+        if(Math.round(response.status / 100) === 4){
             notification.error({
                 message:"Error",
                 duration:1,
@@ -24,10 +23,9 @@ instance.interceptors.response.use(
         window.location.href = "/"
         }
 
-    return response
-    },error =>{
-        console.log("error",error.response.status);
-        if(error.response.status === 403 || error.response.status === 401){
+    return response;
+    },function(error){
+        if(Math.round(response.status / 100) === 4){
             notification.error({
             message:error.response.status,
             duration:1,
