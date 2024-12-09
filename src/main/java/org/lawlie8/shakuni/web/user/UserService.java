@@ -191,7 +191,7 @@ public class UserService {
                 return true;
             }
         } catch (Exception e) {
-            log.error("User Not Saved");
+            log.error("User Not Saved {}",e);
             return false;
         }
     }

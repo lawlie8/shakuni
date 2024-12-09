@@ -30,7 +30,6 @@ public class DataSourceResource {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_VIEW_DATASOURCE')")
     @RequestMapping(path = "/datasource/type/all",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllDataSourceType(){
-        simpMessagingTemplate.convertAndSend("/notification/all","payload");
         List<DataSourceType> dataSourceTypeList = dataSourceService.getAllDataSource();
         return ResponseEntity.ok(dataSourceTypeList);
     }

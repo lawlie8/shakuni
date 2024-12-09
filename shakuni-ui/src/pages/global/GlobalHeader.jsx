@@ -1,52 +1,52 @@
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { LogoutOutlined, NotificationOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logout } from "./globalService";
 import { setStoreSelectedDataSourceType,setStoreSelectedAddEditDataSourceType } from "../internal/config/data-sources/DataSourceSlice";
-import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WS_BASE_URL } from "../../util/Constants";
 import { useEffect } from "react";
-import SockJS from 'sockjs-client';
+import {SockJS} from 'sockjs-client';
 import { Client } from "@stomp/stompjs";
 export default function GlobalHeader() {
 
     const headerList = [{name:'Dashboard',url:"/dashboard"},{name:'Jobs',url:"/jobs"}, {name:'Config',url:"/config"}, {name:'Management',url:"/management"}];
     const email = useSelector((state) => state.loginStore.userName);
     const emailFromLocalStorage = localStorage.getItem("userName");
-    
-
-    
+        
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
 
     useEffect(() => {
-        // WebSocket connection
-        const socket = new SockJS();
-        const stompClient = new Client({
-          webSocketFactory: () => socket,
-          debug: (str) => console.log(str),
-          onConnect: () => {
-            console.log("Connected to WebSocket");
-
-            stompClient.subscribe("/notification/all", (response) => {
-                console.log('Received message:', response.body);
+        try{
+            const socket = new SockJS(WS_BASE_URL);
+            const stompClient = new Client({
+                webSocketFactory: () => socket,
+                debug: (str) => {},
+                onConnect: () => {
+    
+                    stompClient.subscribe("/notification/all", (response) => {
+                        console.log('Received message:', response.body);
+                    });
+    
+                },
+                onStompError: () => {
+                    console.log("error");
+                },
             });
+    
+            stompClient.activate();
+    
+            return () => {
+                stompClient.deactivate();
+            };
+        }catch(e){
+            console.log(e)
+        }
 
-        },
-          onStompError: () => {
-            console.log("error");
-          },
-        });
-     
-        stompClient.activate();
-     
-        return () => {
-          stompClient.deactivate();
-        };
-      }, []);
+    }, []);
 
     const onClick = ({ key }) => {
         if (key === '3') {
@@ -151,6 +151,9 @@ return (
                 </ul>
             </li>
             <li className="header-user-logo">
+                <div className="global-notification">
+                    <NotificationOutlined></NotificationOutlined>
+                </div>
                 <Dropdown menu={{ items, onClick }} >
                     <Avatar className="header-user-logo-avatar" src={{ fetchUserAvatarImage }} size={35} style={{ backgroundColor: 'purple' }} onClick={userAvatarClick()}>{fetchEmail()?.toUpperCase()[0]}</Avatar>
                 </Dropdown>

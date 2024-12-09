@@ -1,5 +1,5 @@
 export const BASE_URL = "http://localhost:7911";
-export const WS_BASE_URL = "ws://localhost:7911/ws";
+export const WS_BASE_URL = "http://localhost:7911/ws";
 
 export const AUTH_URL = "/web/auth";
 export const LOGOUT_URL = "/web/logout";
