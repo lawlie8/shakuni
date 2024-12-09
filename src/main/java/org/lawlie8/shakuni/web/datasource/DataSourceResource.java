@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -23,10 +24,13 @@ public class DataSourceResource {
 
     private static final Logger log = LoggerFactory.getLogger(DataSourceResource.class);
 
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_VIEW_DATASOURCE')")
     @RequestMapping(path = "/datasource/type/all",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllDataSourceType(){
+        simpMessagingTemplate.convertAndSend("/notification/all","payload");
         List<DataSourceType> dataSourceTypeList = dataSourceService.getAllDataSource();
         return ResponseEntity.ok(dataSourceTypeList);
     }
@@ -50,6 +54,12 @@ public class DataSourceResource {
     public ResponseEntity<?> getDataSourcePropertiesById(@PathVariable(name = "id") Long id){
         Map<DataSourcePropertiesEnum, Map<String,String>> properties = dataSourceService.getDataSourcePropertiesById(id);
         return ResponseEntity.ok(properties);
+    }
+
+    @RequestMapping(path = "/ws/check",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> checkWs(){
+        simpMessagingTemplate.convertAndSend("/notification","this is payload");
+        return ResponseEntity.ok("ok");
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PER_DELETE_DATASOURCE')")
@@ -86,4 +96,6 @@ public class DataSourceResource {
         }
         return ResponseEntity.internalServerError().build();
     }
+
+
 }

@@ -21,7 +21,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="org.lawlie8.*" level="info" additivity="false">
+        <Logger name="org.lawlie8.*" level="DEBUG" additivity="false">
             <AppenderRef ref="Console" />
             <AppenderRef ref="RollingFile" />
         </Logger>
