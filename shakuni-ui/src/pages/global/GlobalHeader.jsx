@@ -6,7 +6,7 @@ import { logout } from "./globalService";
 import { setStoreSelectedDataSourceType,setStoreSelectedAddEditDataSourceType } from "../internal/config/data-sources/DataSourceSlice";
 import { WS_BASE_URL } from "../../util/Constants";
 import { useEffect } from "react";
-import {SockJS} from 'sockjs-client';
+import SockJS from 'sockjs-client';
 import { Client } from "@stomp/stompjs";
 export default function GlobalHeader() {
 
@@ -24,7 +24,7 @@ export default function GlobalHeader() {
             const socket = new SockJS(WS_BASE_URL);
             const stompClient = new Client({
                 webSocketFactory: () => socket,
-                debug: (str) => {},
+                debug: (str) => {console.log(str);},
                 onConnect: () => {
     
                     stompClient.subscribe("/notification/all", (response) => {
