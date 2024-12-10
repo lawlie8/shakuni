@@ -1,5 +1,5 @@
-import { LogoutOutlined, NotificationOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Dropdown, notification } from "antd";
+import { LogoutOutlined, NotificationFilled, NotificationOutlined, UserOutlined } from "@ant-design/icons";
+import { Avatar, Col, Dropdown, notification, Row } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logout } from "./globalService";
@@ -150,14 +150,18 @@ return (
                     }
                 </ul>
             </li>
-            <li className="header-user-logo">
+            <Row className="header-user-logo" justify={'space-between'}>
+                <Col span={12}>
                 <div className="global-notification">
-                    <NotificationOutlined></NotificationOutlined>
+                    <NotificationFilled style={{fontSize:'25px'}} />
                 </div>
+                </Col>
+                <Col span={12}>
                 <Dropdown menu={{ items, onClick }} >
                     <Avatar className="header-user-logo-avatar" src={{ fetchUserAvatarImage }} size={35} style={{ backgroundColor: 'purple' }} onClick={userAvatarClick()}>{fetchEmail()?.toUpperCase()[0]}</Avatar>
                 </Dropdown>
-            </li>
+                </Col>
+            </Row>
         </ul>
 
     </div>

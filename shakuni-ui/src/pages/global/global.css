@@ -56,12 +56,11 @@
 }
 
 .header-user-logo{
-    position: absolute;
-    right: 0%;
-    top: 0%;
-    width: 50px;
-    height: 50px;
-    padding: 10px;
+    position: relative;
+    float: right;
+    width: 100px;
+    bottom: 0px;
+    padding: 0px;
 }
 
 .header-user-logo-avatar{
@@ -69,6 +68,11 @@
         box-shadow: 0px 0px 5px #dfdfdf;
         cursor:pointer;
     }
+}
+
+.global-notification{
+    position: relative;
+    bottom: -10px;
 }
 
 
