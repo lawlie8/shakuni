@@ -1,0 +1,15 @@
+.editor-main{
+
+}
+
+.editor-tool-pick{
+    position: relative;
+    background-color: rgb(160, 159, 159);
+    height: 30px;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 1px solid rgb(0, 0, 0);
+}
