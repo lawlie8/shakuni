@@ -2,6 +2,24 @@
 
 }
 
+.editor-tool-pick-ul{
+    list-style: none;
+    display: flex;
+    padding: 5px 5px 5px 10px;
+    align-items: center;
+}
+
+.editor-tool-pick-ul-li{
+    position: relative;
+    align-items: center;
+    width: 20px;
+    height: 100%;
+    margin: 0px 5px 0px 5px;
+
+}
+
+
+
 .editor-tool-pick{
     position: relative;
     background-color: rgb(160, 159, 159);
