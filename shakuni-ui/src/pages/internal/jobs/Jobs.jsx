@@ -1,15 +1,22 @@
-import { Col, Divider, Dropdown, List, Menu, Row, Select, Space, Statistic, Tooltip } from 'antd';
+import { Col, Divider, Dropdown, Form, List, Menu, Row, Select, Space, Statistic, Tooltip } from 'antd';
 import './jobs.css';
-import { useState } from 'react';
-import { ArrowUpOutlined, CheckCircleOutlined, CheckOutlined, CodeFilled, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, UserOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { ArrowUpOutlined, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CodeFilled, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, SendOutlined, UserOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { useHorizontalScroll } from '../../../util/scroll';
+import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 
 export default function Jobs(params = { params }) {
 
     const [segmentItemList, setSegmentItemList] = useState([1, 2]);
     const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([1, 2, 3, 4])
+    const [datasourceType, setDataSourceType] = useState([]);
+    const [configuredDatasource, setConfiguredDatasource] = useState([]);
+
+    const [selectedDataSourceTypeId, setSelectedDataSourceTypeId] = useState(0);
+    const [selectedConfiguredDataSourceId, setSelectedConfiguredDataSourceId] = useState(0);
+
     const [menuItems, setMenuItems] = useState([{
         key: "1",
         icon: <img src='/datasource_logo/hive_logo.svg' height="50px" width="50px" />,
@@ -21,41 +28,35 @@ export default function Jobs(params = { params }) {
         label: "Hive Sources",
     },])
 
-    const selectOptions = [
-        {
-          label: 'China',
-          value: 'china',
-          emoji: '🇨🇳',
-          desc: 'China (中国)',
-        },
-        {
-          label: 'USA',
-          value: 'usa',
-          emoji: '🇺🇸',
-          desc: 'USA (美国)',
-        },
-        {
-          label: 'Japan',
-          value: 'japan',
-          emoji: '🇯🇵',
-          desc: 'Japan (日本)',
-        },
-        {
-          label: 'Korea',
-          value: 'korea',
-          emoji: '🇰🇷',
-          desc: 'Korea (韩国)',
-        },
-      ];
+    useEffect(()=>{
+        fetchDataSourceTypes().then((response)=>{
+            setDataSourceType(response.data)
+           datasourceType?.map((item)=>{
+                item.value = item.dataSourceLabel
+           })
+        })
+    },[])
 
-      const handleChange = (value) => {
-        console.log(`selected ${value}`);
-      };
+    const setDataSourceTypeIdFunction = (value) => {
+        setSelectedDataSourceTypeId(value)
+        fetchConfiguredDataSourcesById(value).then((response)=>{
+            setConfiguredDatasource(response.data);
+        })
+        console.log(configuredDatasource);
+        
+    };
 
 
 
     function onClickDataSource(value) {
 
+    }
+
+    function handleCreateNewModal(value) {
+        value.selectedDataSourceTypeId = Number(selectedDataSourceTypeId);
+        value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
+
+        console.log(value);
     }
 
     return <div className="jobs-page">
@@ -69,7 +70,7 @@ export default function Jobs(params = { params }) {
                             <Statistic
                                 title="Running"
                                 value={"11"}
-                                valueStyle={{ color: 'orange',fontSize:'30px' }}
+                                valueStyle={{ color: 'orange', fontSize: '30px' }}
                                 prefix={<FireFilled />}
                                 suffix=""
                             />
@@ -78,8 +79,8 @@ export default function Jobs(params = { params }) {
                             <Statistic
                                 title="Completed"
                                 value={"26"}
-                                valueStyle={{ color: '#3f8600',fontSize:'30px' }}
-                                prefix={<CheckCircleOutlined />}
+                                valueStyle={{ color: '#3f8600', fontSize: '30px' }}
+                                prefix={<CheckCircleFilled />}
                                 suffix=""
                             />
                         </Col>
@@ -87,7 +88,7 @@ export default function Jobs(params = { params }) {
                             <Statistic
                                 title="Total"
                                 value={"Σ 37"}
-                                valueStyle={{ color: '#000',fontSize:'30px' }}
+                                valueStyle={{ color: '#000', fontSize: '30px' }}
                                 suffix=""
                             />
                         </Col>
@@ -113,62 +114,80 @@ export default function Jobs(params = { params }) {
                 <Row className='jobs-util-segment'>
                     <Col span={24}>
                         <ul className='jobs-util-segment-ul'>
-                            <li className='jobs-util-segment-li'>
-                                <Select
-                                    mode="single"
-                                    style={{ width: '100%',height:'90px' }}
-                                    placeholder="select one country"
-                                    defaultValue={['china']}
-                                    onChange={handleChange}
-                                    options={selectOptions}
-                                    optionRender={(option) => (
-                                        <Space>
-                                            <span role="img" aria-label={option.data.label}>
-                                                {option.data.emoji}
-                                            </span>
-                                            {option.data.desc}
-                                        </Space>
-                                    )}
-                                />
-                            </li>
-                            <li className='jobs-util-segment-li'>
-                            <Select
-                                    mode="single"
-                                    style={{ width: '100%',height:'90px' }}
-                                    placeholder="select one country"
-                                    defaultValue={['china']}
-                                    onChange={handleChange}
-                                    options={selectOptions}
-                                    optionRender={(option) => (
-                                        <Space>
-                                            <span role="img" aria-label={option.data.label}>
-                                                {option.data.emoji}
-                                            </span>
-                                            {option.data.desc}
-                                        </Space>
-                                    )}
-                                />
-                            </li>
-                            <li className='jobs-util-segment-li-create'>
-                                <PlusCircleFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
-                            </li>
+                            <Form onFinish={handleCreateNewModal} style={{ display: 'flex',width:'100%' }}>
+                                <li className='jobs-util-segment-li'>
+                                        <div style={{position:'absolute',zIndex:'1',backgroundColor:'white',width:'calc(100% - 10px)',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}}>
+                                            <img  height="25px" width="25px"  src="" alt="" />
+                                        </div>
+                                    <Form.Item name="selectedDataSourceTypeId">
+                                        <Select
+                                            mode="single"
+                                            style={{ width: '100%', height: '90px' }}
+                                            placeholder="Select Data-Source"
+                                            defaultValue={[]}
+                                            value={selectedDataSourceTypeId}
+                                            onChange={(value)=>{setDataSourceTypeIdFunction(value)}}
+                                            options={datasourceType}
+                                            optionRender={(option) => (
+                                                <div id={option.data.id} onClick={(value)=>setDataSourceTypeIdFunction(value.target.id)} style={{display:'flex'}} >
+                                                    <span style={{margin:'5px',pointerEvents:'none'}}>
+                                                        <img height="25px" width="25px" src={option.data.dataSourceImageUrl} alt="" />
+                                                    </span>
+                                                    <h4 style={{margin:'0px 0px 0px 10px',paddingTop:'10px',pointerEvents:'none'}}>{option.data.dataSourceLabel}</h4>
+                                                </div>
+                                            )}
+                                        />
+                                    </Form.Item>
+                                </li>
+                                <li className='jobs-util-segment-li'>
+                                    <div style={{position:'absolute',zIndex:'1',backgroundColor:'white',width:'calc(100% - 10px)',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}}>
+                                            {selectedConfiguredDataSourceId}
+                                    </div>
+                                    <Form.Item name="selectedConfiguredDataSourceId" required={true}>
+                                        <Select
+                                            mode="single"
+                                            style={{ width: '100%', height: '90px' }}
+                                            placeholder="Select Configured Data-Source"
+                                            defaultValue={[]}
+                                            onChange={(value)=>{console.log(value)}}
+                                            options={configuredDatasource}
+                                            optionRender={(option) => (
+                                                <Space>
+                                                    <span role="img" aria-label={option.data.label}>
+                                                    </span>
+                                                    {option.data.datasourceName}
+                                                </Space>
+                                            )}
+                                        />
+                                    </Form.Item>
+
+                                </li>
+                                <Form.Item>
+
+                                    <button className='jobs-util-segment-li-create' type='submit'>
+                                        <CheckOutlined style={{ fontSize: '30px', position: 'relative', top: '25%', transform: 'translateY(-50%)' }} />
+                                    </button>
+                                </Form.Item>
+
+                            </Form>
+
                         </ul>
                     </Col>
                 </Row>
                 <Row className='jobs-content-segment'>
                     <Col span={24}>
-                    <h2 style={{textAlign:'left',margin:'10px'}}>All Jobs</h2>
+                        <h2 style={{ textAlign: 'left', margin: '10px' }}>All Jobs</h2>
                         <Divider />
                         <List>
-                            
-                               {
+
+                            {
                                 recentJobs?.map((item) => (
                                     <List.Item className='jobs-recent-all-jobs-item'>
                                         {item}
                                     </List.Item>
                                 ))
-                            } 
-                            
+                            }
+
                         </List>
                     </Col>
                 </Row>
