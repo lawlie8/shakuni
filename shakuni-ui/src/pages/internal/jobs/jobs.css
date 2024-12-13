@@ -73,22 +73,17 @@
 }
 
 .jobs-all-stat-overview{
-    position: relative;
-    top: 0px;
-    height: 200px;
     margin: 5px;
+    height: 200px;
     background-color: white;
     color: rgba(0, 0, 0, 0.72);
     border-radius: 10px;
     box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
-
 }
 
 .jobs-all-recent-jobs{
-    position: relative;
-    top: 0px;
-    height: calc(100vh - 325px);
-    margin:5px;
+    margin: 5px;
+    height: calc(100vh - 309px);
     background-color: white;
     color: rgba(0, 0, 0, 0.72);
     border-radius: 10px;
@@ -97,8 +92,6 @@
 
 .jobs-all-page{
     position: relative;
-    top: 0px;
-    height: 100vh;
 }
 
 .jobs-recent-all-jobs-item{
@@ -117,6 +110,40 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
-    height: calc(100vh - 220px);
+    height: calc(100vh - 209px);
     margin: 5px;
 }
+
+.jobs-util-segment-ul{
+    list-style: none;
+    margin: 5px;
+    display: flex;
+    position: relative;
+    height: 90px;
+    width: auto;
+    padding: 0px;
+}
+
+.jobs-util-segment-li{
+    position: relative;
+    height: 90px;
+    padding: none;
+    width: 100%;
+    margin: 0px 3px 0px 2px;
+}
+
+.jobs-util-segment-li-create{
+    position: relative;
+    height: 90px;
+    padding: none;
+    min-width: 90px;
+    margin: 0px;
+    margin: 0px 3px 0px 2px;
+    border-radius: 10px;
+    background-color: #2caa34;
+    cursor: pointer;
+    &:hover{
+        background-color: #1c8a23;
+    }
+}
+

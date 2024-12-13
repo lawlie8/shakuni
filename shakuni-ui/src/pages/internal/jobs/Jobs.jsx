@@ -1,4 +1,4 @@
-import { Col, Divider, List, Menu, Row, Statistic, Tooltip } from 'antd';
+import { Col, Divider, Dropdown, List, Menu, Row, Select, Space, Statistic, Tooltip } from 'antd';
 import './jobs.css';
 import { useState } from 'react';
 import { ArrowUpOutlined, CheckCircleOutlined, CheckOutlined, CodeFilled, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, UserOutlined } from '@ant-design/icons';
@@ -21,8 +21,36 @@ export default function Jobs(params = { params }) {
         label: "Hive Sources",
     },])
 
+    const selectOptions = [
+        {
+          label: 'China',
+          value: 'china',
+          emoji: '🇨🇳',
+          desc: 'China (中国)',
+        },
+        {
+          label: 'USA',
+          value: 'usa',
+          emoji: '🇺🇸',
+          desc: 'USA (美国)',
+        },
+        {
+          label: 'Japan',
+          value: 'japan',
+          emoji: '🇯🇵',
+          desc: 'Japan (日本)',
+        },
+        {
+          label: 'Korea',
+          value: 'korea',
+          emoji: '🇰🇷',
+          desc: 'Korea (韩国)',
+        },
+      ];
 
-
+      const handleChange = (value) => {
+        console.log(`selected ${value}`);
+      };
 
 
 
@@ -32,16 +60,16 @@ export default function Jobs(params = { params }) {
 
     return <div className="jobs-page">
         <Row className='jobs-all-page' justify={"space-between"} style={{ display: !allJobsView ? 'none' : 'flex' }}>
-            <Col span={4} style={{width:"30%",position:'relative' ,top: '-10px' }}>
+            <Col span={5} style={{ width: "30%" }}>
                 <div className='jobs-all-stat-overview'>
-                    <h2>Overview</h2>
+                    <h2 style={{ margin: '0px' }}>Overview</h2>
                     <Divider />
                     <Row justify={"space-between"}>
                         <Col span={8}>
                             <Statistic
                                 title="Running"
                                 value={"11"}
-                                valueStyle={{ color: 'orange' }}
+                                valueStyle={{ color: 'orange',fontSize:'30px' }}
                                 prefix={<FireFilled />}
                                 suffix=""
                             />
@@ -50,7 +78,7 @@ export default function Jobs(params = { params }) {
                             <Statistic
                                 title="Completed"
                                 value={"26"}
-                                valueStyle={{ color: '#3f8600' }}
+                                valueStyle={{ color: '#3f8600',fontSize:'30px' }}
                                 prefix={<CheckCircleOutlined />}
                                 suffix=""
                             />
@@ -59,7 +87,7 @@ export default function Jobs(params = { params }) {
                             <Statistic
                                 title="Total"
                                 value={"Σ 37"}
-                                valueStyle={{ color: '#000' }}
+                                valueStyle={{ color: '#000',fontSize:'30px' }}
                                 suffix=""
                             />
                         </Col>
@@ -67,7 +95,7 @@ export default function Jobs(params = { params }) {
                     </Row>
                 </div>
                 <div className='jobs-all-recent-jobs'>
-                    <h2>Recent Jobs</h2>
+                    <h2 style={{ margin: '0px' }}>Recent Jobs</h2>
                     <Divider />
                     <List style={{ margin: '0px', padding: '0px' }}>
                         {
@@ -81,14 +109,67 @@ export default function Jobs(params = { params }) {
                     </List>
                 </div>
             </Col>
-            <Col span={20} style={{width:"70%",position:'relative',top: '-10px' }}>
+            <Col span={19} style={{ width: "70%", position: 'relative' }}>
                 <Row className='jobs-util-segment'>
                     <Col span={24}>
-                    
+                        <ul className='jobs-util-segment-ul'>
+                            <li className='jobs-util-segment-li'>
+                                <Select
+                                    mode="single"
+                                    style={{ width: '100%',height:'90px' }}
+                                    placeholder="select one country"
+                                    defaultValue={['china']}
+                                    onChange={handleChange}
+                                    options={selectOptions}
+                                    optionRender={(option) => (
+                                        <Space>
+                                            <span role="img" aria-label={option.data.label}>
+                                                {option.data.emoji}
+                                            </span>
+                                            {option.data.desc}
+                                        </Space>
+                                    )}
+                                />
+                            </li>
+                            <li className='jobs-util-segment-li'>
+                            <Select
+                                    mode="single"
+                                    style={{ width: '100%',height:'90px' }}
+                                    placeholder="select one country"
+                                    defaultValue={['china']}
+                                    onChange={handleChange}
+                                    options={selectOptions}
+                                    optionRender={(option) => (
+                                        <Space>
+                                            <span role="img" aria-label={option.data.label}>
+                                                {option.data.emoji}
+                                            </span>
+                                            {option.data.desc}
+                                        </Space>
+                                    )}
+                                />
+                            </li>
+                            <li className='jobs-util-segment-li-create'>
+                                <PlusCircleFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
+                            </li>
+                        </ul>
                     </Col>
                 </Row>
                 <Row className='jobs-content-segment'>
                     <Col span={24}>
+                    <h2 style={{textAlign:'left',margin:'10px'}}>All Jobs</h2>
+                        <Divider />
+                        <List>
+                            
+                               {
+                                recentJobs?.map((item) => (
+                                    <List.Item className='jobs-recent-all-jobs-item'>
+                                        {item}
+                                    </List.Item>
+                                ))
+                            } 
+                            
+                        </List>
                     </Col>
                 </Row>
             </Col>
