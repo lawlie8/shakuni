@@ -3,7 +3,7 @@
 }
 
 .jobs-page{
-    position: fixed;
+    position: absolute;
     left: 0px;
     top: 65px;
     margin: 0px;
@@ -70,4 +70,53 @@
     &:hover{
         background-color: #1c8a23;
     }
+}
+
+.jobs-all-stat-overview{
+    position: relative;
+    top: 0px;
+    height: 200px;
+    margin: 5px;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.72);
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+
+}
+
+.jobs-all-recent-jobs{
+    position: relative;
+    top: 0px;
+    height: calc(100vh - 325px);
+    margin:5px;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.72);
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+.jobs-all-page{
+    position: relative;
+    top: 0px;
+    height: 100vh;
+}
+
+.jobs-recent-all-jobs-item{
+    margin: 5px;
+}
+
+.jobs-util-segment{
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+    height: 100px;
+    margin: 5px;
+}
+
+.jobs-content-segment{
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+    height: calc(100vh - 220px);
+    margin: 5px;
 }
