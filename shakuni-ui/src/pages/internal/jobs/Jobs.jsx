@@ -9,12 +9,16 @@ import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/
 export default function Jobs(params = { params }) {
 
     const [segmentItemList, setSegmentItemList] = useState([1, 2]);
-    const [allJobsView, setAllJobsView] = useState(false);
+    const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([1, 2, 3, 4])
     const [datasourceType, setDataSourceType] = useState([]);
     const [configuredDatasource, setConfiguredDatasource] = useState([]);
 
     const [selectedDataSourceTypeId, setSelectedDataSourceTypeId] = useState(0);
+    const [selectedDataSourceTypeName, setSelectedDataSourceTypeName] = useState("");
+    const [selectedConfiguredDataSourceName, setSelectedConfiguredDataSourceName] = useState("");
+
+    const [selectedDataSourceTypeImageUrl, setSelectedDataSourceTypeImageUrl] = useState("");
     const [selectedConfiguredDataSourceId, setSelectedConfiguredDataSourceId] = useState(0);
 
     const [menuItems, setMenuItems] = useState([{
@@ -38,13 +42,21 @@ export default function Jobs(params = { params }) {
     },[])
 
     const setDataSourceTypeIdFunction = (value) => {
-        setSelectedDataSourceTypeId(value)
-        fetchConfiguredDataSourcesById(value).then((response)=>{
+        setSelectedDataSourceTypeImageUrl(String(value.attributes.url.nodeValue));
+        setSelectedDataSourceTypeName(String(value.attributes.dataSourceName.nodeValue));
+        setSelectedDataSourceTypeId(Number(value.attributes.id.nodeValue));
+        fetchConfiguredDataSourcesById(Number(value.attributes.id.nodeValue)).then((response)=>{
             setConfiguredDatasource(response.data);
         })
-        console.log(configuredDatasource);
         
     };
+
+    const setConfiguredDataSourceNameFunction = (value) => {
+        console.log(value)
+        setSelectedConfiguredDataSourceName(value)
+        
+    };
+
 
 
 
@@ -56,7 +68,6 @@ export default function Jobs(params = { params }) {
         value.selectedDataSourceTypeId = Number(selectedDataSourceTypeId);
         value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
 
-        console.log(value);
     }
 
     return <div className="jobs-page">
@@ -116,8 +127,15 @@ export default function Jobs(params = { params }) {
                         <ul className='jobs-util-segment-ul'>
                             <Form onFinish={handleCreateNewModal} style={{ display: 'flex',width:'100%' }}>
                                 <li className='jobs-util-segment-li'>
-                                        <div style={{position:'absolute',zIndex:'1',backgroundColor:'white',width:'calc(100% - 10px)',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}}>
-                                            <img  height="25px" width="25px"  src="" alt="" />
+                                        <div style={{position:'absolute',zIndex:'1',display: selectedDataSourceTypeImageUrl === "" ? "none" : "block",backgroundColor:'white',width:'calc(100% - 10px)',pointerEvents:'none',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}}>
+                                            <ul style={{listStyle:'none',display:'inline-flex'}}>
+                                                <li style={{margin:'0px 5px 0px 5px'}}>
+                                                    <img  height="25px" width="25px"  src={selectedDataSourceTypeImageUrl} alt="" />
+                                                </li>
+                                                <li>
+                                                    <b>{selectedDataSourceTypeName}</b>
+                                                </li>
+                                            </ul>
                                         </div>
                                     <Form.Item name="selectedDataSourceTypeId">
                                         <Select
@@ -129,7 +147,7 @@ export default function Jobs(params = { params }) {
                                             onChange={(value)=>{setDataSourceTypeIdFunction(value)}}
                                             options={datasourceType}
                                             optionRender={(option) => (
-                                                <div id={option.data.id} onClick={(value)=>setDataSourceTypeIdFunction(value.target.id)} style={{display:'flex'}} >
+                                                <div id={option.data.id} url={option.data.dataSourceImageUrl} dataSourceName={option.data.dataSourceLabel} onClick={(value)=>setDataSourceTypeIdFunction(value.target)} style={{display:'flex'}} >
                                                     <span style={{margin:'5px',pointerEvents:'none'}}>
                                                         <img height="25px" width="25px" src={option.data.dataSourceImageUrl} alt="" />
                                                     </span>
@@ -141,7 +159,7 @@ export default function Jobs(params = { params }) {
                                 </li>
                                 <li className='jobs-util-segment-li'>
                                     <div style={{position:'absolute',zIndex:'1',backgroundColor:'white',width:'calc(100% - 10px)',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}}>
-                                            {selectedConfiguredDataSourceId}
+                                            {selectedConfiguredDataSourceName}
                                     </div>
                                     <Form.Item name="selectedConfiguredDataSourceId" required={true}>
                                         <Select
@@ -152,11 +170,11 @@ export default function Jobs(params = { params }) {
                                             onChange={(value)=>{console.log(value)}}
                                             options={configuredDatasource}
                                             optionRender={(option) => (
-                                                <Space>
+                                                <div  onClick={(value)=>setConfiguredDataSourceNameFunction(value.target.innerText)}>
                                                     <span role="img" aria-label={option.data.label}>
                                                     </span>
                                                     {option.data.datasourceName}
-                                                </Space>
+                                                </div>
                                             )}
                                         />
                                     </Form.Item>

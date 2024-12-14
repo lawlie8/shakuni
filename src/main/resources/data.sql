@@ -167,3 +167,16 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+CREATE TABLE `jobs` (
+	`id` INTEGER auto_increment NOT NULL,
+	`job_name` varchar(200) NOT NULL,
+	`configured_datasource_id` INTEGER NOT NULL,
+	`created_by` varchar(200) NULL,
+	`creation_date` DATETIME NULL,
+	CONSTRAINT jobs_pk PRIMARY KEY (`id`),
+	CONSTRAINT jobs_unique UNIQUE KEY (`job_name`)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=latin1
+COLLATE=latin1_swedish_ci
+COMMENT='Table Consists of Data Regarding Shakuni Jobs';

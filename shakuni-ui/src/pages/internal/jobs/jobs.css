@@ -9,6 +9,9 @@
     margin: 0px;
     padding: 0px;
     width: 100%;
+    overflow: hidden;
+    height: calc(100vh - 65px);
+
 }
 
 .jobs-page-content{
