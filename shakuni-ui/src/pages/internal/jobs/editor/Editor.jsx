@@ -68,18 +68,18 @@ OPTION (HASH GROUP, FAST 10);
       <ul className='editor-tool-pick-ul'>
         <li className='editor-tool-pick-ul-li'>
           <Tooltip title="Execute Query">
-            <PlaySquareFilled style={{ fontSize: '20px', color: '#161b22' }} />
+            <PlaySquareFilled style={{ fontSize: '20px', color: '#161b22',cursor:'pointer' }} />
           </Tooltip>
 
         </li>
         <li className='editor-tool-pick-ul-li'>
           <Tooltip title="Save Query">
-            <SaveFilled style={{ fontSize: '20px', color: '#161b22' }} />
+            <SaveFilled style={{ fontSize: '20px', color: '#161b22',cursor:'pointer' }} />
           </Tooltip>
         </li>
         <li style={{display:'absolute', left:'calc(100% - 90px)'}} className='editor-tool-pick-ul-li' >
           <Tooltip title="Close">
-            <CloseCircleFilled style={{ fontSize: '20px', color: '#161b22'}} />
+            <CloseCircleFilled style={{ fontSize: '20px', color: '#161b22',cursor:'pointer'}} />
           </Tooltip>
         </li>
 

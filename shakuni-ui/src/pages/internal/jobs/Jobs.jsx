@@ -1,7 +1,7 @@
 import { Col, Divider, Dropdown, Form, List, Menu, Row, Select, Space, Statistic, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { ArrowUpOutlined, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CodeFilled, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, SendOutlined, UserOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CodeFilled, ConsoleSqlOutlined, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, SendOutlined, UserOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { useHorizontalScroll } from '../../../util/scroll';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
@@ -9,7 +9,7 @@ import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/
 export default function Jobs(params = { params }) {
 
     const [segmentItemList, setSegmentItemList] = useState([1, 2]);
-    const [allJobsView, setAllJobsView] = useState(true);
+    const [allJobsView, setAllJobsView] = useState(false);
     const [recentJobs, setRecentJobs] = useState([1, 2, 3, 4])
     const [datasourceType, setDataSourceType] = useState([]);
     const [configuredDatasource, setConfiguredDatasource] = useState([]);
@@ -210,18 +210,11 @@ export default function Jobs(params = { params }) {
                         <div className='job-segment-selection' >
                             <ul className='job-segment-selection-ul'>
                                 <li className='job-segment-selection-ul-li'>
-                                    <CodeFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
+                                    <ConsoleSqlOutlined style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
                                 </li>                                        <li className='job-segment-selection-ul-li'>
                                     <FileTextFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
                                 </li>
-                                {/* 
-                                {
-                                    segmentItemList?.map((item)=>(
-                                        <li className='job-segment-selection-ul-li'>
-                                            <FileTextFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
-                                        </li>
-                                    ))
-                                } */}
+
                                 <Tooltip title="Create New Item">
                                     <li className='job-segment-selection-ul-li-create'>
                                         <PlusCircleFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
