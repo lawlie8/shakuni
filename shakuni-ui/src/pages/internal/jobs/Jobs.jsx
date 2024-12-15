@@ -1,4 +1,4 @@
-import { Col, Divider, Dropdown, Form, List, Menu, Row, Select, Space, Statistic, Tooltip } from 'antd';
+import { Col, Divider, Dropdown, Form, List, Menu, Pagination, Row, Select, Space, Statistic, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
 import { ArrowUpOutlined, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CodeFilled, ConsoleSqlOutlined, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, SendOutlined, UserOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ export default function Jobs(params = { params }) {
 
     const [segmentItemList, setSegmentItemList] = useState([1, 2]);
     const [allJobsView, setAllJobsView] = useState(true);
-    const [recentJobs, setRecentJobs] = useState([1, 2, 3, 4])
+    const [recentJobs, setRecentJobs] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     const [datasourceType, setDataSourceType] = useState([]);
     const [configuredDatasource, setConfiguredDatasource] = useState([]);
 
@@ -32,29 +32,31 @@ export default function Jobs(params = { params }) {
         label: "Hive Sources",
     },])
 
-    useEffect(()=>{
-        fetchDataSourceTypes().then((response)=>{
+    useEffect(() => {
+        fetchDataSourceTypes().then((response) => {
             setDataSourceType(response.data)
-           datasourceType?.map((item)=>{
+            datasourceType?.map((item) => {
                 item.value = item.dataSourceLabel
-           })
+            })
         })
-    },[])
+
+        //add fetch first 10 Jobs with pagination
+        //add fetch recent jobs 10max
+    }, [])
 
     const setDataSourceTypeIdFunction = (value) => {
         setSelectedDataSourceTypeImageUrl(String(value.attributes.url.nodeValue));
         setSelectedDataSourceTypeName(String(value.attributes.dataSourceName.nodeValue));
         setSelectedDataSourceTypeId(Number(value.attributes.id.nodeValue));
-        fetchConfiguredDataSourcesById(Number(value.attributes.id.nodeValue)).then((response)=>{
+        fetchConfiguredDataSourcesById(Number(value.attributes.id.nodeValue)).then((response) => {
             setConfiguredDatasource(response.data);
         })
-        
+
     };
 
     const setConfiguredDataSourceNameFunction = (value) => {
-        console.log(value)
-        setSelectedConfiguredDataSourceName(value)
-        
+        setSelectedConfiguredDataSourceName(value.innerText)
+        setSelectedConfiguredDataSourceId(Number(value.id));
     };
 
 
@@ -67,8 +69,13 @@ export default function Jobs(params = { params }) {
     function handleCreateNewModal(value) {
         value.selectedDataSourceTypeId = Number(selectedDataSourceTypeId);
         value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
+        console.log(value);
 
     }
+
+    const onShowSizeChange = (current, pageSize) => {
+        console.log(current, pageSize);
+      };
 
     return <div className="jobs-page">
         <Row className='jobs-all-page' justify={"space-between"} style={{ display: !allJobsView ? 'none' : 'flex' }}>
@@ -113,7 +120,7 @@ export default function Jobs(params = { params }) {
                         {
                             recentJobs?.map((item) => (
                                 <List.Item className='jobs-recent-all-jobs-item'>
-                                    {item}
+                                    {item + "."}
                                 </List.Item>
                             ))
                         }
@@ -125,18 +132,18 @@ export default function Jobs(params = { params }) {
                 <Row className='jobs-util-segment'>
                     <Col span={24}>
                         <ul className='jobs-util-segment-ul'>
-                            <Form onFinish={handleCreateNewModal} style={{ display: 'flex',width:'100%' }}>
+                            <Form onFinish={handleCreateNewModal} style={{ display: 'flex', width: '100%' }}>
                                 <li className='jobs-util-segment-li'>
-                                        <div style={{position:'absolute',zIndex:'1',display: selectedDataSourceTypeImageUrl === "" ? "none" : "block",backgroundColor:'white',width:'calc(100% - 10px)',pointerEvents:'none',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}}>
-                                            <ul style={{listStyle:'none',display:'inline-flex'}}>
-                                                <li style={{margin:'0px 5px 0px 5px'}}>
-                                                    <img  height="25px" width="25px"  src={selectedDataSourceTypeImageUrl} alt="" />
-                                                </li>
-                                                <li>
-                                                    <b>{selectedDataSourceTypeName}</b>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    <div style={{ position: 'absolute', zIndex: '1', display: selectedDataSourceTypeImageUrl === "" ? "none" : "block", backgroundColor: 'white', width: 'calc(100% - 10px)', pointerEvents: 'none', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}>
+                                        <ul style={{ listStyle: 'none', display: 'inline-flex' }}>
+                                            <li style={{ margin: '0px 5px 0px 5px' }}>
+                                                <img height="25px" width="25px" src={selectedDataSourceTypeImageUrl} alt="" />
+                                            </li>
+                                            <li>
+                                                <b>{selectedDataSourceTypeName}</b>
+                                            </li>
+                                        </ul>
+                                    </div>
                                     <Form.Item name="selectedDataSourceTypeId">
                                         <Select
                                             mode="single"
@@ -144,22 +151,22 @@ export default function Jobs(params = { params }) {
                                             placeholder="Select Data-Source"
                                             defaultValue={[]}
                                             value={selectedDataSourceTypeId}
-                                            onChange={(value)=>{setDataSourceTypeIdFunction(value)}}
+                                            onChange={(value) => { setDataSourceTypeIdFunction(value) }}
                                             options={datasourceType}
                                             optionRender={(option) => (
-                                                <div id={option.data.id} url={option.data.dataSourceImageUrl} dataSourceName={option.data.dataSourceLabel} onClick={(value)=>setDataSourceTypeIdFunction(value.target)} style={{display:'flex'}} >
-                                                    <span style={{margin:'5px',pointerEvents:'none'}}>
+                                                <div id={option.data.id} url={option.data.dataSourceImageUrl} dataSourceName={option.data.dataSourceLabel} onClick={(value) => setDataSourceTypeIdFunction(value.target)} style={{ display: 'flex' }} >
+                                                    <span style={{ margin: '5px', pointerEvents: 'none' }}>
                                                         <img height="25px" width="25px" src={option.data.dataSourceImageUrl} alt="" />
                                                     </span>
-                                                    <h4 style={{margin:'0px 0px 0px 10px',paddingTop:'10px',pointerEvents:'none'}}>{option.data.dataSourceLabel}</h4>
+                                                    <h4 style={{ margin: '0px 0px 0px 10px', paddingTop: '10px', pointerEvents: 'none' }}>{option.data.dataSourceLabel}</h4>
                                                 </div>
                                             )}
                                         />
                                     </Form.Item>
                                 </li>
                                 <li className='jobs-util-segment-li'>
-                                    <div style={{position:'absolute',zIndex:'1',backgroundColor:'white',width:'calc(100% - 10px)',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}}>
-                                            {selectedConfiguredDataSourceName}
+                                    <div style={{ position: 'absolute', zIndex: '1', backgroundColor: 'white', width: 'calc(100% - 10px)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none' }}>
+                                        {selectedConfiguredDataSourceName}
                                     </div>
                                     <Form.Item name="selectedConfiguredDataSourceId" required={true}>
                                         <Select
@@ -167,10 +174,10 @@ export default function Jobs(params = { params }) {
                                             style={{ width: '100%', height: '90px' }}
                                             placeholder="Select Configured Data-Source"
                                             defaultValue={[]}
-                                            onChange={(value)=>{console.log(value)}}
+                                            onChange={(value) => { console.log(value) }}
                                             options={configuredDatasource}
                                             optionRender={(option) => (
-                                                <div  onClick={(value)=>setConfiguredDataSourceNameFunction(value.target.innerText)}>
+                                                <div id={option.data.id} onClick={(value) => setConfiguredDataSourceNameFunction(value.target)}>
                                                     <span role="img" aria-label={option.data.label}>
                                                     </span>
                                                     {option.data.datasourceName}
@@ -181,7 +188,6 @@ export default function Jobs(params = { params }) {
 
                                 </li>
                                 <Form.Item>
-
                                     <button className='jobs-util-segment-li-create' type='submit'>
                                         <CheckOutlined style={{ fontSize: '30px', position: 'relative', top: '25%', transform: 'translateY(-50%)' }} />
                                     </button>
@@ -201,13 +207,22 @@ export default function Jobs(params = { params }) {
                             {
                                 recentJobs?.map((item) => (
                                     <List.Item className='jobs-recent-all-jobs-item'>
-                                        {item}
+                                        {item + "."}
                                     </List.Item>
                                 ))
                             }
 
                         </List>
+                        <Pagination
+                        showSizeChanger
+                        onShowSizeChange={onShowSizeChange}
+                        defaultCurrent={3}
+                        total={500}
+                        align='center'
+                        style={{position:'absolute',bottom:'10px',left:'50%',transform:'translateX(-50%)',marginBottom:'10px'}}
+                    />
                     </Col>
+                    
                 </Row>
             </Col>
         </Row>
