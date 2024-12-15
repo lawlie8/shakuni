@@ -1,10 +1,13 @@
-import { Col, Divider, Dropdown, Form, List, Menu, Pagination, Row, Select, Space, Statistic, Tooltip } from 'antd';
+import { Col, Divider, Dropdown, Form, List, Menu, Modal, notification, Pagination, Row, Select, Space, Statistic, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
 import { ArrowUpOutlined, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CodeFilled, ConsoleSqlOutlined, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, SendOutlined, UserOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { useHorizontalScroll } from '../../../util/scroll';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
+import NewJobs from './new-job/NewJob';
+import { useDispatch } from 'react-redux';
+import { setIsModalOpen } from './JobSlice';
 
 export default function Jobs(params = { params }) {
 
@@ -20,6 +23,8 @@ export default function Jobs(params = { params }) {
 
     const [selectedDataSourceTypeImageUrl, setSelectedDataSourceTypeImageUrl] = useState("");
     const [selectedConfiguredDataSourceId, setSelectedConfiguredDataSourceId] = useState(0);
+
+    const dispatch = useDispatch();
 
     const [menuItems, setMenuItems] = useState([{
         key: "1",
@@ -45,6 +50,9 @@ export default function Jobs(params = { params }) {
     }, [])
 
     const setDataSourceTypeIdFunction = (value) => {
+        if(value.attributes.dataSourceName.nodeValue !== selectedDataSourceTypeName){
+            setSelectedConfiguredDataSourceName("");
+        }
         setSelectedDataSourceTypeImageUrl(String(value.attributes.url.nodeValue));
         setSelectedDataSourceTypeName(String(value.attributes.dataSourceName.nodeValue));
         setSelectedDataSourceTypeId(Number(value.attributes.id.nodeValue));
@@ -69,13 +77,26 @@ export default function Jobs(params = { params }) {
     function handleCreateNewModal(value) {
         value.selectedDataSourceTypeId = Number(selectedDataSourceTypeId);
         value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
-        console.log(value);
+        if(value.selectedDataSourceTypeId === 0 || value.selectedConfiguredDataSourceId === 0){
+            notification.warning({
+                message:"Attributes Missing",
+                description:"Some Attributes Required To Create Jobs Are Missing",
+                duration:1,
+                style:{width:'250px'}
+            })
+        }else{
+            //Generate Modal Here and Let User Create The Job
+            console.log("Generating Modal");
+            dispatch(setIsModalOpen(true));
+        }
 
     }
 
     const onShowSizeChange = (current, pageSize) => {
         console.log(current, pageSize);
       };
+
+
 
     return <div className="jobs-page">
         <Row className='jobs-all-page' justify={"space-between"} style={{ display: !allJobsView ? 'none' : 'flex' }}>
@@ -148,7 +169,7 @@ export default function Jobs(params = { params }) {
                                         <Select
                                             mode="single"
                                             style={{ width: '100%', height: '90px' }}
-                                            placeholder="Select Data-Source"
+                                            placeholder="Select Data-Source Type"
                                             defaultValue={[]}
                                             value={selectedDataSourceTypeId}
                                             onChange={(value) => { setDataSourceTypeIdFunction(value) }}
@@ -267,5 +288,10 @@ export default function Jobs(params = { params }) {
                 </Row>
             </Col>
         </Row>
+
+
+        <div className='create-job-modal'>
+            <NewJobs />
+        </div>
     </div>
 }
