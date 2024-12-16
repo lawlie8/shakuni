@@ -233,8 +233,8 @@ export default function Jobs(params = { params }) {
 
                                 </li>
                                 <Form.Item>
-                                    <button className='jobs-util-segment-li-create' type='submit'>
-                                        <CheckOutlined style={{ fontSize: '30px', position: 'relative', top: '25%', transform: 'translateY(-50%)' }} />
+                                    <button className='jobs-util-segment-li-create' type='submit' style={{filter: selectedDataSourceTypeId === 0 || selectedConfiguredDataSourceName === "" ? 'grayscale(1)' : 'none'}}>
+                                        <CheckOutlined style={{ fontSize: '30px', position: 'relative', top: '25%', transform: 'translateY(-50%)'}} />
                                     </button>
                                 </Form.Item>
 
