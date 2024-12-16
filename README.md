@@ -21,16 +21,16 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 ## ScreenShots
 
 ### Authentication is provided by default for the organization.
-<a href="https://ibb.co/6nGN58r"><img src="https://i.ibb.co/BzvwRGc/auth-portal.png" alt="auth-portal" border="0"></a>
+<img src="https://i.ibb.co/BzvwRGc/auth-portal.png" alt="auth-portal" border="0"></img>
 ### InBuilt SQL Editor and File Upload Feature
-<a href="https://ibb.co/vqkz4qR"><img src="https://i.ibb.co/mT4z5Tg/jobs.png" alt="jobs" border="0"></a>
+<img src="https://i.ibb.co/mT4z5Tg/jobs.png" alt="jobs" border="0"></img>
 ### Supported Integrations for Data Sources.
-<a href="https://ibb.co/KXpvfPp"><img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></a>
+<img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></img>
 ### Integrate Multiple Data Sources.
-<a href="https://ibb.co/zhz6SBK"><img src="https://i.ibb.co/xSNFMBV/hive-source.png" alt="hive-source" border="0"></a>
+<img src="https://i.ibb.co/xSNFMBV/hive-source.png" alt="hive-source" border="0"></img>
 ### Cron Type Planned Jobs.
 <img src="https://i.ibb.co/XjXb9qk/job-execution.png" alt="job-execution" ></img>
 ### Establish Connection via JDBC Properties.
-<a href="https://ibb.co/QdkMbdz"><img src="https://i.ibb.co/ZmSxLmt/edit-datasource.png" alt="edit-datasource" border="0"></a>
+<img src="https://i.ibb.co/ZmSxLmt/edit-datasource.png" alt="edit-datasource" border="0"></img>
 ### Role-based access control (RBAC) system for managing user permissions.
-<a href="https://ibb.co/S3H8ZZt"><img src="https://i.ibb.co/MCK4JJc/Screenshot-2024-11-30-124439.png" alt="Screenshot-2024-11-30-124439" border="0"></a>
+<img src="https://i.ibb.co/MCK4JJc/Screenshot-2024-11-30-124439.png" alt="Screenshot-2024-11-30-124439" border="0"></img>
