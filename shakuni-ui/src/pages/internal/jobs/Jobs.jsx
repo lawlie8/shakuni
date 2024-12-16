@@ -98,7 +98,7 @@ export default function Jobs(params = { params }) {
     function handleCreateNewModal(value) {
         value.selectedDataSourceTypeId = Number(selectedDataSourceTypeId);
         value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
-        if (value.selectedDataSourceTypeId === 0 || value.selectedConfiguredDataSourceId === 0) {
+        if (value.selectedDataSourceTypeId === 0 || selectedConfiguredDataSourceName === "") {
             notification.warning({
                 message: "Attributes Missing",
                 description: "Some Attributes Required To Create Jobs Are Missing",
