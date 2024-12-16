@@ -6,6 +6,9 @@ import org.lawlie8.shakuni.repo.JobsRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,19 +23,28 @@ public class JobService {
     @Autowired
     private JobsRepo jobsRepo;
 
-    public List<Jobs> fetchAllJobs() {
-        List<Jobs> jobsList = new ArrayList<>();
+    public List<Jobs> fetchAllJobs(Integer page,Integer size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Jobs> jobsList= null;
         try {
-            jobsList = jobsRepo.findAll();
+            jobsList = jobsRepo.findAll(pageable);
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching All Jobs List {}", e.getStackTrace());
         }
-        return jobsList;
+        return jobsList.getContent();
     }
 
     public Optional<Jobs> fetchJobDataById(Long id) {
         try {
             return jobsRepo.findById(id);
+        } catch (Exception e) {
+            log.error("Exception Occurred While Fetching All Jobs List {}", e.getStackTrace());
+            return null;
+        }
+    }
+    public Long fetchAllJobSize() {
+        try {
+            return jobsRepo.count();
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching All Jobs List {}", e.getStackTrace());
             return null;

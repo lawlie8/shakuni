@@ -23,12 +23,12 @@ public class JobsResource {
     private JobService jobService;
 
 
-    @RequestMapping(value = "/jobs/get/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchAllJobs() {
+    @RequestMapping(value = "/jobs/get/all/{page}/{size}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> fetchAllJobs(@PathVariable Integer page,Integer size) {
         List<Jobs> jobsList = new ArrayList<>();
         try {
             log.info("Rest Call to Fetch All configured Jobs");
-            jobsList = jobService.fetchAllJobs();
+            jobsList = jobService.fetchAllJobs(page,size);
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching All Configured Jobs");
         }
@@ -44,6 +44,18 @@ public class JobsResource {
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching Job Data With id : {} exception is ; {}",id,e);
             return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/jobs/get/all/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> fetchAllJobsSize() {
+        try {
+            log.info("Rest Call to Fetch Job count");
+            Long count =  jobService.fetchAllJobSize();
+            return new ResponseEntity<>(count, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception Occurred While Fetching Job Count {}",e);
+            return new ResponseEntity<>(0, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

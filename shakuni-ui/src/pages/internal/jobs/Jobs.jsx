@@ -1,4 +1,4 @@
-import { Col, Divider, Dropdown, Form, List, Menu, Modal, notification, Pagination, Row, Select, Space, Statistic, Tooltip } from 'antd';
+import { Col, Divider, Dropdown, Empty, Form, List, Menu, Modal, notification, Pagination, Row, Select, Space, Statistic, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
 import { ArrowUpOutlined, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CodeFilled, ConsoleSqlOutlined, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, SendOutlined, UserOutlined } from '@ant-design/icons';
@@ -8,16 +8,24 @@ import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/
 import NewJobs from './new-job/NewJob';
 import { useDispatch } from 'react-redux';
 import { setIsModalOpen } from './JobSlice';
+import { fetchAllJobsPagable, fetchAllJobsCount } from './jobs-service';
 
 export default function Jobs(params = { params }) {
 
     const [segmentItemList, setSegmentItemList] = useState([1, 2]);
     const [allJobsView, setAllJobsView] = useState(true);
-    const [recentJobs, setRecentJobs] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    const [recentJobs, setRecentJobs] = useState([])
+    const [jobsPagable, setJobsPagable] = useState([])
+
     const [datasourceType, setDataSourceType] = useState([]);
     const [configuredDatasource, setConfiguredDatasource] = useState([]);
 
     const [selectedDataSourceTypeId, setSelectedDataSourceTypeId] = useState(0);
+    const [jobCount, setJobCount] = useState(0);
+    const [jobPageSize, setJobPageSize] = useState(10);
+    const [jobCurrentPage, setJobCurrentPage] = useState(1);
+
+
     const [selectedDataSourceTypeName, setSelectedDataSourceTypeName] = useState("");
     const [selectedConfiguredDataSourceName, setSelectedConfiguredDataSourceName] = useState("");
 
@@ -39,18 +47,31 @@ export default function Jobs(params = { params }) {
 
     useEffect(() => {
         fetchDataSourceTypes().then((response) => {
-            setDataSourceType(response.data)
+            setDataSourceType(response?.data)
             datasourceType?.map((item) => {
                 item.value = item.dataSourceLabel
             })
         })
 
-        //add fetch first 10 Jobs with pagination
-        //add fetch recent jobs 10max
+        fetchAllJobsCount().then((response) => {
+            setJobCount(response?.data);
+        })
+
+
     }, [])
 
+    useEffect(() => {
+        console.log("fetching", jobCurrentPage, jobPageSize);
+
+        fetchAllJobsPagable(jobCurrentPage, jobPageSize)
+            .then((response) => {
+                setJobsPagable(response.data)
+            })
+
+    }, [jobCurrentPage, jobPageSize])
+
     const setDataSourceTypeIdFunction = (value) => {
-        if(value.attributes.dataSourceName.nodeValue !== selectedDataSourceTypeName){
+        if (value.attributes.dataSourceName.nodeValue !== selectedDataSourceTypeName) {
             setSelectedConfiguredDataSourceName("");
         }
         setSelectedDataSourceTypeImageUrl(String(value.attributes.url.nodeValue));
@@ -77,14 +98,14 @@ export default function Jobs(params = { params }) {
     function handleCreateNewModal(value) {
         value.selectedDataSourceTypeId = Number(selectedDataSourceTypeId);
         value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
-        if(value.selectedDataSourceTypeId === 0 || value.selectedConfiguredDataSourceId === 0){
+        if (value.selectedDataSourceTypeId === 0 || value.selectedConfiguredDataSourceId === 0) {
             notification.warning({
-                message:"Attributes Missing",
-                description:"Some Attributes Required To Create Jobs Are Missing",
-                duration:1,
-                style:{width:'250px'}
+                message: "Attributes Missing",
+                description: "Some Attributes Required To Create Jobs Are Missing",
+                duration: 1,
+                style: { width: '250px' }
             })
-        }else{
+        } else {
             //Generate Modal Here and Let User Create The Job
             console.log("Generating Modal");
             dispatch(setIsModalOpen(true));
@@ -92,9 +113,9 @@ export default function Jobs(params = { params }) {
 
     }
 
-    const onShowSizeChange = (current, pageSize) => {
-        console.log(current, pageSize);
-      };
+    const onPaginationChange = (current, pageSize) => {
+        setJobPageSize(pageSize);
+    };
 
 
 
@@ -126,7 +147,7 @@ export default function Jobs(params = { params }) {
                         <Col span={8}>
                             <Statistic
                                 title="Total"
-                                value={"Σ 37"}
+                                value={"Σ "+jobCount}
                                 valueStyle={{ color: '#000', fontSize: '30px' }}
                                 suffix=""
                             />
@@ -139,6 +160,9 @@ export default function Jobs(params = { params }) {
                     <Divider />
                     <List style={{ margin: '0px', padding: '0px' }}>
                         {
+                            recentJobs.length === 0 ? 
+                            <Empty />
+                            :
                             recentJobs?.map((item) => (
                                 <List.Item className='jobs-recent-all-jobs-item'>
                                     {item + "."}
@@ -224,26 +248,39 @@ export default function Jobs(params = { params }) {
                         <h2 style={{ textAlign: 'left', margin: '10px' }}>All Jobs</h2>
                         <Divider />
                         <List>
-
                             {
-                                recentJobs?.map((item) => (
-                                    <List.Item className='jobs-recent-all-jobs-item'>
-                                        {item + "."}
-                                    </List.Item>
-                                ))
+
+                                jobsPagable.length === 0 ?
+                                    <>
+                                        <Empty description={<>
+                                            <p>No Data</p>
+                                            <p>Create New Job By Selecting Options At Top ⬆️</p>
+                                        </>} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,50%)' }} />
+                                    </>
+                                    :
+                                    <>
+                                        {
+                                            jobsPagable?.map((item) => (
+                                                <List.Item className='jobs-recent-all-jobs-item'>
+                                                    {item + "."}
+                                                </List.Item>
+                                            ))
+                                        }
+                                    </>
                             }
 
                         </List>
                         <Pagination
-                        showSizeChanger
-                        onShowSizeChange={onShowSizeChange}
-                        defaultCurrent={3}
-                        total={500}
-                        align='center'
-                        style={{position:'absolute',bottom:'10px',left:'50%',transform:'translateX(-50%)',marginBottom:'10px'}}
-                    />
+                            showSizeChanger
+                            onChange={onPaginationChange}
+                            defaultCurrent={1}
+                            defaultPageSize={jobPageSize}
+                            total={jobCount}
+                            align='center'
+                            style={{ position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)', marginBottom: '10px' }}
+                        />
                     </Col>
-                    
+
                 </Row>
             </Col>
         </Row>

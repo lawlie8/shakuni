@@ -24,6 +24,9 @@ export const PERMISSION_GET_BY_NAME = "/app/user/permission/name/get";
 export const SAVE_NEW_USER = "/app/user/save";
 export const EDIT_NEW_USER = "/app/user/edit";
 
+export const JOBS_GET_PAGABLE = "/app/jobs/get/all";
+export const JOBS_ALL_COUNT = "/app/jobs/get/all/count";
+
 
 
 
