@@ -3,6 +3,7 @@ package org.lawlie8.shakuni.web.jobs;
 
 import org.lawlie8.shakuni.entity.jobs.Jobs;
 import org.lawlie8.shakuni.repo.JobsRepo;
+import org.lawlie8.shakuni.web.engine.JobRunnable;
 import org.lawlie8.shakuni.web.jobs.util.NewJobDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 @Service
 public class JobService {
@@ -23,6 +25,14 @@ public class JobService {
 
     @Autowired
     private JobsRepo jobsRepo;
+
+
+    private final ExecutorService executorService;
+
+    @Autowired
+    public JobService(ExecutorService executorService) {
+        this.executorService = executorService;
+    }
 
     public List<Jobs> fetchAllJobs(Integer page,Integer size) {
         Pageable pageable = PageRequest.of(page,size);
@@ -53,6 +63,13 @@ public class JobService {
     }
 
     public boolean createNewJob(NewJobDTO newJobDTO){
+        return true;
+    }
+
+
+    public boolean executeTask(Long id){
+        JobRunnable jobRunnable = new JobRunnable(1L);
+        executorService.submit(jobRunnable);
         return true;
     }
 

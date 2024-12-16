@@ -73,4 +73,17 @@ public class JobsResource {
         }
     }
 
+    @RequestMapping(value = "/jobs/execute/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> executeJobById(@RequestParam Long id) {
+        boolean isJobExecuted = false;
+        try {
+            log.info("Rest Call to Execute New Job with id : {}",id);
+            isJobExecuted = jobService.executeTask(id);
+            return new ResponseEntity<>(isJobExecuted, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception Occurred While Executing New Job {}",e);
+            return new ResponseEntity<>(isJobExecuted, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
