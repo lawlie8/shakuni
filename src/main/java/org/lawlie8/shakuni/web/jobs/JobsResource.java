@@ -1,6 +1,7 @@
 package org.lawlie8.shakuni.web.jobs;
 
 import org.lawlie8.shakuni.entity.jobs.Jobs;
+import org.lawlie8.shakuni.web.jobs.util.NewJobDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,19 @@ public class JobsResource {
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching Job Count {}",e);
             return new ResponseEntity<>(0, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/jobs/post/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createNewJob(@RequestBody NewJobDTO newJobDTO) {
+        boolean isJobCreated = false;
+        try {
+            log.info("Rest Call to Create New Job with name : {}",newJobDTO.getJobName());
+            isJobCreated =  jobService.createNewJob(newJobDTO);
+            return new ResponseEntity<>(isJobCreated, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception Occurred While Creating New Job {}",e);
+            return new ResponseEntity<>(isJobCreated, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

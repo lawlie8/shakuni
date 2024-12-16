@@ -28,6 +28,8 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 <a href="https://ibb.co/KXpvfPp"><img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></a>
 ### Integrate Multiple Data Sources.
 <a href="https://ibb.co/zhz6SBK"><img src="https://i.ibb.co/xSNFMBV/hive-source.png" alt="hive-source" border="0"></a>
+### Cron Type Planned Jobs.
+<img src="https://i.ibb.co/XjXb9qk/job-execution.png" alt="job-execution" ></img>
 ### Establish Connection via JDBC Properties.
 <a href="https://ibb.co/QdkMbdz"><img src="https://i.ibb.co/ZmSxLmt/edit-datasource.png" alt="edit-datasource" border="0"></a>
 ### Role-based access control (RBAC) system for managing user permissions.

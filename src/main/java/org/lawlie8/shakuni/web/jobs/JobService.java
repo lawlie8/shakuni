@@ -3,6 +3,7 @@ package org.lawlie8.shakuni.web.jobs;
 
 import org.lawlie8.shakuni.entity.jobs.Jobs;
 import org.lawlie8.shakuni.repo.JobsRepo;
+import org.lawlie8.shakuni.web.jobs.util.NewJobDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,10 @@ public class JobService {
             log.error("Exception Occurred While Fetching All Jobs List {}", e.getStackTrace());
             return null;
         }
+    }
+
+    public boolean createNewJob(NewJobDTO newJobDTO){
+        return true;
     }
 
 

@@ -129,7 +129,7 @@ export default function Jobs(params = { params }) {
                         <Col span={8}>
                             <Statistic
                                 title="Running"
-                                value={"11"}
+                                value={"0"}
                                 valueStyle={{ color: 'orange', fontSize: '30px' }}
                                 prefix={<FireFilled />}
                                 suffix=""
@@ -138,7 +138,7 @@ export default function Jobs(params = { params }) {
                         <Col span={8}>
                             <Statistic
                                 title="Completed"
-                                value={"26"}
+                                value={"0"}
                                 valueStyle={{ color: '#3f8600', fontSize: '30px' }}
                                 prefix={<CheckCircleFilled />}
                                 suffix=""
