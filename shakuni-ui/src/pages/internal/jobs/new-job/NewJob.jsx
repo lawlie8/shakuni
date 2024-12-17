@@ -1,12 +1,13 @@
-import { Button, Col, Form, Input, Modal, Row, Select, Switch, TimePicker } from "antd";
+import { Button, Col, Form, Input, Modal, notification, Row, Select, Switch, TimePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsModalOpen } from "../JobSlice";
 import { useState } from "react";
+import { createNewJob } from "../jobs-service";
 
 export default function NewJobs({ params }) {
-    const isModalOpen = useSelector(state => state.jobStore.isModalOpen)
-    const [executionFormatLabel, setExecutionFormatLabel] = useState("Un-Planned")
-
+    const isModalOpen = useSelector(state => state.jobStore.isModalOpen);
+    const [executionFormatLabel, setExecutionFormatLabel] = useState("Un-Planned");
+    const selectedConfiguredDataSourceId = useSelector(state => state.jobStore.selectedConfiguredDataSourceId);
     const minuteOption = [{
         value: 0,
         label: "0"
@@ -575,8 +576,18 @@ export default function NewJobs({ params }) {
         dispatch(setIsModalOpen(false));
     };
 
-    const createNewJob = (value) => {
-        console.log(value);
+    const newJob = (value) => {
+        value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
+        createNewJob(value).then((response)=>{
+            if(response.status === 200 && response.data === true){
+                notification.success({
+                    description : "Job Created Sucessfully",
+                    message : "Job Created",
+                    duration : 1,
+                    style: { width: '250px' }
+                })
+            }
+        })
     }
 
     const changeExecutionFormatLabel = (value) => {
@@ -590,7 +601,7 @@ export default function NewJobs({ params }) {
 
     return <div className="new-job-modal">
         <Modal title="Create New Job" open={isModalOpen} footer={<></>} onCancel={handleCancel}>
-            <Form name="form" layout="vertical" onFinish={createNewJob}>
+            <Form name="form" layout="vertical" onFinish={newJob}>
                 <Form.Item label="Name" rules={[{ required: true, message: 'Please Enter Job Name' }]} name="jobName" >
                     <Input type="text" placeholder="Job Name" />
                 </Form.Item>

@@ -60,11 +60,11 @@ public class JobsResource {
         }
     }
 
-    @RequestMapping(value = "/jobs/post/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/jobs/create/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createNewJob(@RequestBody NewJobDTO newJobDTO) {
         boolean isJobCreated = false;
         try {
-            log.info("Rest Call to Create New Job with name : {}",newJobDTO.getJobName());
+            log.info("Rest Call to Create New Job with name : {}",newJobDTO);
             isJobCreated =  jobService.createNewJob(newJobDTO);
             return new ResponseEntity<>(isJobCreated, HttpStatus.OK);
         } catch (Exception e) {

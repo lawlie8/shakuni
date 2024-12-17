@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     isModalOpen : false,
+    selectedConfiguredDataSourceId : 0,
 }
 
 const JobSlice = createSlice({
@@ -12,8 +13,12 @@ const JobSlice = createSlice({
             state.isModalOpen = action.payload;
         },
 
+        setStoreSelectedConfiguredDataSourceId(state,action){
+            state.selectedConfiguredDataSourceId = action.payload;
+        },
+
     }
 })
 
-export const {setIsModalOpen} = JobSlice.actions;
+export const {setIsModalOpen,setStoreSelectedConfiguredDataSourceId} = JobSlice.actions;
 export default JobSlice.reducer;

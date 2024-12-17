@@ -7,7 +7,7 @@ import { useHorizontalScroll } from '../../../util/scroll';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch } from 'react-redux';
-import { setIsModalOpen } from './JobSlice';
+import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId } from './JobSlice';
 import { fetchAllJobsPagable, fetchAllJobsCount } from './jobs-service';
 
 export default function Jobs(params = { params }) {
@@ -107,8 +107,8 @@ export default function Jobs(params = { params }) {
             })
         } else {
             //Generate Modal Here and Let User Create The Job
-            console.log("Generating Modal");
             dispatch(setIsModalOpen(true));
+            dispatch(setStoreSelectedConfiguredDataSourceId(value.selectedConfiguredDataSourceId));
         }
 
     }
