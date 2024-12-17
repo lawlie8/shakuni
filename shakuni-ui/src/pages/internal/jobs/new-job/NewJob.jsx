@@ -8,6 +8,7 @@ export default function NewJobs({ params }) {
     const isModalOpen = useSelector(state => state.jobStore.isModalOpen);
     const [executionFormatLabel, setExecutionFormatLabel] = useState("Un-Planned");
     const selectedConfiguredDataSourceId = useSelector(state => state.jobStore.selectedConfiguredDataSourceId);
+    
     const minuteOption = [{
         value: 0,
         label: "0"
@@ -479,83 +480,83 @@ export default function NewJobs({ params }) {
     const monthOption = [{
         value: 0,
         label: " "
-      },{
+    }, {
         value: 1,
         label: "Jan"
-      },
-      {
+    },
+    {
         value: 2,
         label: "Feb"
-      },
-      {
+    },
+    {
         value: 3,
         label: "Mar"
-      },
-      {
+    },
+    {
         value: 4,
         label: "Apr"
-      },
-      {
+    },
+    {
         value: 5,
         label: "May"
-      },
-      {
+    },
+    {
         value: 6,
         label: "Jun"
-      },
-      {
+    },
+    {
         value: 7,
         label: "Jul"
-      },
-      {
+    },
+    {
         value: 8,
         label: "Aug"
-      },
-      {
+    },
+    {
         value: 9,
         label: "Sep"
-      },
-      {
+    },
+    {
         value: 10,
         label: "Oct"
-      },
-      {
+    },
+    {
         value: 11,
         label: "Nov"
-      },
-      {
+    },
+    {
         value: 12,
         label: "Dec"
-      }]
+    }]
 
-      const weeklyOption = [{
+    const weeklyOption = [{
         value: 0,
         label: "Sunday"
-      },
-      {
+    },
+    {
         value: 1,
         label: "Monday"
-      },
-      {
+    },
+    {
         value: 2,
         label: "Tuesday"
-      },
-      {
+    },
+    {
         value: 3,
         label: "Wednesday"
-      },
-      {
+    },
+    {
         value: 4,
         label: "Thursday"
-      },
-      {
+    },
+    {
         value: 5,
         label: "Friday"
-      },
-      {
+    },
+    {
         value: 6,
         label: "Saturday"
-      }]
+    }]
 
     const selectOptions = [{
         value: "NORMAL",
@@ -578,12 +579,20 @@ export default function NewJobs({ params }) {
 
     const newJob = (value) => {
         value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
-        createNewJob(value).then((response)=>{
-            if(response.status === 200 && response.data === true){
+        createNewJob(value).then((response) => {
+            if (response.status === 200 && response.data === true) {
                 notification.success({
-                    description : "Job Created Sucessfully",
-                    message : "Job Created",
-                    duration : 1,
+                    description: "Job Created Sucessfully",
+                    message: "Job Created",
+                    duration: 1,
+                    style: { width: '250px' }
+                })
+                dispatch(setIsModalOpen(false));
+            } else {
+                notification.error({
+                    description: "Job Creation Failed",
+                    message: "Error",
+                    duration: 1,
                     style: { width: '250px' }
                 })
             }
@@ -595,7 +604,6 @@ export default function NewJobs({ params }) {
             setExecutionFormatLabel("Planned")
         } else {
             setExecutionFormatLabel("Un-Planned")
-
         }
     }
 
@@ -609,7 +617,7 @@ export default function NewJobs({ params }) {
                     <Select defaultValue={[{ value: "NORMAL", label: "Normal" }]} style={{ width: '100%' }} options={selectOptions} />
                 </Form.Item>
                 <Form.Item label="Execution Format" name="executionFormat">
-                    <Switch style={{backgroundColor:'black'}} onChange={changeExecutionFormatLabel} /> <span style={{marginLeft:'10px'}}>{executionFormatLabel}</span>
+                    <Switch style={{ backgroundColor: executionFormatLabel === "Un-Planned" ? '#dfdfdf' : 'black' }} onChange={changeExecutionFormatLabel} /> <span style={{ marginLeft: '10px' }}>{executionFormatLabel}</span>
                 </Form.Item>
                 {
                     executionFormatLabel === "Planned" ?
@@ -648,7 +656,7 @@ export default function NewJobs({ params }) {
                 }
 
                 <Form.Item>
-                    <button type="primary">
+                    <button style={{float:'right'}} type="primary">
                         Submit
                     </button>
                 </Form.Item>

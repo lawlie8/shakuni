@@ -11,7 +11,7 @@ public class Jobs {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "job_name")
@@ -27,7 +27,8 @@ public class Jobs {
     private Date creationDate;
 
     @Column(name = "execution_type")
-    private Enum<ExecutionTypeEnum> executionType;
+    @Enumerated(EnumType.STRING)
+    private ExecutionTypeEnum executionType;
 
     @Column(name = "execution_pattern")
     private String executionPattern;
@@ -72,11 +73,11 @@ public class Jobs {
         this.creationDate = creationDate;
     }
 
-    public Enum<ExecutionTypeEnum> getExecutionType() {
+    public ExecutionTypeEnum getExecutionType() {
         return executionType;
     }
 
-    public void setExecutionType(Enum<ExecutionTypeEnum> executionType) {
+    public void setExecutionType(ExecutionTypeEnum executionType) {
         this.executionType = executionType;
     }
 
