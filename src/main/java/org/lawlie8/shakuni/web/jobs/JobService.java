@@ -11,12 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Service
 public class JobService {
@@ -26,12 +31,11 @@ public class JobService {
     @Autowired
     private JobsRepo jobsRepo;
 
-
-    private final ExecutorService executorService;
+    private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     @Autowired
-    public JobService(ExecutorService executorService) {
-        this.executorService = executorService;
+    public JobService(ThreadPoolTaskScheduler threadPoolTaskScheduler) {
+        this.threadPoolTaskScheduler = threadPoolTaskScheduler;
     }
 
     public List<Jobs> fetchAllJobs(Integer page,Integer size) {
@@ -66,10 +70,15 @@ public class JobService {
         return true;
     }
 
+    public boolean scheduleTask(Long id){
+        JobRunnable jobRunnable = new JobRunnable(id);
+        threadPoolTaskScheduler.schedule(jobRunnable,new CronTrigger(""));
+        return true;
+    }
 
     public boolean executeTask(Long id){
         JobRunnable jobRunnable = new JobRunnable(id);
-        executorService.submit(jobRunnable);
+        threadPoolTaskScheduler.execute(jobRunnable);
         return true;
     }
 

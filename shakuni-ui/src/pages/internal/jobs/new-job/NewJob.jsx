@@ -598,7 +598,7 @@ export default function NewJobs({ params }) {
                     <Select defaultValue={[{ value: "NORMAL", label: "Normal" }]} style={{ width: '100%' }} options={selectOptions} />
                 </Form.Item>
                 <Form.Item label="Execution Format" name="executionFormat">
-                    <Switch onChange={changeExecutionFormatLabel} /> <span style={{marginLeft:'10px'}}>{executionFormatLabel}</span>
+                    <Switch style={{backgroundColor:'black'}} onChange={changeExecutionFormatLabel} /> <span style={{marginLeft:'10px'}}>{executionFormatLabel}</span>
                 </Form.Item>
                 {
                     executionFormatLabel === "Planned" ?
@@ -637,9 +637,9 @@ export default function NewJobs({ params }) {
                 }
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <button type="primary">
                         Submit
-                    </Button>
+                    </button>
                 </Form.Item>
             </Form>
         </Modal>
