@@ -64,7 +64,7 @@ public class JobsResource {
     public ResponseEntity<?> createNewJob(@RequestBody NewJobDTO newJobDTO) {
         boolean isJobCreated = false;
         try {
-            log.info("Rest Call to Create New Job with name : {}",newJobDTO);
+            log.info("Rest Call to Create New Job with name : {}",newJobDTO.getJobName());
             isJobCreated =  jobService.createNewJob(newJobDTO);
             return new ResponseEntity<>(isJobCreated, HttpStatus.OK);
         } catch (Exception e) {
