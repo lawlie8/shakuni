@@ -25,7 +25,7 @@ public class JobsResource {
 
 
     @RequestMapping(value = "/jobs/get/all/{page}/{size}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchAllJobs(@PathVariable Integer page,Integer size) {
+    public ResponseEntity<?> fetchAllJobs(@PathVariable Integer page,@PathVariable Integer size) {
         List<Jobs> jobsList = new ArrayList<>();
         try {
             log.info("Rest Call to Fetch All configured Jobs");
@@ -73,8 +73,8 @@ public class JobsResource {
         }
     }
 
-    @RequestMapping(value = "/jobs/execute/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> executeJobById(@RequestParam Long id) {
+    @RequestMapping(value = "/jobs/execute/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> executeJobById(@PathVariable Long id) {
         boolean isJobExecuted = false;
         try {
             log.info("Rest Call to Execute New Job with id : {}",id);

@@ -68,7 +68,7 @@ public class JobService {
 
 
     public boolean executeTask(Long id){
-        JobRunnable jobRunnable = new JobRunnable(1L);
+        JobRunnable jobRunnable = new JobRunnable(id);
         executorService.submit(jobRunnable);
         return true;
     }
