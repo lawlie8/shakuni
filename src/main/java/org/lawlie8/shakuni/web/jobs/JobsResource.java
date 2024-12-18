@@ -36,6 +36,19 @@ public class JobsResource {
         return new ResponseEntity<>(jobsList, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/jobs/get/recent", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> fetchRecentJobs() {
+        List<Jobs> jobsList = new ArrayList<>();
+        try {
+            log.info("Rest Call to Fetch Recent configured Jobs");
+            jobsList = jobService.fetchRecentJobs();
+        } catch (Exception e) {
+            log.error("Exception Occurred While Fetching All Configured Jobs");
+        }
+        return new ResponseEntity<>(jobsList, HttpStatus.OK);
+    }
+
+
     @RequestMapping(value = "/jobs/get/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchJobById(@PathVariable Long id) {
         try {
@@ -64,7 +77,7 @@ public class JobsResource {
     public ResponseEntity<?> createNewJob(@RequestBody NewJobDTO newJobDTO) {
         boolean isJobCreated = false;
         try {
-            log.info("Rest Call to Create New Job with name : {}",newJobDTO.getJobName());
+            log.info("Rest Call to Create New Job with name : {}",newJobDTO);
             isJobCreated =  jobService.createNewJob(newJobDTO);
             return new ResponseEntity<>(isJobCreated, HttpStatus.OK);
         } catch (Exception e) {

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.security.core.Authentication;
@@ -24,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Service
 public class JobService {
@@ -53,6 +49,17 @@ public class JobService {
         }
         return jobsList.getContent();
     }
+
+    public List<Jobs> fetchRecentJobs() {
+        List<Jobs> jobsList = new ArrayList<>();
+        try {
+            jobsList = jobsRepo.findLastTenJobs();
+        } catch (Exception e) {
+            log.error("Exception Occurred While Fetching All Jobs List {}", e.getStackTrace());
+        }
+        return jobsList;
+    }
+
 
     public Optional<Jobs> fetchJobDataById(Long id) {
         try {
@@ -83,6 +90,7 @@ public class JobService {
             jobs.setConfiguredDataSourceId(newJobDTO.getSelectedConfiguredDataSourceId());
             jobs.setExecutionPattern(newJobDTO.getExecutionPattern());
             jobs.setDescription(newJobDTO.getDescription());
+            jobs.setDatasourceId(newJobDTO.getSelectedDataSourceId());
             jobs.setStatusEnum(StatusEnum.UNTRIGGERED);
             log.debug("Saving Job Entity with data : {}",jobs);
             jobsRepo.save(jobs);

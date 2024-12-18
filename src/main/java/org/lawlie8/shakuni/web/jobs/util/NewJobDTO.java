@@ -6,6 +6,7 @@ public class NewJobDTO {
     private String executionType;
     private String executionPattern;
     private Long selectedConfiguredDataSourceId;
+    private Long selectedDataSourceId;
     private String description;
 
     public String getJobName() {
@@ -48,6 +49,14 @@ public class NewJobDTO {
         this.description = description;
     }
 
+    public Long getSelectedDataSourceId() {
+        return selectedDataSourceId;
+    }
+
+    public void setSelectedDataSourceId(Long selectedDataSourceId) {
+        this.selectedDataSourceId = selectedDataSourceId;
+    }
+
     @Override
     public String toString() {
         return "NewJobDTO{" +
@@ -55,6 +64,7 @@ public class NewJobDTO {
                 ", executionType='" + executionType + '\'' +
                 ", executionPattern='" + executionPattern + '\'' +
                 ", selectedConfiguredDataSourceId=" + selectedConfiguredDataSourceId +
+                ", selectedDataSourceId=" + selectedDataSourceId +
                 ", description='" + description + '\'' +
                 '}';
     }

@@ -25,6 +25,8 @@ export const SAVE_NEW_USER = "/app/user/save";
 export const EDIT_NEW_USER = "/app/user/edit";
 
 export const JOBS_GET_PAGABLE = "/app/jobs/get/all";
+export const JOBS_GET_RECENT = "/app/jobs/get/recent";
+
 export const JOBS_ALL_COUNT = "/app/jobs/get/all/count";
 export const JOBS_CREATE_NEW = "/app/jobs/create/new";
 

@@ -21,6 +21,9 @@ public class Jobs {
     @Column(name = "configured_datasource_id")
     private Long configuredDataSourceId;
 
+    @Column(name = "datasource_id")
+    private Long datasourceId;
+
     @Column(name = "created_by")
     private String createdBy;
 
@@ -40,6 +43,15 @@ public class Jobs {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
+
+
+    public Long getDatasourceId() {
+        return datasourceId;
+    }
+
+    public void setDatasourceId(Long datasourceId) {
+        this.datasourceId = datasourceId;
+    }
 
     public Long getId() {
         return id;
@@ -119,6 +131,7 @@ public class Jobs {
                 "id=" + id +
                 ", jobName='" + jobName + '\'' +
                 ", configuredDataSourceId=" + configuredDataSourceId +
+                ", datasourceId=" + datasourceId +
                 ", createdBy='" + createdBy + '\'' +
                 ", creationDate=" + creationDate +
                 ", executionType=" + executionType +

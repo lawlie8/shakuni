@@ -6,8 +6,8 @@ import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch } from 'react-redux';
-import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId } from './JobSlice';
-import { fetchAllJobsPagable, fetchAllJobsCount } from './jobs-service';
+import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId } from './JobSlice';
+import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs } from './jobs-service';
 
 export default function Jobs(params = { params }) {
 
@@ -55,11 +55,13 @@ export default function Jobs(params = { params }) {
             setJobCount(response?.data);
         })
 
+        fetchRecentJobs().then((response) => {
+            setRecentJobs(response?.data)
+        })
 
     }, [])
 
     useEffect(() => {
-        console.log("fetching", jobCurrentPage, jobPageSize);
 
         fetchAllJobsPagable(jobCurrentPage, jobPageSize)
             .then((response) => {
@@ -75,6 +77,7 @@ export default function Jobs(params = { params }) {
         setSelectedDataSourceTypeImageUrl(String(value.attributes.url.nodeValue));
         setSelectedDataSourceTypeName(String(value.attributes.dataSourceName.nodeValue));
         setSelectedDataSourceTypeId(Number(value.attributes.id.nodeValue));
+        dispatch(setStoreSelectedDataSourceId(Number(value.attributes.id.nodeValue)))
         fetchConfiguredDataSourcesById(Number(value.attributes.id.nodeValue)).then((response) => {
             setConfiguredDatasource(response.data);
         })
@@ -115,11 +118,11 @@ export default function Jobs(params = { params }) {
         setJobPageSize(pageSize);
     };
 
-    
-function getUrl(id) {
-    const item = datasourceType.find(data => data.id === id);
-    return item ? item.dataSourceImageUrl : null; // Return the imageUrl if found, otherwise return null
-  }
+
+    function getUrl(id) {
+        const item = datasourceType.find(data => data.id === id);
+        return item ? item.dataSourceImageUrl : null; // Return the imageUrl if found, otherwise return null
+    }
 
 
     return <div className="jobs-page">
@@ -159,7 +162,7 @@ function getUrl(id) {
                     </Row>
                 </div>
                 <div className='jobs-all-recent-jobs'>
-                    <h2 style={{ margin: '0px' }}>Recent Jobs</h2>
+                    <h2 style={{ textAlign: 'left', margin: '10px' }}>Recent Jobs</h2>
                     <Divider />
                     <List style={{ margin: '0px', padding: '0px' }}>
                         {
@@ -167,8 +170,12 @@ function getUrl(id) {
                                 <Empty />
                                 :
                                 recentJobs?.map((item) => (
-                                    <List.Item className='jobs-recent-all-jobs-item'>
-                                        {item + "."}
+                                    <List.Item style={{ height: "60px", borderRadius: '10px', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-recent-all-jobs-item'>
+                                        <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
+                                        <List.Item.Meta
+                                            style={{ textAlign: 'start', marginLeft: '20px' }}
+                                            title={<span style={{ fontWeight: '600' }}>{item.jobName}</span>}
+                                        />
                                     </List.Item>
                                 ))
                         }
@@ -222,7 +229,7 @@ function getUrl(id) {
                                             style={{ width: '100%', height: '90px' }}
                                             placeholder="Select Configured Data-Source"
                                             defaultValue={[]}
-                                            onChange={(value) => { console.log(value) }}
+                                            onChange={(value) => { }}
                                             options={configuredDatasource}
                                             optionRender={(option) => (
                                                 <div id={option.data.id} onClick={(value) => setConfiguredDataSourceNameFunction(value.target)}>
@@ -264,22 +271,22 @@ function getUrl(id) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item  style={{height:"60px", boxShadow:'0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
-                                                    <img style={{marginLeft:'10px'}} src={getUrl(item.configuredDataSourceId)} height="35px" width="35px" alt="" />
+                                                <List.Item style={{ height: "60px", boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                    <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
                                                     <List.Item.Meta
-                                                        style={{textAlign:'start',marginLeft:'20px'}}
-                                                        title={<span style={{fontWeight:'600'}}>{item.jobName}</span>}
+                                                        style={{ textAlign: 'start', marginLeft: '20px' }}
+                                                        title={<span style={{ fontWeight: '600' }}>{item.jobName}</span>}
                                                         description={item.description !== null ? item.description : ''}
                                                     />
-                                                    
-                                                    <ul style={{listStyle:'none',display:'flex',paddingLeft:'5px'}}>
+
+                                                    <ul style={{ listStyle: 'none', display: 'flex', paddingLeft: '5px' }}>
                                                         <li>
                                                             <Tag color={item.executionType === 'NORMAL' ? 'purple' : 'blue'}>{item.executionType}</Tag>
                                                         </li>
 
                                                     </ul>
                                                     <div className='job-interactive-button' >
-                                                        <CaretRightFilled style={{position:'relative',fontSize:'25px',left:'0%',top:'50%',transform:'translate(-0%,-50%)'}} />
+                                                        <CaretRightFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
                                                     </div>
                                                 </List.Item>
                                             ))

@@ -9,7 +9,8 @@ export default function NewJobs({ params }) {
     const isModalOpen = useSelector(state => state.jobStore.isModalOpen);
     const [executionFormatLabel, setExecutionFormatLabel] = useState("Un-Planned");
     const selectedConfiguredDataSourceId = useSelector(state => state.jobStore.selectedConfiguredDataSourceId);
-    
+    const selectedDataSourceId = useSelector(state => state.jobStore.selectedDataSourceId);
+
     const minuteOption = [{
         value: 0,
         label: "0"
@@ -580,6 +581,7 @@ export default function NewJobs({ params }) {
 
     const newJob = (value) => {
         value.selectedConfiguredDataSourceId = selectedConfiguredDataSourceId;
+        value.selectedDataSourceId = selectedDataSourceId;
         createNewJob(value).then((response) => {
             if (response.status === 200 && response.data === true) {
                 notification.success({
@@ -614,7 +616,7 @@ export default function NewJobs({ params }) {
                 <Form.Item label="Name" rules={[{ required: true, message: 'Please Enter Job Name' }]} name="jobName" >
                     <Input type="text" placeholder="Job Name" />
                 </Form.Item>
-                <Form.Item label="Description" rules={[{ required: false,max:200, message: 'Please Enter Description' }]} name="description" >
+                <Form.Item label="Description" rules={[{ required: false, max: 200, message: 'Please Enter Description' }]} name="description" >
                     <TextArea rows={1} type="text" placeholder="Job Description" />
                 </Form.Item>
                 <Form.Item label="Execution Type" name="executionType" required={true} initialValue={"NORMAL"}>
@@ -660,7 +662,7 @@ export default function NewJobs({ params }) {
                 }
 
                 <Form.Item>
-                    <button style={{float:'right'}} type="primary">
+                    <button style={{ float: 'right' }} type="primary">
                         Submit
                     </button>
                 </Form.Item>
