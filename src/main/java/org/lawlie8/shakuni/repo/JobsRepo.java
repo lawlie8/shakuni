@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface JobsRepo extends JpaRepository<Jobs, Long> {
 
-    @Query(value = "select * from `jobs` order by `creation_date` desc limit 10",nativeQuery = true)
+    @Query(value = "select * from `jobs` order by `creation_date` desc limit 7",nativeQuery = true)
     List<Jobs> findLastTenJobs();
 
 }

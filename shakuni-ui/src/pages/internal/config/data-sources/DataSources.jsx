@@ -3,7 +3,7 @@ import './datasource-service.js';
 import './datasources.css';
 import { deleteConfiguredDataSourceById, fetchConfiguredDataSourcePropertiesByDataSourceTypeId, fetchConfiguredDataSourcePropertyValuesByConfiguredDataSourceId, fetchConfiguredDataSourcesById, fetchDataSourceTypes } from './datasource-service.js';
 import DataSourceItem from './DataSourceItem.jsx';
-import { Avatar, Breadcrumb, Button, Divider, Dropdown, List, notification, Popconfirm, Tooltip } from 'antd';
+import { Avatar, Breadcrumb, Divider, List, notification, Popconfirm, Tooltip } from 'antd';
 import { DatabaseOutlined, DeleteFilled, EditFilled, PlusCircleFilled } from '@ant-design/icons';
 import DataSourceConnection from './datasource-connection/DataSourceConnection.jsx';
 import {
@@ -175,7 +175,7 @@ export default function DataSources(params = { params }) {
                                             :{new Date(item.creationDate).getSeconds()}</span>}
 
                                         <Tooltip arrow={false} placement='topLeft' title={`Last Modified By :   ${item.createdBy}`}>
-                                            <Avatar className="header-user-logo-avatar" size={30} style={{ backgroundColor: 'purple' }}>{item.createdBy?.toUpperCase()[0]}</Avatar>
+                                            <Avatar size={30} style={{ backgroundColor: 'purple',position:'relative',top:'-6px' }}>{item.createdBy?.toUpperCase()[0]}</Avatar>
                                         </Tooltip>
 
 

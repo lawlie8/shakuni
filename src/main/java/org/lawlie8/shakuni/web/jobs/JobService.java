@@ -109,8 +109,22 @@ public class JobService {
     }
 
     public boolean executeTask(Long id) {
-        JobRunnable jobRunnable = new JobRunnable(id);
-        threadPoolTaskScheduler.execute(jobRunnable);
+        try {
+            JobRunnable jobRunnable = new JobRunnable(id);
+            threadPoolTaskScheduler.execute(jobRunnable);
+        }catch (Exception e){
+            log.error("Exception Occurred While Starting Job with id : {}",id);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean deleteJobById(Long id) {
+        try {
+            jobsRepo.deleteById(id);
+        }catch (Exception e){
+            return false;
+        }
         return true;
     }
 

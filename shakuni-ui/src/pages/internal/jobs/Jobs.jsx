@@ -1,13 +1,13 @@
-import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Row, Select, Statistic, Tag, Tooltip } from 'antd';
+import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { CaretRightFilled, CheckCircleFilled, CheckOutlined, ConsoleSqlOutlined, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { CaretRightFilled, CheckCircleFilled, CheckOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch } from 'react-redux';
 import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId } from './JobSlice';
-import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs } from './jobs-service';
+import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById } from './jobs-service';
 
 export default function Jobs(params = { params }) {
 
@@ -117,6 +117,46 @@ export default function Jobs(params = { params }) {
     const onPaginationChange = (current, pageSize) => {
         setJobPageSize(pageSize);
     };
+
+    function handleJobDelete(id){
+        deleteJobById(id).then((response)=>{
+            if(response.status === 200 && response.data === true){
+                notification.success({
+                    message:'Success',
+                    description:'Job Deleted SucessFully',
+                    duration:1,
+                    style:{width:'250px'}
+                })
+            }else{
+                notification.error({
+                    message:'Error',
+                    description:'Job Deletion Failed',
+                    duration:1,
+                    style:{width:'250px'}
+                })
+            }
+        })
+    }
+
+    function executeJobById(id){
+        runJobById(id).then((response)=>{
+            if(response.status === 200 && response.data === true){
+                notification.success({
+                    message:'Success',
+                    description:'Execution Started',
+                    duration:1,
+                    style:{width:'250px'}
+                })
+            }else{
+                notification.error({
+                    message:'Error',
+                    description:'Job Failed',
+                    duration:1,
+                    style:{width:'250px'}
+                })
+            }
+        })
+    }
 
 
     function getUrl(id) {
@@ -280,14 +320,35 @@ export default function Jobs(params = { params }) {
                                                     />
 
                                                     <ul style={{ listStyle: 'none', display: 'flex', paddingLeft: '5px' }}>
-                                                        <li>
-                                                            <Tag color={item.executionType === 'NORMAL' ? 'purple' : 'blue'}>{item.executionType}</Tag>
+                                                        <li style={{ display: 'flex' }}>
+                                                            <Tag style={{ width: '85px', textAlign: 'center' }} color={item.executionType === 'NORMAL' ? 'purple' : 'blue'}>{item.executionType}</Tag>
                                                         </li>
-
                                                     </ul>
-                                                    <div className='job-interactive-button' >
-                                                        <CaretRightFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
-                                                    </div>
+                                                    <Tooltip title="Delete Job">
+                                                        <Popconfirm
+                                                            placement="leftTop"
+                                                            title="Delete Confirmation"
+                                                            description="Are you sure you want to delete this Job?"
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                            onConfirm={() => handleJobDelete(item.id)}>
+                                                            <div className='job-interactive-button-delete' >
+                                                                <DeleteFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
+                                                            </div>
+                                                        </Popconfirm>
+
+                                                    </Tooltip>
+                                                    <Tooltip title="Edit Job">
+                                                        <div className='job-interactive-button-edit' >
+                                                            <EditFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
+                                                        </div>
+                                                    </Tooltip>
+                                                    <Tooltip title="Execute Job">
+                                                        <div className='job-interactive-button-run' onClick={()=> executeJobById(item.id)}>
+                                                            <CaretRightFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
+                                                        </div>
+                                                    </Tooltip>
+
                                                 </List.Item>
                                             ))
                                         }
@@ -302,7 +363,7 @@ export default function Jobs(params = { params }) {
                             defaultPageSize={jobPageSize}
                             total={jobCount}
                             align='center'
-                            style={{ position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)', marginBottom: '10px' }}
+                            style={{ position: 'relative', bottom: '10px', left: '50%', transform: 'translateX(-50%)', marginBottom: '10px', marginTop: '20px' }}
                         />
                     </Col>
 

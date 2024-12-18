@@ -99,4 +99,17 @@ public class JobsResource {
         }
     }
 
+    @RequestMapping(value = "/jobs/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteJobById(@PathVariable Long id) {
+        boolean isJobExecuted = false;
+        try {
+            log.info("Rest Call to Delete New Job with id : {}",id);
+            isJobExecuted = jobService.deleteJobById(id);
+            return new ResponseEntity<>(isJobExecuted, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception Occurred While Executing New Job {}",e);
+            return new ResponseEntity<>(isJobExecuted, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
