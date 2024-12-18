@@ -160,6 +160,7 @@
 
 .job-interactive-button-run{
     background-color: #2caa34;
+    color: white;
     height:100%;
     width:50px;
     cursor: pointer;
@@ -172,30 +173,30 @@
 }
 
 .job-interactive-button-edit{
-    color: black;
+    color: white;
     height:100%;
-    background-color: rgba(222, 224, 73, 0.753);
+    background-color: #0d1117;
     width:50px;
     cursor: pointer;
 
     /* border-top-right-radius:10px;
     border-bottom-right-radius:10px; */
     &:hover{
-        background-color: rgba(238, 241, 54, 0.753);
-
+        background-color:  #242830;
     }
 }
 
 .job-interactive-button-delete{
     color: #fd3838;
-    background-color: #252525;
+    background-color: #0d1117;
     height:100%;
     width:50px;
     cursor: pointer;
     /* border-top-right-radius:10px;
     border-bottom-right-radius:10px; */
     &:hover{
-        background-color: #141414;
+        background-color:  #242830;
+
     }
 }
 

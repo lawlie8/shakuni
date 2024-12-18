@@ -1,7 +1,7 @@
 import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { CaretRightFilled, CheckCircleFilled, CheckOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { CaretRightFilled, CheckCircleFilled, CheckOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, SyncOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
@@ -175,7 +175,7 @@ export default function Jobs(params = { params }) {
                         <Col span={8}>
                             <Statistic
                                 title="Running"
-                                value={"0"}
+                                value={"10"}
                                 valueStyle={{ color: 'orange', fontSize: '30px' }}
                                 prefix={<FireFilled />}
                                 suffix=""
@@ -184,7 +184,7 @@ export default function Jobs(params = { params }) {
                         <Col span={8}>
                             <Statistic
                                 title="Completed"
-                                value={"0"}
+                                value={"1"}
                                 valueStyle={{ color: '#3f8600', fontSize: '30px' }}
                                 prefix={<CheckCircleFilled />}
                                 suffix=""
@@ -293,6 +293,7 @@ export default function Jobs(params = { params }) {
                         </ul>
                     </Col>
                 </Row>
+                {/* backgroundImage:`linear-gradient(90deg, rgb(17, 150, 45) ${item.datasourceId * 8}%, rgba(255,255,255,1)${item.datasourceId * 8}%)` */}
                 <Row className='jobs-content-segment'>
                     <Col span={24}>
                         <h2 style={{ textAlign: 'left', margin: '10px' }}>All Jobs</h2>
@@ -311,14 +312,20 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item style={{ height: "60px", boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item style={{ height: "60px",backgroundImage:`linear-gradient(90deg, rgb(17, 150, 45) ${item.datasourceId * 8}%, rgba(255,255,255,1)${item.datasourceId * 8}%)`,backgroundSize: '95% 5%',backgroundRepeat:'no-repeat' ,boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
                                                     <List.Item.Meta
                                                         style={{ textAlign: 'start', marginLeft: '20px' }}
                                                         title={<span style={{ fontWeight: '600' }}>{item.jobName}</span>}
                                                         description={item.description !== null ? item.description : ''}
                                                     />
-
+                                                    <div style={{left:'50%',position:'absolute'}}>
+                                                        <Tag icon={<SyncOutlined spin />} color='green' style={{width:'100px'}}>
+                                                            Running {item.datasourceId * 8}%
+                                                        </Tag>
+                                                        
+                                                    </div>
                                                     <ul style={{ listStyle: 'none', display: 'flex', paddingLeft: '5px' }}>
                                                         <li style={{ display: 'flex' }}>
                                                             <Tag style={{ width: '85px', textAlign: 'center' }} color={item.executionType === 'NORMAL' ? 'purple' : 'blue'}>{item.executionType}</Tag>
