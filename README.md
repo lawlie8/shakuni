@@ -28,6 +28,8 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 <img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></img>
 ### Integrate Multiple Data Sources.
 <img src="https://i.ibb.co/xSNFMBV/hive-source.png" alt="hive-source" border="0"></img>
+### Job Page.
+<img src="https://i.ibb.co/kgCz1cL/job-list.png" alt="job-list" border="0"></img>
 ### Cron Type Planned Jobs.
 <img src="https://i.ibb.co/XjXb9qk/job-execution.png" alt="job-execution" ></img>
 ### Establish Connection via JDBC Properties.
