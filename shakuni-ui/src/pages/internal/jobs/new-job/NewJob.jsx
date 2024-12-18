@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsModalOpen } from "../JobSlice";
 import { useState } from "react";
 import { createNewJob } from "../jobs-service";
+import TextArea from "antd/es/input/TextArea";
 
 export default function NewJobs({ params }) {
     const isModalOpen = useSelector(state => state.jobStore.isModalOpen);
@@ -613,7 +614,10 @@ export default function NewJobs({ params }) {
                 <Form.Item label="Name" rules={[{ required: true, message: 'Please Enter Job Name' }]} name="jobName" >
                     <Input type="text" placeholder="Job Name" />
                 </Form.Item>
-                <Form.Item label="Execution Type" name="executionType" initialValue={"NORMAL"}>
+                <Form.Item label="Description" rules={[{ required: false,max:200, message: 'Please Enter Description' }]} name="description" >
+                    <TextArea rows={1} type="text" placeholder="Job Description" />
+                </Form.Item>
+                <Form.Item label="Execution Type" name="executionType" required={true} initialValue={"NORMAL"}>
                     <Select defaultValue={[{ value: "NORMAL", label: "Normal" }]} style={{ width: '100%' }} options={selectOptions} />
                 </Form.Item>
                 <Form.Item label="Execution Format" name="executionFormat">

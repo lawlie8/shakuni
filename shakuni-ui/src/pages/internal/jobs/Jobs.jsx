@@ -1,9 +1,8 @@
-import { Col, Divider, Dropdown, Empty, Form, List, Menu, Modal, notification, Pagination, Row, Select, Space, Statistic, Tooltip } from 'antd';
+import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { ArrowUpOutlined, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CodeFilled, ConsoleSqlOutlined, DatabaseOutlined, FileTextFilled, FireFilled, FireOutlined, FunctionOutlined, HourglassOutlined, MergeOutlined, PlusCircleFilled, SendOutlined, UserOutlined } from '@ant-design/icons';
+import { CaretRightFilled, CheckCircleFilled, CheckOutlined, ConsoleSqlOutlined, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled } from '@ant-design/icons';
 import Editor from './editor/Editor';
-import { useHorizontalScroll } from '../../../util/scroll';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch } from 'react-redux';
@@ -12,7 +11,6 @@ import { fetchAllJobsPagable, fetchAllJobsCount } from './jobs-service';
 
 export default function Jobs(params = { params }) {
 
-    const [segmentItemList, setSegmentItemList] = useState([1, 2]);
     const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([])
     const [jobsPagable, setJobsPagable] = useState([])
@@ -117,6 +115,11 @@ export default function Jobs(params = { params }) {
         setJobPageSize(pageSize);
     };
 
+    
+function getUrl(id) {
+    const item = datasourceType.find(data => data.id === id);
+    return item ? item.dataSourceImageUrl : null; // Return the imageUrl if found, otherwise return null
+  }
 
 
     return <div className="jobs-page">
@@ -147,7 +150,7 @@ export default function Jobs(params = { params }) {
                         <Col span={8}>
                             <Statistic
                                 title="Total"
-                                value={"Σ "+jobCount}
+                                value={"Σ " + jobCount}
                                 valueStyle={{ color: '#000', fontSize: '30px' }}
                                 suffix=""
                             />
@@ -160,14 +163,14 @@ export default function Jobs(params = { params }) {
                     <Divider />
                     <List style={{ margin: '0px', padding: '0px' }}>
                         {
-                            recentJobs.length === 0 ? 
-                            <Empty />
-                            :
-                            recentJobs?.map((item) => (
-                                <List.Item className='jobs-recent-all-jobs-item'>
-                                    {item + "."}
-                                </List.Item>
-                            ))
+                            recentJobs.length === 0 ?
+                                <Empty />
+                                :
+                                recentJobs?.map((item) => (
+                                    <List.Item className='jobs-recent-all-jobs-item'>
+                                        {item + "."}
+                                    </List.Item>
+                                ))
                         }
 
                     </List>
@@ -233,8 +236,8 @@ export default function Jobs(params = { params }) {
 
                                 </li>
                                 <Form.Item>
-                                    <button className='jobs-util-segment-li-create' type='submit' style={{filter: selectedDataSourceTypeId === 0 || selectedConfiguredDataSourceName === "" ? 'grayscale(1)' : 'none'}}>
-                                        <CheckOutlined style={{ fontSize: '30px', position: 'relative', top: '25%', transform: 'translateY(-50%)'}} />
+                                    <button className='jobs-util-segment-li-create' type='submit' style={{ filter: selectedDataSourceTypeId === 0 || selectedConfiguredDataSourceName === "" ? 'grayscale(1)' : 'none' }}>
+                                        <CheckOutlined style={{ fontSize: '30px', position: 'relative', top: '25%', transform: 'translateY(-50%)' }} />
                                     </button>
                                 </Form.Item>
 
@@ -261,8 +264,23 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item className='jobs-recent-all-jobs-item'>
-                                                    {item + "."}
+                                                <List.Item  style={{height:"60px", boxShadow:'0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                    <img style={{marginLeft:'10px'}} src={getUrl(item.configuredDataSourceId)} height="35px" width="35px" alt="" />
+                                                    <List.Item.Meta
+                                                        style={{textAlign:'start',marginLeft:'20px'}}
+                                                        title={<span style={{fontWeight:'600'}}>{item.jobName}</span>}
+                                                        description={item.description !== null ? item.description : ''}
+                                                    />
+                                                    
+                                                    <ul style={{listStyle:'none',display:'flex',paddingLeft:'5px'}}>
+                                                        <li>
+                                                            <Tag color={item.executionType === 'NORMAL' ? 'purple' : 'blue'}>{item.executionType}</Tag>
+                                                        </li>
+
+                                                    </ul>
+                                                    <div className='job-interactive-button' >
+                                                        <CaretRightFilled style={{position:'relative',fontSize:'25px',left:'0%',top:'50%',transform:'translate(-0%,-50%)'}} />
+                                                    </div>
                                                 </List.Item>
                                             ))
                                         }

@@ -6,6 +6,7 @@ import org.lawlie8.shakuni.repo.JobsRepo;
 import org.lawlie8.shakuni.web.engine.JobRunnable;
 import org.lawlie8.shakuni.web.jobs.util.ExecutionTypeEnum;
 import org.lawlie8.shakuni.web.jobs.util.NewJobDTO;
+import org.lawlie8.shakuni.web.jobs.util.StatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class JobService {
     }
 
     public List<Jobs> fetchAllJobs(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Jobs> jobsList = null;
         try {
             jobsList = jobsRepo.findAll(pageable);
@@ -81,6 +82,8 @@ public class JobService {
             jobs.setExecutionType(ExecutionTypeEnum.valueOf(newJobDTO.getExecutionType()));
             jobs.setConfiguredDataSourceId(newJobDTO.getSelectedConfiguredDataSourceId());
             jobs.setExecutionPattern(newJobDTO.getExecutionPattern());
+            jobs.setDescription(newJobDTO.getDescription());
+            jobs.setStatusEnum(StatusEnum.UNTRIGGERED);
             log.debug("Saving Job Entity with data : {}",jobs);
             jobsRepo.save(jobs);
 

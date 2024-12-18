@@ -2,6 +2,7 @@ package org.lawlie8.shakuni.entity.jobs;
 
 import jakarta.persistence.*;
 import org.lawlie8.shakuni.web.jobs.util.ExecutionTypeEnum;
+import org.lawlie8.shakuni.web.jobs.util.StatusEnum;
 
 import java.util.Date;
 
@@ -32,6 +33,13 @@ public class Jobs {
 
     @Column(name = "execution_pattern")
     private String executionPattern;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private StatusEnum statusEnum;
 
     public Long getId() {
         return id;
@@ -89,6 +97,22 @@ public class Jobs {
         this.executionPattern = executionPattern;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public StatusEnum getStatusEnum() {
+        return statusEnum;
+    }
+
+    public void setStatusEnum(StatusEnum statusEnum) {
+        this.statusEnum = statusEnum;
+    }
+
     @Override
     public String toString() {
         return "Jobs{" +
@@ -99,6 +123,8 @@ public class Jobs {
                 ", creationDate=" + creationDate +
                 ", executionType=" + executionType +
                 ", executionPattern='" + executionPattern + '\'' +
+                ", description='" + description + '\'' +
+                ", statusEnum=" + statusEnum +
                 '}';
     }
 }

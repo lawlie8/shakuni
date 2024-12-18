@@ -102,6 +102,12 @@
     margin: 5px;
 }
 
+.jobs-all-jobs-item{
+    margin: 10px;
+    border-radius: 10px;
+
+}
+
 .jobs-util-segment{
     background-color: white;
     border-radius: 10px;
@@ -147,6 +153,17 @@
     border-radius: 10px;
     background-color: #2caa34;
     cursor: pointer;
+    &:hover{
+        background-color: #1c8a23;
+    }
+}
+
+.job-interactive-button{
+    background-color: #2caa34;
+    height:100%;
+    width:50px;
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
     &:hover{
         background-color: #1c8a23;
     }
