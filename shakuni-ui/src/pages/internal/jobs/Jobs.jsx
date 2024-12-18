@@ -62,7 +62,6 @@ export default function Jobs(params = { params }) {
     }, [])
 
     useEffect(() => {
-
         fetchAllJobsPagable(jobCurrentPage, jobPageSize)
             .then((response) => {
                 setJobsPagable(response.data)
@@ -116,6 +115,7 @@ export default function Jobs(params = { params }) {
 
     const onPaginationChange = (current, pageSize) => {
         setJobPageSize(pageSize);
+        setJobCurrentPage(current);
     };
 
     function handleJobDelete(id){
