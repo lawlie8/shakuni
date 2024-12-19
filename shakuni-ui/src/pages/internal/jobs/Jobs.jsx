@@ -1,7 +1,7 @@
 import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { CaretRightFilled, CheckCircleFilled, CheckOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, SyncOutlined } from '@ant-design/icons';
+import { CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
@@ -118,41 +118,41 @@ export default function Jobs(params = { params }) {
         setJobCurrentPage(current);
     };
 
-    function handleJobDelete(id){
-        deleteJobById(id).then((response)=>{
-            if(response.status === 200 && response.data === true){
+    function handleJobDelete(id) {
+        deleteJobById(id).then((response) => {
+            if (response.status === 200 && response.data === true) {
                 notification.success({
-                    message:'Success',
-                    description:'Job Deleted SucessFully',
-                    duration:1,
-                    style:{width:'250px'}
+                    message: 'Success',
+                    description: 'Job Deleted SucessFully',
+                    duration: 1,
+                    style: { width: '250px' }
                 })
-            }else{
+            } else {
                 notification.error({
-                    message:'Error',
-                    description:'Job Deletion Failed',
-                    duration:1,
-                    style:{width:'250px'}
+                    message: 'Error',
+                    description: 'Job Deletion Failed',
+                    duration: 1,
+                    style: { width: '250px' }
                 })
             }
         })
     }
 
-    function executeJobById(id){
-        runJobById(id).then((response)=>{
-            if(response.status === 200 && response.data === true){
+    function executeJobById(id) {
+        runJobById(id).then((response) => {
+            if (response.status === 200 && response.data === true) {
                 notification.success({
-                    message:'Success',
-                    description:'Execution Started',
-                    duration:1,
-                    style:{width:'250px'}
+                    message: 'Success',
+                    description: 'Execution Started',
+                    duration: 1,
+                    style: { width: '250px' }
                 })
-            }else{
+            } else {
                 notification.error({
-                    message:'Error',
-                    description:'Job Failed',
-                    duration:1,
-                    style:{width:'250px'}
+                    message: 'Error',
+                    description: 'Job Failed',
+                    duration: 1,
+                    style: { width: '250px' }
                 })
             }
         })
@@ -312,7 +312,7 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item style={{ height: "60px",backgroundImage:`linear-gradient(90deg, rgb(17, 150, 45) ${item.datasourceId * 8}%, rgba(255,255,255,1)${item.datasourceId * 8}%)`,backgroundSize: '95% 5%',backgroundRepeat:'no-repeat' ,boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgb(17, 150, 45) ${item.datasourceId * 8}%, rgba(255,255,255,1)${item.datasourceId * 8}%)`, backgroundSize: '90% 10%', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
                                                     <List.Item.Meta
@@ -320,11 +320,32 @@ export default function Jobs(params = { params }) {
                                                         title={<span style={{ fontWeight: '600' }}>{item.jobName}</span>}
                                                         description={item.description !== null ? item.description : ''}
                                                     />
-                                                    <div style={{left:'50%',position:'absolute'}}>
-                                                        <Tag icon={<SyncOutlined spin />} color='green' style={{width:'100px'}}>
-                                                            Running {item.datasourceId * 8}%
-                                                        </Tag>
-                                                        
+                                                    <div style={{ left: '50%', position: 'absolute' }}>
+                                                        {
+                                                            {
+                                                                'UNTRIGGERED': <><Tag icon={<QuestionCircleOutlined />} color='gray' style={{ width: '120px',textAlign:'center' }}>
+                                                                    UNTRIGGERED
+                                                                </Tag></>,
+                                                                'RUNNING': <><Tag icon={<SyncOutlined spin />} color='green' style={{ width: '120px' ,textAlign:'center'}}>
+                                                                    RUNNING
+                                                                </Tag>
+                                                                </>,
+                                                                'ERROR': <><Tag icon={<ExclamationCircleOutlined />} color='red' style={{ width: '120px',textAlign:'center' }}>
+                                                                    ERROR
+                                                                </Tag>
+                                                                </>,
+                                                                'COMPLETED': <><Tag icon={<CheckCircleOutlined />} color='darkgreen' style={{ width: '120px',textAlign:'center' }}>
+                                                                    COMPLETED
+                                                                </Tag>
+                                                                </>,
+                                                                'TERMINATED': <><Tag icon={<CloseCircleOutlined />} color='red' style={{ width: '120px',textAlign:'center' }}>
+                                                                    TERMINATED
+                                                                </Tag>
+                                                                </>
+                                                            }[item.statusEnum]
+                                                        }
+
+
                                                     </div>
                                                     <ul style={{ listStyle: 'none', display: 'flex', paddingLeft: '5px' }}>
                                                         <li style={{ display: 'flex' }}>
@@ -351,7 +372,7 @@ export default function Jobs(params = { params }) {
                                                         </div>
                                                     </Tooltip>
                                                     <Tooltip title="Execute Job">
-                                                        <div className='job-interactive-button-run' onClick={()=> executeJobById(item.id)}>
+                                                        <div className='job-interactive-button-run' onClick={() => executeJobById(item.id)}>
                                                             <CaretRightFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
                                                         </div>
                                                     </Tooltip>

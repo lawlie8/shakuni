@@ -15,12 +15,12 @@ public class JobRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            log.info("Executing Task with id : {}", jobId);
+            log.info("Executing Job with id : {}", jobId);
             Thread.sleep(20000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-            log.info("Task Completed with id : {}", jobId);
+            log.info("Job Completed with id : {}", jobId);
         }
     }
 }
