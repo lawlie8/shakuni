@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {useLocation, useNavigate } from "react-router-dom";
 import { logout } from "./globalService";
 import { setStoreSelectedDataSourceType, setStoreSelectedAddEditDataSourceType } from "../internal/config/data-sources/DataSourceSlice";
+import { setStoreJobUpdateObj } from "../internal/jobs/JobSlice";
 import { WS_BASE_URL, WS_CUSTOM_NOTIFICATION, WS_GLOBAL_NOTIFICATION, WS_JOB_UPDATE } from "../../util/Constants";
 import { useEffect } from "react";
 import { Client } from "@stomp/stompjs";
@@ -12,7 +13,7 @@ export default function GlobalHeader() {
     const headerList = [{ name: 'Dashboard', url: "/dashboard" }, { name: 'Jobs', url: "/jobs" }, { name: 'Config', url: "/config" }, { name: 'Management', url: "/management" }];
     const email = useSelector((state) => state.loginStore.userName);
     const emailFromLocalStorage = localStorage.getItem("userName");
-
+    const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -45,8 +46,7 @@ export default function GlobalHeader() {
     }
 
     function updateJob(receivedObject){
-        console.log(receivedObject);
-        
+        dispatch(setStoreJobUpdateObj(receivedObject))
     }
 
     useEffect(() => {
@@ -54,9 +54,6 @@ export default function GlobalHeader() {
 
             client.configure({
                 brokerURL: WS_BASE_URL,
-                debug: function (str) {
-                    console.log(str);
-                },
                 onConnect: () => {
                     client && client.subscribe(WS_GLOBAL_NOTIFICATION, (message) => {
                         notify(JSON.parse(message.body),false);

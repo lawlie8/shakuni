@@ -5,7 +5,7 @@ import { CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId } from './JobSlice';
 import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById } from './jobs-service';
 
@@ -29,7 +29,11 @@ export default function Jobs(params = { params }) {
 
     const [selectedDataSourceTypeImageUrl, setSelectedDataSourceTypeImageUrl] = useState("");
     const [selectedConfiguredDataSourceId, setSelectedConfiguredDataSourceId] = useState(0);
-
+    
+    const [runningCount, setRunningCount] = useState(0);
+    const [completedCount, setCompletedCount] = useState(0);
+    
+    const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
     const dispatch = useDispatch();
 
     const [menuItems, setMenuItems] = useState([{
@@ -52,7 +56,8 @@ export default function Jobs(params = { params }) {
         })
 
         fetchAllJobsCount().then((response) => {
-            setJobCount(response?.data);
+            setCompletedCount(response?.data.completed);            
+            setJobCount(response?.data.all);
         })
 
         fetchRecentJobs().then((response) => {
@@ -60,6 +65,7 @@ export default function Jobs(params = { params }) {
         })
 
     }, [])
+
 
     useEffect(() => {
         fetchAllJobsPagable(jobCurrentPage, jobPageSize)
@@ -158,6 +164,24 @@ export default function Jobs(params = { params }) {
         })
     }
 
+    useEffect(()=>{
+        jobObjList.map((item)=>{
+            const index = jobsPagable.findIndex(job => job.id === item.jobId);
+            if (index !== -1) {
+                jobsPagable[index].statusEnum = item.status;
+                if(item.status === "COMPLETED"){
+                    jobsPagable[index].completionPercentage = 0.0;
+                }else if(item.status === "RUNNING"){
+                    jobsPagable[index].completionPercentage = item.completionPercentage;
+                }
+            }
+
+        })
+        setRunningCount(jobObjList.filter(job => job.status === "RUNNING").length)
+
+        setJobsPagable([...jobsPagable])
+    },[jobObjList])
+
 
     function getUrl(id) {
         const item = datasourceType.find(data => data.id === id);
@@ -175,7 +199,7 @@ export default function Jobs(params = { params }) {
                         <Col span={8}>
                             <Statistic
                                 title="Running"
-                                value={"10"}
+                                value={runningCount}
                                 valueStyle={{ color: 'orange', fontSize: '30px' }}
                                 prefix={<FireFilled />}
                                 suffix=""
@@ -183,8 +207,8 @@ export default function Jobs(params = { params }) {
                         </Col>
                         <Col span={8}>
                             <Statistic
-                                title="Completed"
-                                value={"1"}
+                                title="Successful"
+                                value={completedCount}
                                 valueStyle={{ color: '#3f8600', fontSize: '30px' }}
                                 prefix={<CheckCircleFilled />}
                                 suffix=""
@@ -312,7 +336,7 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgb(17, 150, 45) ${renderPercentage(item.id)}%, rgba(255,255,255,1) ${renderPercentage(item.id)}%)`, backgroundSize: '90% 10%', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`,backgroundSize:'90% 10%',transition:'background 1s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
                                                     <List.Item.Meta

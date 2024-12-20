@@ -1,6 +1,7 @@
 package org.lawlie8.shakuni.web.jobs;
 
 
+import jakarta.transaction.Transactional;
 import org.lawlie8.shakuni.entity.jobs.Jobs;
 import org.lawlie8.shakuni.repo.JobsRepo;
 import org.lawlie8.shakuni.web.datasource.util.Notification;
@@ -21,10 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class JobService {
@@ -72,9 +70,12 @@ public class JobService {
         }
     }
 
-    public Long fetchAllJobSize() {
+    public Map<String,Long> fetchAllJobSize() {
         try {
-            return jobsRepo.count();
+            Map<String,Long> countMap = new HashMap<>();
+            countMap.put("all", jobsRepo.count());
+            countMap.put("completed",jobsRepo.fetchCompletedJobCount());
+            return countMap;
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching All Jobs List {}", e.getStackTrace());
             return null;
@@ -133,30 +134,41 @@ public class JobService {
     /**
      * Initializes Job by id
      * send websocket notification for status change and update job status in database
-    * */
+     * @param id - Job it
+     * @return boolean if process is completed without any Error
+     */
     public boolean initializeJobById(Long id){
         try {
             jobsRepo.updateStatus(id,StatusEnum.RUNNING.name());
             Notification.sendJobUpdate(id,generateJobMessage(id,StatusEnum.RUNNING.name(), 5f));
         }catch (Exception e){
-            log.error("Exception Occurred While Initializing Job with id : {}",id);
+            log.error("Exception Occurred While Initializing Job with id : {} : {}",id,e);
             return false;
         }
         return true;
     }
 
+    /**
+     * Method is Executed When a Job is Completed with or without Exception
+     * send related Notification to Front-End from here
+     * @param id - Job id
+     * @param isError - if Job has Completed with Error
+     * @param exceptionMessage - Exception Message to be stored as Result
+     * @return
+     */
     public boolean finishJobById(Long id,boolean isError,String exceptionMessage){
         try {
-            String status = isError ? StatusEnum.ERROR.name() : StatusEnum.RUNNING.name();
+            String status = isError ? StatusEnum.ERROR.name() : StatusEnum.COMPLETED.name();
             jobsRepo.updateStatus(id,status);
             Notification.sendJobUpdate(id,generateJobMessage(id,status,100f));
         }catch (Exception e){
-            log.error("Exception Occurred While Initializing Job with id : {}",id);
+            log.error("Exception Occurred While Finishing Job with id : {} : {}",id,e);
             return false;
         }
         return true;
     }
-    private static JobMessage generateJobMessage(Long id,String status,Float completionPercentage){
+
+    public static JobMessage generateJobMessage(Long id,String status,Float completionPercentage){
         JobMessage jobMessage = new JobMessage();
         jobMessage.setStatus(status);
         jobMessage.setJobId(id);

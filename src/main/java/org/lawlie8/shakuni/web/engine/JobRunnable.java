@@ -1,6 +1,8 @@
 package org.lawlie8.shakuni.web.engine;
 
+import org.lawlie8.shakuni.web.datasource.util.Notification;
 import org.lawlie8.shakuni.web.jobs.JobService;
+import org.lawlie8.shakuni.web.jobs.util.StatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,11 @@ public class JobRunnable implements Runnable {
             } else {
                 log.error("Job Initialization Failed for id : {}",jobId);
             }
-            Thread.sleep(20000);
+
+            for(int i = 6;i<95;i++){
+                Thread.sleep(300);
+                Notification.sendJobUpdate(jobId,jobService.generateJobMessage(jobId, StatusEnum.RUNNING.name(), (float) i));
+            }
         } catch (Exception e) {
             isError = true;
             exceptionMessage = e.getMessage();

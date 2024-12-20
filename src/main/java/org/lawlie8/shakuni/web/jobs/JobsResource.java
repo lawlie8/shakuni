@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -65,7 +66,7 @@ public class JobsResource {
     public ResponseEntity<?> fetchAllJobsSize() {
         try {
             log.info("Rest Call to Fetch Job count");
-            Long count =  jobService.fetchAllJobSize();
+            Map<String,Long> count =  jobService.fetchAllJobSize();
             return new ResponseEntity<>(count, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception Occurred While Fetching Job Count {}",e);
