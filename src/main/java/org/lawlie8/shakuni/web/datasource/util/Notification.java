@@ -1,6 +1,8 @@
 package org.lawlie8.shakuni.web.datasource.util;
 
 import jakarta.annotation.PostConstruct;
+import org.lawlie8.shakuni.web.jobs.util.JobMessage;
+import org.lawlie8.shakuni.web.jobs.util.StatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +41,15 @@ public class Notification {
             log.error("Error: {}", e);
         }
     }
+
+    public static void sendJobUpdate(Long id,JobMessage jobMessage) {
+        log.debug("Sending Notification to update status for id : {} with status : {}",id);
+        try {
+            messagingService.sendJobUpdateNotification(id,jobMessage);
+        } catch (Exception e) {
+            log.error("Error: {}", e);
+        }
+    }
+
+
 }

@@ -312,7 +312,7 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgb(17, 150, 45) ${item.datasourceId * 8}%, rgba(255,255,255,1)${item.datasourceId * 8}%)`, backgroundSize: '90% 10%', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgb(17, 150, 45) ${renderPercentage(item.id)}%, rgba(255,255,255,1) ${renderPercentage(item.id)}%)`, backgroundSize: '90% 10%', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
                                                     <List.Item.Meta

@@ -1,5 +1,9 @@
 export const BASE_URL = "http://localhost:7911";
-export const WS_BASE_URL = 'http://localhost:7911/ws';
+export const WS_BASE_URL = 'ws://localhost:7911/ws';
+export const WS_GLOBAL_NOTIFICATION = `/notification/all`;
+export const WS_CUSTOM_NOTIFICATION = `/notification`;
+export const WS_JOB_UPDATE = `/notification/job`;
+
 
 export const AUTH_URL = "/web/auth";
 export const LOGOUT_URL = "/web/logout";

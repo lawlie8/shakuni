@@ -3,8 +3,10 @@ package org.lawlie8.shakuni.web.jobs;
 
 import org.lawlie8.shakuni.entity.jobs.Jobs;
 import org.lawlie8.shakuni.repo.JobsRepo;
+import org.lawlie8.shakuni.web.datasource.util.Notification;
 import org.lawlie8.shakuni.web.engine.JobRunnable;
 import org.lawlie8.shakuni.web.jobs.util.ExecutionTypeEnum;
+import org.lawlie8.shakuni.web.jobs.util.JobMessage;
 import org.lawlie8.shakuni.web.jobs.util.NewJobDTO;
 import org.lawlie8.shakuni.web.jobs.util.StatusEnum;
 import org.slf4j.Logger;
@@ -103,14 +105,14 @@ public class JobService {
     }
 
     public boolean scheduleTask(Long id) {
-        JobRunnable jobRunnable = new JobRunnable(id);
+        JobRunnable jobRunnable = new JobRunnable(id,this);
         threadPoolTaskScheduler.schedule(jobRunnable, new CronTrigger(""));
         return true;
     }
 
     public boolean executeTask(Long id) {
         try {
-            JobRunnable jobRunnable = new JobRunnable(id);
+            JobRunnable jobRunnable = new JobRunnable(id,this);
             threadPoolTaskScheduler.execute(jobRunnable);
         }catch (Exception e){
             log.error("Exception Occurred While Starting Job with id : {}",id);
@@ -127,6 +129,41 @@ public class JobService {
         }
         return true;
     }
+
+    /**
+     * Initializes Job by id
+     * send websocket notification for status change and update job status in database
+    * */
+    public boolean initializeJobById(Long id){
+        try {
+            jobsRepo.updateStatus(id,StatusEnum.RUNNING.name());
+            Notification.sendJobUpdate(id,generateJobMessage(id,StatusEnum.RUNNING.name(), 5f));
+        }catch (Exception e){
+            log.error("Exception Occurred While Initializing Job with id : {}",id);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean finishJobById(Long id,boolean isError,String exceptionMessage){
+        try {
+            String status = isError ? StatusEnum.ERROR.name() : StatusEnum.RUNNING.name();
+            jobsRepo.updateStatus(id,status);
+            Notification.sendJobUpdate(id,generateJobMessage(id,status,100f));
+        }catch (Exception e){
+            log.error("Exception Occurred While Initializing Job with id : {}",id);
+            return false;
+        }
+        return true;
+    }
+    private static JobMessage generateJobMessage(Long id,String status,Float completionPercentage){
+        JobMessage jobMessage = new JobMessage();
+        jobMessage.setStatus(status);
+        jobMessage.setJobId(id);
+        jobMessage.setCompletionPercentage(completionPercentage);
+        return  jobMessage;
+    }
+
 
 
 }

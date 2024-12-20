@@ -1,10 +1,10 @@
 import { LogoutOutlined, NotificationFilled, NotificationOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Col, Dropdown, notification, Row } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { json, useLocation, useNavigate } from "react-router-dom";
+import {useLocation, useNavigate } from "react-router-dom";
 import { logout } from "./globalService";
 import { setStoreSelectedDataSourceType, setStoreSelectedAddEditDataSourceType } from "../internal/config/data-sources/DataSourceSlice";
-import { WS_BASE_URL } from "../../util/Constants";
+import { WS_BASE_URL, WS_CUSTOM_NOTIFICATION, WS_GLOBAL_NOTIFICATION, WS_JOB_UPDATE } from "../../util/Constants";
 import { useEffect } from "react";
 import { Client } from "@stomp/stompjs";
 export default function GlobalHeader() {
@@ -18,61 +18,61 @@ export default function GlobalHeader() {
     const dispatch = useDispatch();
     let client = new Client();
 
+    function notify(receivedObject,logout){
+        if (receivedObject.type === "WARNING") {
+            notification.warning({
+                message: receivedObject.title,
+                description: receivedObject.message,
+                style: { width: '250px' }
+            })
+            if (receivedObject.title === 'Session Expired' && logout) {
+                navigate("/")
+            }
+        } else if (receivedObject.type === "SUCCESS") {
+            notification.success({
+                message: receivedObject.title,
+                duration: 3,
+                description: receivedObject.message,
+                style: { width: '250px' }
+            })
+        } else if (receivedObject.type === "ERROR") {
+            notification.error({
+                message: receivedObject.title,
+                description: receivedObject.message,
+                style: { width: '250px' }
+            })
+        } 
+    }
+
+    function updateJob(receivedObject){
+        console.log(receivedObject);
+        
+    }
+
     useEffect(() => {
         try {
-            // Create a WebSocket connection
-            // Configure the WebSocket endpoint URL
-            const websocketUrl = 'ws://localhost:7911/ws'; // Replace with your WebSocket endpoint URL
 
-            // Connect to the WebSocket server
             client.configure({
-                brokerURL: websocketUrl,
+                brokerURL: WS_BASE_URL,
                 debug: function (str) {
-                    console.log("debug", str);
+                    console.log(str);
                 },
                 onConnect: () => {
-                    // Perform actions after successful connection
-                    const destination = `/notification/all`; // Specify the destination for the server-side message handler
-                    client && client.subscribe(destination, (message) => {
-                        console.log('Received message:', JSON.parse(message.body));
-                        // Process the received message as needed
+                    client && client.subscribe(WS_GLOBAL_NOTIFICATION, (message) => {
+                        notify(JSON.parse(message.body),false);
                     });
 
-                    client && client.subscribe(`/notification/${fetchEmail()}`, (message) => {
-                        const receivedObject = JSON.parse(message.body);
-                        if (receivedObject.type === "WARNING") {
-                            notification.warning({
-                                message: receivedObject.title,
-                                description: receivedObject.message,
-                                style: { width: '250px' }
-                            })
-                            if (receivedObject.title === 'Session Expired') {
-                                navigate("/")
-                            }
-                        } else if (receivedObject.type === "SUCCESS") {
-                            notification.success({
-                                message: receivedObject.title,
-                                duration: 3,
-                                description: receivedObject.message,
-                                style: { width: '250px' }
-                            })
-                        } else if (receivedObject.type === "ERROR") {
-                            notification.error({
-                                message: receivedObject.title,
-                                description: receivedObject.message,
-                                style: { width: '250px' }
-                            })
-                        }
+                    client && client.subscribe(`${WS_CUSTOM_NOTIFICATION}/${fetchEmail()}`, (message) => {
+                        notify(JSON.parse(message.body),true);
+                    });
+
+                    client && client.subscribe(`${WS_JOB_UPDATE}`, (message) => {
+                        updateJob(JSON.parse(message.body));
                     });
                 },
-                // You can add more event handlers and configuration options as needed
             });
 
-            // Connect to the WebSocket server
             client.activate();
-
-
-            // Clean up the connection on component unmount
             return () => {
                 client && client.deactivate();
             };
