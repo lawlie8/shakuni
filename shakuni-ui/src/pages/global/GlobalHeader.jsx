@@ -1,12 +1,11 @@
 import { LogoutOutlined, NotificationFilled, NotificationOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Col, Dropdown, notification, Row } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { json, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "./globalService";
 import { setStoreSelectedDataSourceType,setStoreSelectedAddEditDataSourceType } from "../internal/config/data-sources/DataSourceSlice";
 import { WS_BASE_URL } from "../../util/Constants";
 import { useEffect } from "react";
-import SockJS from 'sockjs-client';
 import { Client } from "@stomp/stompjs";
 export default function GlobalHeader() {
 
@@ -17,30 +16,41 @@ export default function GlobalHeader() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    let client = null;
 
     useEffect(() => {
         try{
-            const socket = new SockJS(WS_BASE_URL);
-            const stompClient = new Client({
-                webSocketFactory: () => socket,
-                debug: (str) => {console.log(str);},
-                onConnect: () => {
-    
-                    stompClient.subscribe("/notification/all", (response) => {
-                        console.log('Received message:', response.body);
-                    });
-    
-                },
-                onStompError: () => {
-                    console.log("error");
-                },
+            // Create a WebSocket connection
+        
+            client = new Client();
+        
+            // Configure the WebSocket endpoint URL
+            const websocketUrl = 'ws://localhost:7911/ws'; // Replace with your WebSocket endpoint URL
+        
+            // Connect to the WebSocket server
+            client.configure({
+              brokerURL: websocketUrl,
+              debug: function (str) {
+                console.log("debug",str);
+              },
+              onConnect: () => {
+                // Perform actions after successful connection
+                const destination = `/notification/all`; // Specify the destination for the server-side message handler
+                client && client.subscribe(destination, (message) => {
+                  console.log('Received message:', JSON.parse(message.body));
+                  // Process the received message as needed
+                });
+              },
+              // You can add more event handlers and configuration options as needed
             });
-    
-            stompClient.activate();
-    
+        
+            // Connect to the WebSocket server
+            client.activate();
+        
+        
+            // Clean up the connection on component unmount
             return () => {
-                stompClient.deactivate();
+              client && client.deactivate();
             };
         }catch(e){
             console.log(e)

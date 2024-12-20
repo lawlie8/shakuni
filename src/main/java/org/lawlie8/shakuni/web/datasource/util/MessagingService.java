@@ -17,7 +17,7 @@ public class MessagingService {
 
     public void sendNotification(Message message){
         try {
-            simpMessagingTemplate.convertAndSend("/notification/all",message.toString());
+            simpMessagingTemplate.convertAndSend("/notification/all",message);
         }catch (Exception e){
             log.error("Exception Occurred While Sending Message {}",e);
         }
