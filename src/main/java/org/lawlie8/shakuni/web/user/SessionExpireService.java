@@ -22,7 +22,7 @@ public class SessionExpireService {
     private final static Logger log = LoggerFactory.getLogger(SessionExpireService.class);
 
     public void expireUserSessionByUserName(String userName){
-        Notification.sendMessage(new Message("WARNING","user is expired"));
+        Notification.sendMessage(userName,new Message("WARNING","Session Expired","User Logged Out"));
         log.info("Session Expire Called for User : {}",userName);
         for (Object principal : sessionRegistry.getAllPrincipals()) {
             if (principal instanceof UserDetails) {

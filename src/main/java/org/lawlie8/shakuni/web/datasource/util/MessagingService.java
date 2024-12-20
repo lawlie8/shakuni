@@ -22,4 +22,12 @@ public class MessagingService {
             log.error("Exception Occurred While Sending Message {}",e);
         }
     }
+
+    public void sendNotification(String userName,Message message){
+        try {
+            simpMessagingTemplate.convertAndSend(String.format("/notification/%s",userName),message);
+        }catch (Exception e){
+            log.error("Exception Occurred While Sending Message {}",e);
+        }
+    }
 }

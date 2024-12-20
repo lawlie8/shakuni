@@ -30,4 +30,13 @@ public class Notification {
             log.error("Error: {}", e);
         }
     }
+
+    public static void sendMessage(String userName,Message message) {
+        log.info("Sending Notification with message: {}", message);
+        try {
+            messagingService.sendNotification(userName, message);
+        } catch (Exception e) {
+            log.error("Error: {}", e);
+        }
+    }
 }

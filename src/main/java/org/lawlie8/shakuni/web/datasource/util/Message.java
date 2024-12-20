@@ -4,10 +4,25 @@ public class Message {
 
     private String type;
     private String message;
+    private String title;
 
     public Message(String type, String message) {
         this.type = type;
         this.message = message;
+    }
+
+    public Message(String type,String title, String message) {
+        this.type = type;
+        this.message = message;
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getType() {
@@ -31,6 +46,7 @@ public class Message {
         return "Message{" +
                 "type='" + type + '\'' +
                 ", message='" + message + '\'' +
+                ", title='" + title + '\'' +
                 '}';
     }
 }
