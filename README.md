@@ -29,7 +29,7 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 ### Integrate Multiple Data Sources.
 <img src="https://i.ibb.co/xSNFMBV/hive-source.png" alt="hive-source" border="0"></img>
 ### Real Time Progress Update.
-![Alt Text](https://i.ibb.co/fQV7Y6m/Shakuni-Mozilla-Firefox-2024-12-21-00-07-04-1.gif)
+<img src="https://github.com/lawlie8/shakuni/blob/main/shakuni-ui/public/misc/demo.gif" height="316px" width="600px" border="0"></img>
 ### Job Page.
 <a href="https://ibb.co/Pzmc61c"><img src="https://i.ibb.co/wr0SzpS/job-list.png" alt="job-list" border="0"></a>
 ### Cron Type Planned Jobs.
