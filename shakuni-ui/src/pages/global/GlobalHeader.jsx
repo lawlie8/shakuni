@@ -56,6 +56,12 @@ export default function GlobalHeader() {
                                 description: receivedObject.message,
                                 style: { width: '250px' }
                             })
+                        } else if (receivedObject.type === "ERROR") {
+                            notification.error({
+                                message: receivedObject.title,
+                                description: receivedObject.message,
+                                style: { width: '250px' }
+                            })
                         }
                     });
                 },
