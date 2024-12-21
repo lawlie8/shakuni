@@ -1,4 +1,4 @@
-import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Row, Select, Statistic, Tag, Tooltip } from 'antd';
+import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Progress, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
 import { CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
@@ -29,10 +29,10 @@ export default function Jobs(params = { params }) {
 
     const [selectedDataSourceTypeImageUrl, setSelectedDataSourceTypeImageUrl] = useState("");
     const [selectedConfiguredDataSourceId, setSelectedConfiguredDataSourceId] = useState(0);
-    
+
     const [runningCount, setRunningCount] = useState(0);
     const [completedCount, setCompletedCount] = useState(0);
-    
+
     const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
     const dispatch = useDispatch();
 
@@ -47,7 +47,28 @@ export default function Jobs(params = { params }) {
         label: "Hive Sources",
     },])
 
+    let timeout;
+    function pollRecentJobs() {
+        timeout = setTimeout(() => {
+            if (window.location.pathname === "/jobs") {
+                fetchAllJobsCount().then((response) => {
+                    setCompletedCount(response?.data.completed);
+                    setJobCount(response?.data.all);
+                    pollRecentJobs();
+                });
+            } else {
+                clearTimeout(timeout); // Clear timeout if not on the /jobs page
+            }
+        }, 10000);
+    }
+
     useEffect(() => {
+        pollRecentJobs();
+        fetchAllJobsCount().then((response) => {
+            setCompletedCount(response?.data.completed);
+            setJobCount(response?.data.all);
+        });
+        
         fetchDataSourceTypes().then((response) => {
             setDataSourceType(response?.data)
             datasourceType?.map((item) => {
@@ -55,10 +76,6 @@ export default function Jobs(params = { params }) {
             })
         })
 
-        fetchAllJobsCount().then((response) => {
-            setCompletedCount(response?.data.completed);            
-            setJobCount(response?.data.all);
-        })
 
         fetchRecentJobs().then((response) => {
             setRecentJobs(response?.data)
@@ -164,14 +181,14 @@ export default function Jobs(params = { params }) {
         })
     }
 
-    useEffect(()=>{
-        jobObjList.map((item)=>{
+    useEffect(() => {
+        jobObjList.map((item) => {
             const index = jobsPagable.findIndex(job => job.id === item.jobId);
             if (index !== -1) {
                 jobsPagable[index].statusEnum = item.status;
-                if(item.status === "COMPLETED"){
+                if (item.status === "COMPLETED") {
                     jobsPagable[index].completionPercentage = 0.0;
-                }else if(item.status === "RUNNING"){
+                } else if (item.status === "RUNNING") {
                     jobsPagable[index].completionPercentage = item.completionPercentage;
                 }
             }
@@ -180,7 +197,7 @@ export default function Jobs(params = { params }) {
         setRunningCount(jobObjList.filter(job => job.status === "RUNNING").length)
 
         setJobsPagable([...jobsPagable])
-    },[jobObjList])
+    }, [jobObjList])
 
 
     function getUrl(id) {
@@ -336,7 +353,8 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`,backgroundSize:'90% 10%',transition:'background 1s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: '90% 10%', transition: 'background 1s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                    {/* <Progress trailColor='rgba(1,1,1,0)' strokeLinecap="" showInfo={false} style={{position:'absolute',marginTop:"-61px",paddingLeft:'5px',borderRadius:'10px',width:"calc(100% - 172px)",padding:'0px'}} size={['100%',5]} percent={55} strokeColor={{'0%': '#108ee9','100%': '#87d068',}} /> */}
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
                                                     <List.Item.Meta
@@ -347,22 +365,22 @@ export default function Jobs(params = { params }) {
                                                     <div style={{ left: '50%', position: 'absolute' }}>
                                                         {
                                                             {
-                                                                'UNTRIGGERED': <><Tag icon={<QuestionCircleOutlined />} color='gray' style={{ width: '120px',textAlign:'center' }}>
+                                                                'UNTRIGGERED': <><Tag icon={<QuestionCircleOutlined />} color='gray' style={{ width: '120px', textAlign: 'center' }}>
                                                                     UNTRIGGERED
                                                                 </Tag></>,
-                                                                'RUNNING': <><Tag icon={<SyncOutlined spin />} color='green' style={{ width: '120px' ,textAlign:'center'}}>
-                                                                    RUNNING
+                                                                'RUNNING': <><Tag icon={<SyncOutlined spin />} color='green' style={{ width: '120px', textAlign: 'center' }}>
+                                                                    RUNNING {item.completionPercentage}%
                                                                 </Tag>
                                                                 </>,
-                                                                'ERROR': <><Tag icon={<ExclamationCircleOutlined />} color='red' style={{ width: '120px',textAlign:'center' }}>
+                                                                'ERROR': <><Tag icon={<ExclamationCircleOutlined />} color='red' style={{ width: '120px', textAlign: 'center' }}>
                                                                     ERROR
                                                                 </Tag>
                                                                 </>,
-                                                                'COMPLETED': <><Tag icon={<CheckCircleOutlined />} color='darkgreen' style={{ width: '120px',textAlign:'center' }}>
+                                                                'COMPLETED': <><Tag icon={<CheckCircleOutlined />} color='darkgreen' style={{ width: '120px', textAlign: 'center' }}>
                                                                     COMPLETED
                                                                 </Tag>
                                                                 </>,
-                                                                'TERMINATED': <><Tag icon={<CloseCircleOutlined />} color='red' style={{ width: '120px',textAlign:'center' }}>
+                                                                'TERMINATED': <><Tag icon={<CloseCircleOutlined />} color='red' style={{ width: '120px', textAlign: 'center' }}>
                                                                     TERMINATED
                                                                 </Tag>
                                                                 </>
