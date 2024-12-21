@@ -224,7 +224,7 @@ export default function Jobs(params = { params }) {
                         </Col>
                         <Col span={8}>
                             <Statistic
-                                title="Successful"
+                                title="Completed"
                                 value={completedCount}
                                 valueStyle={{ color: '#3f8600', fontSize: '30px' }}
                                 prefix={<CheckCircleFilled />}
