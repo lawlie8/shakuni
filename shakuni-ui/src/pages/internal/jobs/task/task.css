@@ -1,0 +1,23 @@
+.task-view-details{
+    margin: 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.user-share-details{
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.task-details-ul{
+    list-style: none;
+    width: 100%;
+    margin: 5px;
+    padding: 0px;
+}
+
+.task-details-ul-li{
+    width: 100%;
+    display: flex;
+    margin: 0px;
+    padding: 0px;
+}

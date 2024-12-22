@@ -1,17 +1,18 @@
-import { Avatar, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Progress, Row, Select, Statistic, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Progress, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CaretLeftFilled, CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId } from './JobSlice';
+import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobId } from './JobSlice';
 import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById } from './jobs-service';
+import TaskViewDetails from './task/TaskViewDetails';
 
 export default function Jobs(params = { params }) {
 
-    const [allJobsView, setAllJobsView] = useState(true);
+    const [allJobsView, setAllJobsView] = useState(false);
     const [recentJobs, setRecentJobs] = useState([])
     const [jobsPagable, setJobsPagable] = useState([])
 
@@ -34,18 +35,19 @@ export default function Jobs(params = { params }) {
     const [completedCount, setCompletedCount] = useState(0);
 
     const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
+    const selectedJobId = useSelector((state) => state.jobStore.selectedJobId);
     const dispatch = useDispatch();
-
-    const [menuItems, setMenuItems] = useState([{
-        key: "1",
-        icon: <img src='/datasource_logo/hive_logo.svg' height="50px" width="50px" />,
-        label: "Hive Sources",
-    },
-    {
-        key: "2",
-        icon: <img src='/datasource_logo/oracle_logo.svg' height="50px" width="50px" />,
-        label: "Hive Sources",
-    },])
+    
+    const [menuItems, setMenuItems] = useState([
+        {
+            key: "1",
+            label: <button className='task-back-button' onClick={()=>{setAllJobsView(true)}} style={{}}><ArrowLeftOutlined style={{margin:'0px',padding:'0px'}} /><span style={{paddingLeft:'5px',margin:'0px'}}>Return</span></button>,
+            style:{padding:'0px',margin:'none',backgroundColor:'white'}
+        },{
+            key: "2",
+            label: <TaskViewDetails />,
+            style:{position:'relative',top:"10px",height:"auto",padding:'0px',backgroundColor:'white'}
+        }])
 
     let timeout;
     function pollRecentJobs() {
@@ -68,7 +70,7 @@ export default function Jobs(params = { params }) {
             setCompletedCount(response?.data.completed);
             setJobCount(response?.data.all);
         });
-        
+
         fetchDataSourceTypes().then((response) => {
             setDataSourceType(response?.data)
             datasourceType?.map((item) => {
@@ -199,6 +201,10 @@ export default function Jobs(params = { params }) {
         setJobsPagable([...jobsPagable])
     }, [jobObjList])
 
+    function handleJobSelect(id) {
+        dispatch(setStoreSlectedJobId(id));
+        setAllJobsView(false);
+    }
 
     function getUrl(id) {
         const item = datasourceType.find(data => data.id === id);
@@ -353,7 +359,7 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: '90% 10%', transition: 'background 1s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item onClick={() => handleJobSelect(item.id)} style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: '90% 10%', transition: 'background 0.5s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
                                                     {/* <Progress trailColor='rgba(1,1,1,0)' strokeLinecap="" showInfo={false} style={{position:'absolute',marginTop:"-61px",paddingLeft:'5px',borderRadius:'10px',width:"calc(100% - 172px)",padding:'0px'}} size={['100%',5]} percent={55} strokeColor={{'0%': '#108ee9','100%': '#87d068',}} /> */}
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
@@ -442,6 +448,7 @@ export default function Jobs(params = { params }) {
         </Row>
         <Row className="jobs-page-main" style={{ display: allJobsView ? 'none' : 'flex' }}>
             <Col span={4} className="jobs-page-selection">
+
                 <Menu
                     className='jobs-page-selection-menu'
                     onClick={onClickDataSource}

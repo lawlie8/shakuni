@@ -105,6 +105,10 @@
 .jobs-all-jobs-item{
     margin: 10px;
     border-radius: 10px;
+    &:hover{
+        background-color: #dfdfdf;
+        cursor: pointer;
+    }
 
 }
 
@@ -197,6 +201,21 @@
     &:hover{
         background-color:  #242830;
 
+    }
+}
+
+.task-back-button{
+    width:100%;
+    height:100px;
+    padding:0px;
+    margin:0px;
+    background-color:black;
+    color:white;
+    border:1px solid black;
+    transition: background-color 0.2s ease;
+    &:hover{
+        background-color: #2caa34;
+        color: black;
     }
 }
 
