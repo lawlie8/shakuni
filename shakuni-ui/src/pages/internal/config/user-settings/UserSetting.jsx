@@ -3,12 +3,12 @@ import './user-setting.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllUsers, getAllUserRoleOptions, getAllPermissionOptions, getAllPermissionOptionsByRoleName, saveUser } from "./user-setting-service";
-import { setStoreAllRoles, setStorePermissionOptions, setStoreSelectedUserSetting } from "./UserSettingSlice";
+import { setAllUsers, setStoreAllRoles, setStorePermissionOptions, setStoreSelectedUserSetting } from "./UserSettingSlice";
 import { Avatar, Breadcrumb, Button, Col, Divider, Dropdown, Form, Input, List, notification, Radio, Row, Select, Space, Tooltip, Upload } from "antd";
 import UserDetails from "./user-details/UserDetails";
 export default function UserSetting(params = { params }) {
 
-    const [allUserInfo, setAllUserInfo] = useState([]);
+    const allUserInfo = useSelector((state)=>state.userStoreSetting.allUsers);
     const [breadCrumbItems, setBreadCrumbItems] = useState([{ title: (<><UserOutlined style={{ color: 'black' }} onClick={() => { handleBreadCrumbUserConfigureClick() }} /></>) }]);
     const [activeId, setActiveId] = useState(null)
     const [newUserFormActive, setNewUserFormActive] = useState(false)
@@ -33,7 +33,7 @@ export default function UserSetting(params = { params }) {
 
     useEffect(() => {
         getAllUsers().then((response) => {
-            setAllUserInfo(response.data)
+            dispatch(setAllUsers(response.data))
         })
 
         getAllUserRoleOptions().then((response) => {

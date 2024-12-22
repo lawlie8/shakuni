@@ -1,7 +1,7 @@
 import { Avatar, Button, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Progress, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { ArrowLeftOutlined, BarsOutlined, CaretLeftFilled, CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, MoreOutlined, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, BarsOutlined, CaretLeftFilled, CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, MoreOutlined, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, RollbackOutlined, SyncOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
@@ -41,7 +41,7 @@ export default function Jobs(params = { params }) {
     const [menuItems, setMenuItems] = useState([
         {
             key: "1",
-            label: <button className='task-back-button' onClick={()=>{setAllJobsView(true)}} style={{}}><ArrowLeftOutlined style={{margin:'0px',padding:'0px'}} /><span style={{paddingLeft:'5px',margin:'0px'}}>Return</span></button>,
+            label: <button className='task-back-button' onClick={()=>{setAllJobsView(true)}} style={{}}><RollbackOutlined style={{margin:'0px',padding:'0px'}} /><span style={{paddingLeft:'5px',margin:'0px'}}>Back</span></button>,
             style:{padding:'0px',margin:'none',backgroundColor:'white'}
         },{
             key: "2",

@@ -1,12 +1,32 @@
 import { Col,Row, Select } from "antd";
 import './task.css';
 import {useEffect, useState } from "react";
-import { UserOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
+import { SyncOutlined, UserOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "../../config/user-settings/user-setting-service";
+import { setAllUsers } from "../../config/user-settings/UserSettingSlice";
 export default function TaskViewDetails({ params }) {
-
+    const allUserInfo = useSelector((state)=>state.userStoreSetting.allUsers);
     const jobItem = useSelector((state)=>state.jobStore.selectedJobItem);
-    const [jobDetails, setJobDetails] = useState([])
+    const [jobDetails, setJobDetails] = useState([]);
+    const dispatch = useDispatch();
+    const [selectedUserOptions, setSelectedUserOptions] = useState([]);
+
+    useEffect(()=>{
+        getAllUsers().then((response) => {
+            dispatch(setAllUsers(response.data))
+        })
+
+        setSelectedUserOptions([]);
+
+        allUserInfo.map((item)=>{
+            setSelectedUserOptions(x=>[...x,
+                {
+                value:item.id,
+                label:item.userName
+            }])
+        })
+    },[])
 
     useEffect(()=>{        
         setJobDetails([
@@ -28,42 +48,6 @@ export default function TaskViewDetails({ params }) {
             }
         ])
     },[jobItem])
-
-    const items = [
-        {
-            key: '1',
-            label: 'Name',
-            children: 'Job Name',
-            span: 3,
-        },
-        {
-            key: '2',
-            label: 'Total Tasks',
-            children: '2',
-            span: 3,
-        },
-        {
-            key: '3',
-            label: 'Owner',
-            children: 'admin@lawlie8.org',
-            span: 3,
-        },]
-
-    const selectUserOptions = [
-        {
-            label: 'admin@lawlie8.org',
-            value: 'admin@lawlie8.org'
-        },
-        {
-            label: 'test@gmail.com',
-            value: 'test@gmail.com'
-        },
-        {
-            label: 'admin@lawlie8.org',
-            value: 'lawlie8'
-        }
-    ]
-
 
 
     function handleJobShareUpdate(){
@@ -93,12 +77,17 @@ export default function TaskViewDetails({ params }) {
             <h3 style={{ textAlign: 'start' }}>Share Job With</h3>
             <Row>
                 <Col span={24}>
-                    <Select
+                    {
+                        selectedUserOptions.length === 0 ? <SyncOutlined spin/>
+                        :
+                        <Select
                         suffixIcon={<UserOutlined style={{color:'black'}} />}
-                        defaultValue={['admin@lawlie8.org']}
+                        defaultValue={[jobItem?.createdBy]}
                         mode="multiple"
                         style={{ width: '100%' }}
-                        options={selectUserOptions} />
+                        options={selectedUserOptions} />
+                    }
+
                 </Col>
                 <Col style={{position:'relative'}} span={24}>
                     <button style={{width:'100%',marginTop:'10px'}} onClick={()=>handleJobShareUpdate()}>Share</button>
