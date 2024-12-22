@@ -1,7 +1,7 @@
 import { Avatar, Button, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Progress, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { ArrowLeftOutlined, CaretLeftFilled, CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, BarsOutlined, CaretLeftFilled, CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, MoreOutlined, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
@@ -12,7 +12,7 @@ import TaskViewDetails from './task/TaskViewDetails';
 
 export default function Jobs(params = { params }) {
 
-    const [allJobsView, setAllJobsView] = useState(false);
+    const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([])
     const [jobsPagable, setJobsPagable] = useState([])
 
@@ -359,7 +359,7 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item onClick={() => handleJobSelect(item.id)} style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: '90% 10%', transition: 'background 0.5s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item  style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: item.statusEnum === 'RUNNING' ? '90% 10%' : '100% 0%' , transition: 'background 0.5s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
                                                     {/* <Progress trailColor='rgba(1,1,1,0)' strokeLinecap="" showInfo={false} style={{position:'absolute',marginTop:"-61px",paddingLeft:'5px',borderRadius:'10px',width:"calc(100% - 172px)",padding:'0px'}} size={['100%',5]} percent={55} strokeColor={{'0%': '#108ee9','100%': '#87d068',}} /> */}
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
@@ -400,6 +400,11 @@ export default function Jobs(params = { params }) {
                                                             <Tag style={{ width: '85px', textAlign: 'center' }} color={item.executionType === 'NORMAL' ? 'purple' : 'blue'}>{item.executionType}</Tag>
                                                         </li>
                                                     </ul>
+                                                    <Tooltip title="View Tasks">
+                                                        <div className='job-interactive-button-edit' onClick={() => handleJobSelect(item.id)}>
+                                                            <BarsOutlined style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
+                                                        </div>
+                                                    </Tooltip>
                                                     <Tooltip title="Delete Job">
                                                         <Popconfirm
                                                             placement="leftTop"
@@ -412,7 +417,7 @@ export default function Jobs(params = { params }) {
                                                                 <DeleteFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
                                                             </div>
                                                         </Popconfirm>
-
+                                                        
                                                     </Tooltip>
                                                     <Tooltip title="Edit Job">
                                                         <div className='job-interactive-button-edit' >
