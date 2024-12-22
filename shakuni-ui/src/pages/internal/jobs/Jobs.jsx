@@ -6,7 +6,7 @@ import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobId } from './JobSlice';
+import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem } from './JobSlice';
 import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById } from './jobs-service';
 import TaskViewDetails from './task/TaskViewDetails';
 
@@ -66,10 +66,10 @@ export default function Jobs(params = { params }) {
 
     useEffect(() => {
         pollRecentJobs();
-        fetchAllJobsCount().then((response) => {
-            setCompletedCount(response?.data.completed);
-            setJobCount(response?.data.all);
-        });
+        // fetchAllJobsCount().then((response) => {
+        //     setCompletedCount(response?.data.completed);
+        //     setJobCount(response?.data.all);
+        // });
 
         fetchDataSourceTypes().then((response) => {
             setDataSourceType(response?.data)
@@ -201,9 +201,12 @@ export default function Jobs(params = { params }) {
         setJobsPagable([...jobsPagable])
     }, [jobObjList])
 
-    function handleJobSelect(id) {
-        dispatch(setStoreSlectedJobId(id));
+    function handleJobSelect(value) {       
+        dispatch(setStoreSlectedJobItem(value));
         setAllJobsView(false);
+        
+        //TODO add fetch all tasks for job here send to store
+
     }
 
     function getUrl(id) {
@@ -401,7 +404,7 @@ export default function Jobs(params = { params }) {
                                                         </li>
                                                     </ul>
                                                     <Tooltip title="View Tasks">
-                                                        <div className='job-interactive-button-edit' onClick={() => handleJobSelect(item.id)}>
+                                                        <div className='job-interactive-button-edit' onClick={() => handleJobSelect(item)}>
                                                             <BarsOutlined style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
                                                         </div>
                                                     </Tooltip>

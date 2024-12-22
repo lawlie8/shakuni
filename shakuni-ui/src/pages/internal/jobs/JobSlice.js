@@ -5,7 +5,7 @@ const initialState = {
     selectedConfiguredDataSourceId: 0,
     selectedDataSourceId: 0,
     jobUpdateObj:[],
-    selectedJobId:0,
+    selectedJobItem:[],
 }
 
 const JobSlice = createSlice({
@@ -38,12 +38,12 @@ const JobSlice = createSlice({
               state.jobUpdateObj.push(newJob);
             }
           },
-          setStoreSlectedJobId(state,action){
-            state.selectedJobId = action.payload;
+          setStoreSlectedJobItem(state,action){
+            state.selectedJobItem = action.payload;
           },
 
     }
 })
 
-export const { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId,setStoreJobUpdateObj,setStoreSlectedJobId } = JobSlice.actions;
+export const { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId,setStoreJobUpdateObj,setStoreSlectedJobItem } = JobSlice.actions;
 export default JobSlice.reducer;

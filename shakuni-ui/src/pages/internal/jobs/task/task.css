@@ -2,10 +2,13 @@
     margin: 10px;
     border-radius: 10px;
     position: relative;
+    color: rgba(0, 0, 0, 0.88);
+
 }
 
 .user-share-details{
     color: rgba(0, 0, 0, 0.88);
+    position: relative;
 }
 
 .task-details-ul{
