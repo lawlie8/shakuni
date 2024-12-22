@@ -65,11 +65,11 @@ export default function Jobs(params = { params }) {
     }
 
     useEffect(() => {
-        pollRecentJobs();
-        // fetchAllJobsCount().then((response) => {
-        //     setCompletedCount(response?.data.completed);
-        //     setJobCount(response?.data.all);
-        // });
+        //pollRecentJobs();
+        fetchAllJobsCount().then((response) => {
+            setCompletedCount(response?.data.completed);
+            setJobCount(response?.data.all);
+        });
 
         fetchDataSourceTypes().then((response) => {
             setDataSourceType(response?.data)
