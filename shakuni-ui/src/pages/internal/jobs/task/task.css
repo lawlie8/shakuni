@@ -24,3 +24,14 @@
     margin: 0px;
     padding: 0px;
 }
+
+.new-task-logo{
+    font-size: 100px;
+    cursor:pointer;
+    padding:20px;
+    margin-top: 20px;
+    border:dashed 3px gray;
+    position: relative;
+    left:50%;
+    transform:translateX(-50%)
+}

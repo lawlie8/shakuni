@@ -25,9 +25,6 @@ public class Tasks {
     @Enumerated(EnumType.STRING)
     private TaskTypeEnum taskTypeEnum;
 
-    @Column(name = "task_data")
-    private Blob taskData;
-
     @Column(name = "creation_date")
     private Date taskCreationDate;
 
@@ -66,14 +63,6 @@ public class Tasks {
         this.taskTypeEnum = taskTypeEnum;
     }
 
-    public Blob getTaskData() {
-        return taskData;
-    }
-
-    public void setTaskData(Blob taskData) {
-        this.taskData = taskData;
-    }
-
     public Date getTaskCreationDate() {
         return taskCreationDate;
     }
@@ -97,7 +86,6 @@ public class Tasks {
                 ", jobId=" + jobId +
                 ", taskName='" + taskName + '\'' +
                 ", taskTypeEnum=" + taskTypeEnum +
-                ", taskData=" + taskData +
                 ", taskCreationDate=" + taskCreationDate +
                 ", createdBy='" + createdBy + '\'' +
                 '}';

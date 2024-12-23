@@ -1,19 +1,22 @@
 import { Avatar, Button, Col, Divider, Empty, Form, List, Menu, notification, Pagination, Popconfirm, Progress, Row, Select, Statistic, Tag, Tooltip } from 'antd';
 import './jobs.css';
 import { useEffect, useState } from 'react';
-import { ArrowLeftOutlined, BarsOutlined, CaretLeftFilled, CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, MoreOutlined, PlayCircleFilled, PlayCircleOutlined, PlusCircleFilled, QuestionCircleOutlined, RollbackOutlined, SyncOutlined } from '@ant-design/icons';
+import { BarsOutlined, CaretRightFilled, CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, ConsoleSqlOutlined, DeleteFilled, EditFilled, ExclamationCircleOutlined, FileTextFilled, FireFilled, PlusCircleFilled, QuestionCircleOutlined, RollbackOutlined, SyncOutlined } from '@ant-design/icons';
 import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem } from './JobSlice';
+import { setIsModalOpen, setIsNewTaskModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem } from './JobSlice';
 import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById } from './jobs-service';
 import TaskViewDetails from './task/TaskViewDetails';
+import NewTask from './task/new-task/NewTask';
 
 export default function Jobs(params = { params }) {
 
     const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([])
+    const [taskList, setTaskList] = useState([])
+
     const [jobsPagable, setJobsPagable] = useState([])
 
     const [datasourceType, setDataSourceType] = useState([]);
@@ -35,7 +38,6 @@ export default function Jobs(params = { params }) {
     const [completedCount, setCompletedCount] = useState(0);
 
     const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
-    const selectedJobId = useSelector((state) => state.jobStore.selectedJobId);
     const dispatch = useDispatch();
     
     const [menuItems, setMenuItems] = useState([
@@ -215,6 +217,11 @@ export default function Jobs(params = { params }) {
     }
 
 
+    function handleNewTaskModal(){
+        console.log("Opening Modal");
+        dispatch(setIsNewTaskModalOpen(true));
+    }
+
     return <div className="jobs-page">
         <Row className='jobs-all-page' justify={"space-between"} style={{ display: !allJobsView ? 'none' : 'flex' }}>
             <Col span={5} style={{ width: "30%" }}>
@@ -362,7 +369,7 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item  style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: item.statusEnum === 'RUNNING' ? '90% 10%' : '100% 0%' , transition: 'background 0.5s ease', backgroundRepeat: 'no-repeat', boxShadow: '0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item  style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: item.statusEnum === 'RUNNING' ? '90% 10%' : '100% 0%' , transition: 'background 0.5s ease', backgroundRepeat: 'no-repeat', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
                                                     {/* <Progress trailColor='rgba(1,1,1,0)' strokeLinecap="" showInfo={false} style={{position:'absolute',marginTop:"-61px",paddingLeft:'5px',borderRadius:'10px',width:"calc(100% - 172px)",padding:'0px'}} size={['100%',5]} percent={55} strokeColor={{'0%': '#108ee9','100%': '#87d068',}} /> */}
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
@@ -471,14 +478,22 @@ export default function Jobs(params = { params }) {
                     <Col span={24}>
                         <div className='job-segment-selection' >
                             <ul className='job-segment-selection-ul'>
-                                <li className='job-segment-selection-ul-li'>
-                                    <ConsoleSqlOutlined style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
-                                </li>                                        <li className='job-segment-selection-ul-li'>
-                                    <FileTextFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
-                                </li>
+
+                                {
+                                    taskList.map((item)=>(
+                                    <li className='job-segment-selection-ul-li'>
+                                        <ConsoleSqlOutlined style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
+                                    </li>
+                                    ))
+
+                                    /*  <li className='job-segment-selection-ul-li'>
+                                            <FileTextFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
+                                        </li> */
+                                }
+
 
                                 <Tooltip title="Create New Item">
-                                    <li className='job-segment-selection-ul-li-create'>
+                                    <li className='job-segment-selection-ul-li-create' onClick={()=>handleNewTaskModal()}>
                                         <PlusCircleFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
                                     </li>
                                 </Tooltip>
@@ -500,6 +515,10 @@ export default function Jobs(params = { params }) {
 
         <div className='create-job-modal'>
             <NewJobs />
+        </div>
+
+        <div className='create-task-modal'>
+            <NewTask />
         </div>
     </div>
 }
