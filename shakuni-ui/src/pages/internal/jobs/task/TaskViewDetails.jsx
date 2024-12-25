@@ -90,8 +90,8 @@ export default function TaskViewDetails({ params }) {
                     }
 
                 </Col>
-                <Col style={{position:'relative'}} span={24}>
-                    <button style={{width:'100%',marginTop:'10px'}} onClick={()=>handleJobShareUpdate()}>Share</button>
+                <Col style={{position:'relative'}} span={6} offset={18}>
+                    <button className='task-back-button' style={{width:'100%',marginTop:'10px'}} onClick={()=>handleJobShareUpdate()}>Share</button>
                 </Col>
             </Row>
 

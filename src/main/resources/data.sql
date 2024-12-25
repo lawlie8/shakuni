@@ -181,6 +181,7 @@ DEFAULT CHARSET=latin1
 COLLATE=latin1_swedish_ci
 COMMENT='Table Consists of Data Regarding Shakuni Jobs';
 
+
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `job_id` int(11) NOT NULL,
@@ -188,8 +189,10 @@ CREATE TABLE `tasks` (
   `file_path` varchar(2000) DEFAULT NULL,
   `creation_date` datetime DEFAULT NULL,
   `created_by` varchar(200) DEFAULT NULL,
+  `description` varchar(400) DEFAULT NULL,
+  `task_type` enum('SQL','FILE') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tasks_unique` (`task_name`),
   KEY `tasks_jobs_FK` (`job_id`),
   CONSTRAINT `tasks_jobs_FK` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci COMMENT='This Table Contains Job Tasks Information';

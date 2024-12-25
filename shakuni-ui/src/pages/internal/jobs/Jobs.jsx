@@ -15,6 +15,7 @@ export default function Jobs(params = { params }) {
 
     const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([])
+    const [selectedTaskId, setSelectedTaskId] = useState(0)
 
     const [jobsPagable, setJobsPagable] = useState([])
 
@@ -37,19 +38,19 @@ export default function Jobs(params = { params }) {
     const [completedCount, setCompletedCount] = useState(0);
 
     const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
-    const tasksList = useSelector((state) => state.jobStore.tasksList)
+    const tasksList = useSelector((state) => state.jobStore.taskList)
 
     const dispatch = useDispatch();
-    
+
     const [menuItems, setMenuItems] = useState([
         {
             key: "1",
-            label: <button className='task-back-button' onClick={()=>{setAllJobsView(true)}} style={{}}><RollbackOutlined style={{margin:'0px',padding:'0px'}} /><span style={{paddingLeft:'5px',margin:'0px'}}>Back</span></button>,
-            style:{padding:'0px',margin:'none',backgroundColor:'white'}
-        },{
+            label: <button className='task-back-button' onClick={() => { setAllJobsView(true) }} style={{}}><RollbackOutlined style={{ margin: '0px', padding: '0px',height:'100px' }} /><span style={{ paddingLeft: '5px', margin: '0px' }}>Back</span></button>,
+            style: { padding: '0px', margin: 'none', backgroundColor: 'white' }
+        }, {
             key: "2",
             label: <TaskViewDetails />,
-            style:{position:'relative',top:"10px",height:"auto",padding:'0px',backgroundColor:'white'}
+            style: { position: 'relative', top: "10px", height: "auto", padding: '0px', backgroundColor: 'white' }
         }])
 
     let timeout;
@@ -204,10 +205,11 @@ export default function Jobs(params = { params }) {
         setJobsPagable([...jobsPagable])
     }, [jobObjList])
 
-    function handleJobSelect(value) {       
+    function handleJobSelect(value) {
         dispatch(setStoreSlectedJobItem(value));
         setAllJobsView(false);
-        fetchTasksByJobId(value?.id).then((response)=>{
+        fetchTasksByJobId(value?.id).then((response) => {
+            setSelectedTaskId(response.data[0].id)
             dispatch(setTasks(response.data))
         })
     }
@@ -218,9 +220,12 @@ export default function Jobs(params = { params }) {
     }
 
 
-    function handleNewTaskModal(){
-        console.log("Opening Modal");
+    function handleNewTaskModal() {
         dispatch(setIsNewTaskModalOpen(true));
+    }
+
+    function selectTask(item){
+        setSelectedTaskId(item.id)
     }
 
     return <div className="jobs-page">
@@ -370,7 +375,7 @@ export default function Jobs(params = { params }) {
                                     <>
                                         {
                                             jobsPagable?.map((item) => (
-                                                <List.Item  style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: item.statusEnum === 'RUNNING' ? '90% 10%' : '100% 0%' , transition: 'background 0.5s ease', backgroundRepeat: 'no-repeat', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
+                                                <List.Item style={{ height: "60px", backgroundImage: `linear-gradient(90deg, rgba(73,212,94,0.7)  ${item.completionPercentage / 2}%, rgba(41,125,54,1) ${item.completionPercentage}%, rgba(255,255,255,1) ${item.completionPercentage}%)`, backgroundSize: item.statusEnum === 'RUNNING' ? '90% 10%' : '100% 0%', transition: 'background 0.5s ease', backgroundRepeat: 'no-repeat', border: '1px solid #dfdfdf', padding: '0px' }} className='jobs-all-jobs-item'>
                                                     {/* <Progress trailColor='rgba(1,1,1,0)' strokeLinecap="" showInfo={false} style={{position:'absolute',marginTop:"-61px",paddingLeft:'5px',borderRadius:'10px',width:"calc(100% - 172px)",padding:'0px'}} size={['100%',5]} percent={55} strokeColor={{'0%': '#108ee9','100%': '#87d068',}} /> */}
 
                                                     <img style={{ marginLeft: '10px' }} src={getUrl(item.datasourceId)} height="35px" width="35px" alt="" />
@@ -428,7 +433,7 @@ export default function Jobs(params = { params }) {
                                                                 <DeleteFilled style={{ position: 'relative', fontSize: '25px', left: '0%', top: '50%', transform: 'translate(-0%,-50%)' }} />
                                                             </div>
                                                         </Popconfirm>
-                                                        
+
                                                     </Tooltip>
                                                     <Tooltip title="Edit Job">
                                                         <div className='job-interactive-button-edit' >
@@ -481,20 +486,26 @@ export default function Jobs(params = { params }) {
                             <ul className='job-segment-selection-ul'>
 
                                 {
-                                    tasksList?.map((item)=>(
-                                    <li className='job-segment-selection-ul-li'>
-                                        <ConsoleSqlOutlined style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
-                                    </li>
-                                    ))
+                                    tasksList?.map((item) => (
+                                        item.taskTypeEnum === 'SQL' ?
+                                            <Tooltip title={item.taskName}>
+                                                <li className='job-segment-selection-ul-li' onClick={()=>selectTask(item)} style={{backgroundColor: selectedTaskId === item.id ? '#dfdfdf' : 'white'}}>
+                                                    <ConsoleSqlOutlined style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
+                                                </li>
+                                            </Tooltip>
+                                            :
+                                            <Tooltip title={item.taskName}>
+                                                <li className='job-segment-selection-ul-li' onClick={()=>selectTask(item)} style={{backgroundColor: selectedTaskId === item.id ? '#dfdfdf' : 'white'}}>
+                                                    <FileTextFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
+                                                </li>
+                                            </Tooltip>
 
-                                    /*  <li className='job-segment-selection-ul-li'>
-                                            <FileTextFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
-                                        </li> */
+                                    ))
                                 }
 
 
                                 <Tooltip title="Create New Item">
-                                    <li className='job-segment-selection-ul-li-create' onClick={()=>handleNewTaskModal()}>
+                                    <li className='job-segment-selection-ul-li-create' onClick={() => handleNewTaskModal()}>
                                         <PlusCircleFilled style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
                                     </li>
                                 </Tooltip>

@@ -44,8 +44,15 @@ public class TasksResource {
      */
     @RequestMapping(value = "/task/get/types",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchTasksTypes(){
-
-        return new ResponseEntity<>("", HttpStatus.OK);
+        List<String> taskTypeString = new ArrayList<>();
+        try {
+            log.info("Rest Call to Fetch Task Types");
+            taskTypeString = tasksService.fetchTasksTypes();
+        }catch (Exception e){
+            log.error("Rest Call to Fetch Task Types failed : {}0",e.getStackTrace());
+            return new ResponseEntity<>(taskTypeString, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(taskTypeString, HttpStatus.OK);
     }
 
     /**
@@ -53,7 +60,7 @@ public class TasksResource {
      * @param newTaskDTO DTO Class Contains Values Related To Saving New Task
      * @return boolean - New Task Creation Success Value
      */
-    @RequestMapping(value = "/task/post/save",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/task/post/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveNewTask(@RequestBody NewTaskDTO newTaskDTO){
         boolean isSaved = false;
         try {

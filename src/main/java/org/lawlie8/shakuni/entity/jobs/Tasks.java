@@ -19,6 +19,9 @@ public class Tasks {
     @Column(name = "task_name")
     private String taskName;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "task_type")
     @Enumerated(EnumType.STRING)
     private TaskTypeEnum taskTypeEnum;
@@ -54,6 +57,14 @@ public class Tasks {
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public TaskTypeEnum getTaskTypeEnum() {
@@ -94,6 +105,7 @@ public class Tasks {
                 "id=" + id +
                 ", jobId=" + jobId +
                 ", taskName='" + taskName + '\'' +
+                ", description='" + description + '\'' +
                 ", taskTypeEnum=" + taskTypeEnum +
                 ", filePath='" + filePath + '\'' +
                 ", taskCreationDate=" + taskCreationDate +

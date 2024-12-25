@@ -37,6 +37,7 @@ export const JOBS_ALL_COUNT = "/app/jobs/get/all/count";
 export const JOBS_CREATE_NEW = "/app/jobs/create/new";
 
 export const TASKS_GET_BY_JOB_ID = "/app/task/get"
+export const TASKS_CREATE_NEW = "/app/task/post/save";
 
 
 
