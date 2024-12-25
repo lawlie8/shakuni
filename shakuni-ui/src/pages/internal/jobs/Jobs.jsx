@@ -6,8 +6,8 @@ import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsModalOpen, setIsNewTaskModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem } from './JobSlice';
-import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById } from './jobs-service';
+import { setIsModalOpen, setIsNewTaskModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem, setTasks } from './JobSlice';
+import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById, fetchTasksByJobId } from './jobs-service';
 import TaskViewDetails from './task/TaskViewDetails';
 import NewTask from './task/new-task/NewTask';
 
@@ -15,7 +15,6 @@ export default function Jobs(params = { params }) {
 
     const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([])
-    const [taskList, setTaskList] = useState([])
 
     const [jobsPagable, setJobsPagable] = useState([])
 
@@ -38,6 +37,8 @@ export default function Jobs(params = { params }) {
     const [completedCount, setCompletedCount] = useState(0);
 
     const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
+    const tasksList = useSelector((state) => state.jobStore.tasksList)
+
     const dispatch = useDispatch();
     
     const [menuItems, setMenuItems] = useState([
@@ -206,9 +207,9 @@ export default function Jobs(params = { params }) {
     function handleJobSelect(value) {       
         dispatch(setStoreSlectedJobItem(value));
         setAllJobsView(false);
-        
-        //TODO add fetch all tasks for job here send to store
-
+        fetchTasksByJobId(value?.id).then((response)=>{
+            dispatch(setTasks(response.data))
+        })
     }
 
     function getUrl(id) {
@@ -480,7 +481,7 @@ export default function Jobs(params = { params }) {
                             <ul className='job-segment-selection-ul'>
 
                                 {
-                                    taskList.map((item)=>(
+                                    tasksList?.map((item)=>(
                                     <li className='job-segment-selection-ul-li'>
                                         <ConsoleSqlOutlined style={{ fontSize: '30px', position: 'relative', top: '50%', transform: 'translateY(-50%)' }} />
                                     </li>

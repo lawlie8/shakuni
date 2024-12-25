@@ -1,5 +1,6 @@
 package org.lawlie8.shakuni.web.jobs.tasks;
 
+import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.web.jobs.util.NewTaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/app")
@@ -23,9 +27,15 @@ public class TasksResource {
      * @return - List of Task Objects Created For A Job with Id
      */
     @RequestMapping(value = "/task/get/{jobId}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchTasksByJobId(@RequestParam Long jobId){
-
-        return new ResponseEntity<>("", HttpStatus.OK);
+    public ResponseEntity<?> fetchTasksByJobId(@PathVariable Long jobId){
+        List<Tasks> tasksList = new ArrayList<>();
+        try {
+            log.info("Rest Call to Fetch Task for Job with Id : {}",jobId);
+            tasksList = tasksService.getTaskByJobId(jobId);
+        }catch (Exception e){
+            log.error("Rest Call to Fetch Tasks for Job with Id Failed Exception is : {}",e.getStackTrace());
+        }
+        return new ResponseEntity<>(tasksList, HttpStatus.OK);
     }
 
     /**

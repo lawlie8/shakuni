@@ -36,7 +36,7 @@ export const JOBS_EXECUTE_ID = "/app/jobs/execute";
 export const JOBS_ALL_COUNT = "/app/jobs/get/all/count";
 export const JOBS_CREATE_NEW = "/app/jobs/create/new";
 
-
+export const TASKS_GET_BY_JOB_ID = "/app/task/get"
 
 
 

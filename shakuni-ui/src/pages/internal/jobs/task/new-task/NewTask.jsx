@@ -7,6 +7,7 @@ import { ConsoleSqlOutlined, UploadOutlined } from "@ant-design/icons"
 export default function NewTask({params}){
 
     const isNewTaskModalOpen = useSelector((state) => state.jobStore.isNewTaskModalOpen)
+
     const dispatch = useDispatch();
 
     function handleCancel(){
