@@ -2,8 +2,6 @@ package org.lawlie8.shakuni.entity.jobs;
 
 import jakarta.persistence.*;
 import org.lawlie8.shakuni.web.jobs.util.TaskTypeEnum;
-
-import java.sql.Blob;
 import java.util.Date;
 
 @Entity
@@ -24,6 +22,9 @@ public class Tasks {
     @Column(name = "task_type")
     @Enumerated(EnumType.STRING)
     private TaskTypeEnum taskTypeEnum;
+
+    @Column(name = "file_path")
+    private String filePath;
 
     @Column(name = "creation_date")
     private Date taskCreationDate;
@@ -63,6 +64,14 @@ public class Tasks {
         this.taskTypeEnum = taskTypeEnum;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public Date getTaskCreationDate() {
         return taskCreationDate;
     }
@@ -86,6 +95,7 @@ public class Tasks {
                 ", jobId=" + jobId +
                 ", taskName='" + taskName + '\'' +
                 ", taskTypeEnum=" + taskTypeEnum +
+                ", filePath='" + filePath + '\'' +
                 ", taskCreationDate=" + taskCreationDate +
                 ", createdBy='" + createdBy + '\'' +
                 '}';
