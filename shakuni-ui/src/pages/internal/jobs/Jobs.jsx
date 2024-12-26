@@ -190,8 +190,10 @@ export default function Jobs(params = { params }) {
     useEffect(() => {
         jobObjList.map((item) => {
             const index = jobsPagable.findIndex(job => job.id === item.jobId);
-            if (index !== -1) {
-                jobsPagable[index].statusEnum = item.status;
+            if (index !== -1 && allJobsView === true) {
+                //Object is Frozen When Websocket Progress is updated here
+                //See Alternatives for this problem
+                jobsPagable[index].statusEnum = String(item.status);
                 if (item.status === "COMPLETED") {
                     jobsPagable[index].completionPercentage = 0.0;
                 } else if (item.status === "RUNNING") {

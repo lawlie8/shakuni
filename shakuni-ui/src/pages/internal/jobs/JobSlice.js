@@ -32,18 +32,15 @@ const JobSlice = createSlice({
 
         setStoreJobUpdateObj(state,action){
             const newJob = action.payload;
-
-            // Find the index of the job with the same jobId
             const index = state.jobUpdateObj.findIndex(job => job.jobId === newJob.jobId);
       
             if (index !== -1) {
-              // If found, replace the existing object
               state.jobUpdateObj[index] = newJob;
             } else {
-              // If not found, add the new job
               state.jobUpdateObj.push(newJob);
             }
           },
+          
           setStoreSlectedJobItem(state,action){
             state.selectedJobItem = action.payload;
           },
