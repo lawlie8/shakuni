@@ -6,7 +6,7 @@ import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsModalOpen, setIsNewTaskModalOpen, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem, setTasks } from './JobSlice';
+import { setIsModalOpen, setIsNewTaskModalOpen, setSelectedTaskId, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem, setTasks } from './JobSlice';
 import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById, fetchTasksByJobId } from './jobs-service';
 import TaskViewDetails from './task/TaskViewDetails';
 import NewTask from './task/new-task/NewTask';
@@ -15,7 +15,6 @@ export default function Jobs(params = { params }) {
 
     const [allJobsView, setAllJobsView] = useState(true);
     const [recentJobs, setRecentJobs] = useState([])
-    const [selectedTaskId, setSelectedTaskId] = useState(0)
 
     const [jobsPagable, setJobsPagable] = useState([])
 
@@ -39,6 +38,7 @@ export default function Jobs(params = { params }) {
 
     const jobObjList = useSelector((state) => state.jobStore.jobUpdateObj);
     const tasksList = useSelector((state) => state.jobStore.taskList)
+    const selectedTaskId = useSelector((state) => state.jobStore.selectedTaskId)
 
     const dispatch = useDispatch();
 
@@ -211,7 +211,7 @@ export default function Jobs(params = { params }) {
         dispatch(setStoreSlectedJobItem(value));
         setAllJobsView(false);
         fetchTasksByJobId(value?.id).then((response) => {
-            setSelectedTaskId(response.data[0].id)
+            dispatch(setSelectedTaskId(response.data[0].id))
             dispatch(setTasks(response.data))
         })
     }
@@ -227,7 +227,7 @@ export default function Jobs(params = { params }) {
     }
 
     function selectTask(item){
-        setSelectedTaskId(item.id)
+        dispatch(setSelectedTaskId(item.id))
     }
 
     return <div className="jobs-page">

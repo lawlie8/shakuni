@@ -3,6 +3,7 @@ package org.lawlie8.shakuni.web.jobs.tasks;
 import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.repo.TaskRepo;
 import org.lawlie8.shakuni.web.jobs.util.NewTaskDTO;
+import org.lawlie8.shakuni.web.jobs.util.SQLTaskDTO;
 import org.lawlie8.shakuni.web.jobs.util.TaskTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,11 @@ public class TasksService {
         taskTypeList.add(TaskTypeEnum.FILE.name());
         taskTypeList.add(TaskTypeEnum.SQL.name());
         return taskTypeList;
+    }
+
+    public boolean saveSQlTask(SQLTaskDTO sqlTaskDTO) throws InterruptedException {
+        Thread.sleep(20000);
+        return true;
     }
 
     private String generateFilePath(String name) {

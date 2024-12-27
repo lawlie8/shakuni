@@ -2,6 +2,7 @@ package org.lawlie8.shakuni.web.jobs.tasks;
 
 import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.web.jobs.util.NewTaskDTO;
+import org.lawlie8.shakuni.web.jobs.util.SQLTaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,24 @@ public class TasksResource {
             isSaved = tasksService.saveNewTask(newTaskDTO);
         }catch (Exception e){
             log.error("Exception Occurred While Saving New Task at Rest level : {}",e.getMessage());
+            return new ResponseEntity<>(isSaved, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(isSaved, HttpStatus.OK);
+    }
+
+    /**
+     * This Method Saves SQL Editor Data to Respective Task File
+     * @param sqlTaskDTO
+     * @return - boolean status if file is saved
+     */
+    @RequestMapping(value = "/task/sql/post/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveSQLFileForTask(@RequestBody SQLTaskDTO sqlTaskDTO){
+        boolean isSaved = false;
+        try {
+            log.info("Rest Call To Save New Task with Name : {}",sqlTaskDTO.getTaskId());
+            isSaved = tasksService.saveSQlTask(sqlTaskDTO);
+        }catch (Exception e){
+            log.error("Exception Occurred While Saving SQL Task at Rest level : {}",e.getMessage());
             return new ResponseEntity<>(isSaved, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(isSaved, HttpStatus.OK);

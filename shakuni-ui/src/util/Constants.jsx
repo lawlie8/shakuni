@@ -39,5 +39,6 @@ export const JOBS_CREATE_NEW = "/app/jobs/create/new";
 export const TASKS_GET_BY_JOB_ID = "/app/task/get"
 export const TASKS_CREATE_NEW = "/app/task/post/save";
 
+export const SAVE_SQL_FILE = "/app/task/sql/post/save";
 
 
