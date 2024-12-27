@@ -208,6 +208,7 @@ export default function Jobs(params = { params }) {
     }, [jobObjList])
 
     function handleJobSelect(value) {
+        dispatch(setTasks([]))
         dispatch(setStoreSlectedJobItem(value));
         setAllJobsView(false);
         fetchTasksByJobId(value?.id).then((response) => {

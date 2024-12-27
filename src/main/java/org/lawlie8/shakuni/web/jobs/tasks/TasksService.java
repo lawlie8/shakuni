@@ -13,12 +13,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+/**
+ * Task Service Class Contains Method Required For Creation, Processing, Execution of Job Tasks.
+ */
 public class TasksService {
 
     private static final Logger log = LoggerFactory.getLogger(TasksService.class);

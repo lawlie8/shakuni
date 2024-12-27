@@ -14,6 +14,9 @@ export default function TaskViewDetails({ params }) {
 
     useEffect(()=>{
         getAllUsers().then((response) => {
+        }).catch((e)=>{
+            console.log(e);
+        }).finally(()=>{
             dispatch(setAllUsers(response.data))
         })
 
