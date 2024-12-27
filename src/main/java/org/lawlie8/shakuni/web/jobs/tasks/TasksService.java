@@ -1,5 +1,6 @@
 package org.lawlie8.shakuni.web.jobs.tasks;
 
+import jakarta.xml.bind.DatatypeConverter;
 import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.repo.TaskRepo;
 import org.lawlie8.shakuni.web.jobs.util.NewTaskDTO;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,14 +22,14 @@ import java.util.List;
 public class TasksService {
 
     private static final Logger log = LoggerFactory.getLogger(TasksService.class);
-
+    private static final String FILE_PATH_PREFIX = "/tmp/";
     @Autowired
     private TaskRepo taskRepo;
 
     public boolean saveNewTask(NewTaskDTO newTaskDTO) {
         boolean isTaskSaved = false;
         try {
-            if(validateTaskData(newTaskDTO)){
+            if (validateTaskData(newTaskDTO)) {
                 Tasks tasks = new Tasks();
                 tasks.setTaskName(newTaskDTO.getTaskName());
                 tasks.setTaskCreationDate(new Date());
@@ -35,12 +38,12 @@ public class TasksService {
                 tasks.setTaskTypeEnum(TaskTypeEnum.valueOf(newTaskDTO.getTaskType()));
                 tasks.setFilePath(generateFilePath(newTaskDTO.getTaskName()));
                 tasks.setDescription(newTaskDTO.getDescription());
-                log.debug("Saving New Task with Data : {}",tasks);
+                log.debug("Saving New Task with Data : {}", tasks);
                 taskRepo.save(tasks);
                 isTaskSaved = true;
             }
-        }catch (Exception e){
-            log.error("Exception Occurred While Creating New Task With Name : {}",newTaskDTO.getTaskName());
+        } catch (Exception e) {
+            log.error("Exception Occurred While Creating New Task With Name : {}", newTaskDTO.getTaskName());
             return isTaskSaved;
         }
         return isTaskSaved;
@@ -69,17 +72,26 @@ public class TasksService {
     }
 
     public boolean saveSQlTask(SQLTaskDTO sqlTaskDTO) throws InterruptedException {
-        Thread.sleep(20000);
+
         return true;
     }
 
     private String generateFilePath(String name) {
-        String fileName = "";
-        return fileName;
+        try {
+            String fileName;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(name.getBytes());
+            byte[] digest = md.digest();
+            fileName = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            return FILE_PATH_PREFIX + fileName + ".sql";
+        } catch (Exception e) {
+            log.error("Exception Occurred While Generating File Name For : {}", name);
+            return FILE_PATH_PREFIX + name + ".sql";
+        }
     }
 
-    private boolean validateTaskData(NewTaskDTO newTaskDTO){
-        if(newTaskDTO.getTaskName().isEmpty()){
+    private boolean validateTaskData(NewTaskDTO newTaskDTO) {
+        if (newTaskDTO.getTaskName().isEmpty()) {
             log.info("Task Name is Null");
             return false;
         } else if (newTaskDTO.getTaskType().isEmpty()) {
