@@ -229,6 +229,7 @@ export default function Jobs(params = { params }) {
 
     function selectTask(item){
         dispatch(setSelectedTaskId(item.id))
+        //Fetch Data of Selected Task and put it on Editor
     }
 
     return <div className="jobs-page">

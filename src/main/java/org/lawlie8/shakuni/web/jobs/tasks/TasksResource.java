@@ -39,6 +39,18 @@ public class TasksResource {
         return new ResponseEntity<>(tasksList, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/task/get/{taskId}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> fetchTasksDataById(@PathVariable Long taskId){
+        List<Tasks> tasksList = new ArrayList<>();
+        try {
+            log.info("Rest Call to Fetch Task Data for Task with Id : {}",taskId);
+            tasksList = tasksService.getTaskByJobId(taskId);
+        }catch (Exception e){
+            log.error("Rest Call to Fetch Tasks for Job with Id Failed Exception is : {}",e.getStackTrace());
+        }
+        return new ResponseEntity<>(tasksList, HttpStatus.OK);
+    }
+
     /**
      * This Method Returns All Task Types That Can be Created in SHAKUNI for a given Job
      * @return - Tasks Type Objects (SQL,File Upload etc.)
@@ -83,7 +95,7 @@ public class TasksResource {
     public ResponseEntity<?> saveSQLFileForTask(@RequestBody SQLTaskDTO sqlTaskDTO){
         boolean isSaved = false;
         try {
-            log.info("Rest Call To Save New Task with Name : {}",sqlTaskDTO.getTaskId());
+            log.info("Rest Call To Save New Task with Name : {}",sqlTaskDTO);
             isSaved = tasksService.saveSQlTask(sqlTaskDTO);
         }catch (Exception e){
             log.error("Exception Occurred While Saving SQL Task at Rest level : {}",e.getMessage());

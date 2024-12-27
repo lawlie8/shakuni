@@ -1,6 +1,7 @@
 package org.lawlie8.shakuni.web.jobs.tasks;
 
 import jakarta.xml.bind.DatatypeConverter;
+import org.apache.commons.lang3.SystemUtils;
 import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.repo.TaskRepo;
 import org.lawlie8.shakuni.web.jobs.util.NewTaskDTO;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.filechooser.FileSystemView;
+import java.io.File;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +28,11 @@ import java.util.List;
 public class TasksService {
 
     private static final Logger log = LoggerFactory.getLogger(TasksService.class);
-    private static final String FILE_PATH_PREFIX = "/tmp/";
+    private static final String UNIX_PATH_PREFIX = "/tmp/shakuni/";
+    private static final String WIN_PATH_PREFIX = FileSystemView.getFileSystemView().getDefaultDirectory().getPath();
+    private static final String APPLICATION_FOLDER_PATH = "\\shakuni\\";
+
+
     @Autowired
     private TaskRepo taskRepo;
 
@@ -74,22 +82,62 @@ public class TasksService {
     }
 
     public boolean saveSQlTask(SQLTaskDTO sqlTaskDTO) throws InterruptedException {
-
         return true;
+    }
+
+    public String fetchTaskDataById(Long taksId){
+        return "";
     }
 
     private String generateFilePath(String name) {
         try {
+            String filePath;
             String fileName;
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(name.getBytes());
             byte[] digest = md.digest();
             fileName = DatatypeConverter.printHexBinary(digest).toUpperCase();
-            return FILE_PATH_PREFIX + fileName + ".sql";
+            if (SystemUtils.IS_OS_WINDOWS) {
+                if (checkApplicationFolderExistsWindows()) {
+                    log.info("Application Folder Exists");
+                    filePath = WIN_PATH_PREFIX + APPLICATION_FOLDER_PATH + fileName + ".sql";
+                } else {
+                    throw new IOException("Application Folder Does Not Exist or Permission Error");
+                }
+            } else {
+                filePath = UNIX_PATH_PREFIX + APPLICATION_FOLDER_PATH + fileName + ".sql";
+            }
+            System.out.println(filePath);
+            File file = new File(filePath);
+            if (file.createNewFile()) {
+                log.info("File Created");
+            } else {
+                log.info("File Already Exists");
+            }
+            return filePath;
         } catch (Exception e) {
-            log.error("Exception Occurred While Generating File Name For : {}", name);
-            return FILE_PATH_PREFIX + name + ".sql";
+            log.error("Exception Occurred While Generating File Name For : {} , {}", name, e);
+            return null;
         }
+    }
+
+    private boolean checkApplicationFolderExistsWindows() throws IOException {
+        File currentDir = new File(WIN_PATH_PREFIX);
+        File[] flist = currentDir.listFiles();
+        boolean applicationFolderExists = false;
+        for (File f : flist) {
+            if (f.isDirectory()) {
+                if (f.getName().equals("shakuni")) {
+                    applicationFolderExists = true;
+                    break;
+                }
+            }
+        }
+        if (applicationFolderExists == false) {
+            new File(WIN_PATH_PREFIX + APPLICATION_FOLDER_PATH).mkdirs();
+            applicationFolderExists = true;
+        }
+        return applicationFolderExists;
     }
 
     private boolean validateTaskData(NewTaskDTO newTaskDTO) {
