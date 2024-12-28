@@ -215,13 +215,13 @@ export default function Jobs(params = { params }) {
         dispatch(setStoreSlectedJobItem(value));
         setAllJobsView(false);
         fetchTasksByJobId(value?.id).then((response) => {
-            dispatch(setSelectedTaskId(response.data[0].id))
-            dispatch(setTasks(response.data))
+            if(response.data.length !== 0){
+                dispatch(setSelectedTaskId(response.data[0].id))
+                dispatch(setTasks(response.data))
+            }
         })
 
-        fetchTaskData(tasksList[0].id).then((response)=>{
-            dispatch(setTaskData(response.data))
-        })
+
 
     }
 
@@ -238,9 +238,6 @@ export default function Jobs(params = { params }) {
     function selectTask(item){
         dispatch(setSelectedTaskId(item.id))
         //Fetch Data of Selected Task and put it on Editor
-        fetchTaskData(item.id).then((response)=>{
-            dispatch(setTaskData(response.data))
-        })
     }
 
     return <div className="jobs-page">

@@ -1,26 +1,34 @@
 import rehypePrism from 'rehype-prism-plus';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { CloseCircleFilled, PlaySquareFilled, SaveFilled, SyncOutlined } from "@ant-design/icons";
-import { notification, Tooltip } from 'antd';
+import { Button, Empty, notification, Tooltip, Typography } from 'antd';
 import './editor.css';
 import { useEffect, useState } from "react";
-import { saveCurrentSQLFile } from './editor-service';
-import { useSelector } from 'react-redux';
+import { fetchTaskData, saveCurrentSQLFile } from './editor-service';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsNewTaskModalOpen, setTaskData } from '../JobSlice';
 export default function Editor({ params }) {
 
-  const taskData = useSelector((state) => state.jobStore.taskData);
+  const tasksList = useSelector((state) => state.jobStore.taskList)
   const selectedTaskId = useSelector((state) => state.jobStore.selectedTaskId);
   const [code, setCode] = useState(``);
   const [isProcessing, setIsProcessing] = useState(false);
+  const dispatch = useDispatch();
 
 
-  useEffect(()=>{
-    setCode(taskData)
-  },[taskData])
+  function handleCreateNewModal() {
+    dispatch(setIsNewTaskModalOpen(true));
+  }
+
+  useEffect(() => {
+    fetchTaskData(selectedTaskId).then((response) => {
+      setCode(response.data)
+    })
+  }, [selectedTaskId])
 
   function saveCurrentFile() {
     setIsProcessing(true);
-  
+
     saveCurrentSQLFile(code, selectedTaskId)
       .then((response) => {
         if (response?.status === 200 && response?.data === true) {
@@ -52,24 +60,24 @@ export default function Editor({ params }) {
         setIsProcessing(false);
       });
   }
-  
 
-  function runCurrentScript(){
+
+  function runCurrentScript() {
     setIsProcessing(!isProcessing)
   }
 
   return <div className="editor-main">
-    <div className="editor-tool-pick">
+    <div className="editor-tool-pick" style={{ display: tasksList.length === 0 ? 'none' : 'block' }} >
       <ul className='editor-tool-pick-ul'>
         <li className='editor-tool-pick-ul-li'>
           <Tooltip title="Execute Query">
-            <PlaySquareFilled  onClick={() => runCurrentScript()} style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
+            <PlaySquareFilled onClick={() => runCurrentScript()} style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
           </Tooltip>
 
         </li>
         <li className='editor-tool-pick-ul-li'>
           <Tooltip title="Save Query">
-            <SaveFilled onClick={()=>saveCurrentFile()} style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
+            <SaveFilled onClick={() => saveCurrentFile()} style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
           </Tooltip>
         </li>
         <li style={{ display: 'absolute', left: 'calc(100% - 90px)' }} className='editor-tool-pick-ul-li' >
@@ -104,8 +112,24 @@ export default function Editor({ params }) {
         borderBottomRightRadius: '10px',
         overflowY: 'scroll',
         fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+        display: tasksList.length === 0 ? 'none' : 'block'
       }}
     />
-
+    <div className='editor-background-div' style={{ display: tasksList.length === 0 ? 'block' : 'none' }}>
+      <Empty
+        image="/misc/empty.svg"
+        imageStyle={{
+          height: 60,
+        }}
+        style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+        description={
+          <Typography.Text>
+            No Tasks
+          </Typography.Text>
+        }
+      >
+        <Button type="primary" onClick={handleCreateNewModal}>Create Now</Button>
+      </Empty>
+    </div>
   </div>
 }

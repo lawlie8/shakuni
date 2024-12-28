@@ -18,7 +18,13 @@
 
 }
 
-
+.editor-background-div{
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 240px);
+    border-radius: 10px;
+}
 
 .editor-tool-pick{
     position: relative;
