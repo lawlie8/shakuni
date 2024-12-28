@@ -1,7 +1,6 @@
 package org.lawlie8.shakuni.web.jobs.tasks;
 
 import jakarta.xml.bind.DatatypeConverter;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.repo.TaskRepo;
@@ -11,10 +10,8 @@ import org.lawlie8.shakuni.web.jobs.util.TaskTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
