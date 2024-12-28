@@ -3,15 +3,20 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import { CloseCircleFilled, PlaySquareFilled, SaveFilled, SyncOutlined } from "@ant-design/icons";
 import { notification, Tooltip } from 'antd';
 import './editor.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { saveCurrentSQLFile } from './editor-service';
 import { useSelector } from 'react-redux';
 export default function Editor({ params }) {
 
-  const jobItem = useSelector((state) => state.jobStore.selectedJobItem);
+  const taskData = useSelector((state) => state.jobStore.taskData);
   const selectedTaskId = useSelector((state) => state.jobStore.selectedTaskId);
   const [code, setCode] = useState(``);
   const [isProcessing, setIsProcessing] = useState(false);
+
+
+  useEffect(()=>{
+    setCode(taskData)
+  },[taskData])
 
   function saveCurrentFile() {
     setIsProcessing(true);

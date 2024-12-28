@@ -6,10 +6,11 @@ import Editor from './editor/Editor';
 import { fetchConfiguredDataSourcesById, fetchDataSourceTypes } from '../config/data-sources/datasource-service';
 import NewJobs from './new-job/NewJob';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsModalOpen, setIsNewTaskModalOpen, setSelectedTaskId, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem, setTasks } from './JobSlice';
+import { setIsModalOpen, setIsNewTaskModalOpen, setSelectedTaskId, setStoreSelectedConfiguredDataSourceId, setStoreSelectedDataSourceId, setStoreSlectedJobItem, setTaskData, setTasks } from './JobSlice';
 import { fetchAllJobsPagable, fetchAllJobsCount, fetchRecentJobs, deleteJobById, runJobById, fetchTasksByJobId } from './jobs-service';
 import TaskViewDetails from './task/TaskViewDetails';
 import NewTask from './task/new-task/NewTask';
+import { fetchTaskData } from './editor/editor-service';
 
 export default function Jobs(params = { params }) {
 
@@ -209,12 +210,19 @@ export default function Jobs(params = { params }) {
 
     function handleJobSelect(value) {
         dispatch(setTasks([]))
+        dispatch(setTaskData(""))
+
         dispatch(setStoreSlectedJobItem(value));
         setAllJobsView(false);
         fetchTasksByJobId(value?.id).then((response) => {
             dispatch(setSelectedTaskId(response.data[0].id))
             dispatch(setTasks(response.data))
         })
+
+        fetchTaskData(tasksList[0].id).then((response)=>{
+            dispatch(setTaskData(response.data))
+        })
+
     }
 
     function getUrl(id) {
@@ -230,6 +238,9 @@ export default function Jobs(params = { params }) {
     function selectTask(item){
         dispatch(setSelectedTaskId(item.id))
         //Fetch Data of Selected Task and put it on Editor
+        fetchTaskData(item.id).then((response)=>{
+            dispatch(setTaskData(response.data))
+        })
     }
 
     return <div className="jobs-page">

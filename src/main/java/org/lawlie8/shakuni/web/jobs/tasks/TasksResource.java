@@ -39,16 +39,17 @@ public class TasksResource {
         return new ResponseEntity<>(tasksList, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/task/get/{taskId}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/task/data/get/{taskId}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchTasksDataById(@PathVariable Long taskId){
-        List<Tasks> tasksList = new ArrayList<>();
+        String taskData = "";
         try {
             log.info("Rest Call to Fetch Task Data for Task with Id : {}",taskId);
-            tasksList = tasksService.getTaskByJobId(taskId);
+            taskData = tasksService.fetchTaskDataById(taskId);
         }catch (Exception e){
+            e.printStackTrace();
             log.error("Rest Call to Fetch Tasks for Job with Id Failed Exception is : {}",e.getStackTrace());
         }
-        return new ResponseEntity<>(tasksList, HttpStatus.OK);
+        return  new ResponseEntity<>(taskData, HttpStatus.OK);
     }
 
     /**

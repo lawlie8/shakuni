@@ -1,6 +1,7 @@
 package org.lawlie8.shakuni.web.jobs.tasks;
 
 import jakarta.xml.bind.DatatypeConverter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.repo.TaskRepo;
@@ -10,16 +11,18 @@ import org.lawlie8.shakuni.web.jobs.util.TaskTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 /**
@@ -85,8 +88,17 @@ public class TasksService {
         return true;
     }
 
-    public String fetchTaskDataById(Long taksId){
-        return "";
+    public String fetchTaskDataById(Long taskId) throws IOException {
+        Optional<Tasks> tasks = taskRepo.findById(taskId);
+        String filePath = tasks.get().getFilePath();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)), 1024);
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            stringBuilder.append(line).append('\n');
+        }
+        br.close();
+        return stringBuilder.toString();
     }
 
     private String generateFilePath(String name) {
