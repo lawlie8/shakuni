@@ -20,6 +20,15 @@ export default function Editor({ params }) {
     dispatch(setIsNewTaskModalOpen(true));
   }
 
+  const keyDownHandler = (event) => {
+
+    if (event.ctrlKey && event.key === "s" && !isProcessing) {
+      saveCurrentFile();
+      event.preventDefault();
+    }
+  };
+
+  
   useEffect(() => {
     fetchTaskData(selectedTaskId).then((response) => {
       setCode(response.data)
@@ -71,24 +80,24 @@ export default function Editor({ params }) {
       <ul className='editor-tool-pick-ul'>
         <li className='editor-tool-pick-ul-li'>
           <Tooltip title="Execute Query">
-            <PlaySquareFilled onClick={() => runCurrentScript()} style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
+            <PlaySquareFilled onClick={() => runCurrentScript()} style={{ fontSize: '20px', color: 'aliceblue', cursor: 'pointer' }} />
           </Tooltip>
 
         </li>
         <li className='editor-tool-pick-ul-li'>
           <Tooltip title="Save Query">
-            <SaveFilled onClick={() => saveCurrentFile()} style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
+            <SaveFilled onClick={() => saveCurrentFile()} style={{ fontSize: '20px', color: 'aliceblue', cursor: 'pointer' }} />
           </Tooltip>
         </li>
         <li style={{ display: 'absolute', left: 'calc(100% - 90px)' }} className='editor-tool-pick-ul-li' >
           {
             isProcessing ?
               <Tooltip title="Saving">
-                <SyncOutlined spin style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
+                <SyncOutlined spin style={{ fontSize: '20px', color: 'aliceblue', cursor: 'pointer' }} />
               </Tooltip>
               :
               <Tooltip title="Close">
-                <CloseCircleFilled style={{ fontSize: '20px', color: '#161b22', cursor: 'pointer' }} />
+                <CloseCircleFilled style={{ fontSize: '20px', color: 'aliceblue', cursor: 'pointer' }} />
               </Tooltip>
           }
         </li>
@@ -101,6 +110,7 @@ export default function Editor({ params }) {
       placeholder="Please enter SQL Query to Execute."
       onChange={(evn) => setCode(evn.target.value)}
       padding={15}
+      onKeyDown={keyDownHandler}
       rehypePlugins={[
         [rehypePrism, { ignoreMissing: true, showLineNumbers: true, }]
       ]}

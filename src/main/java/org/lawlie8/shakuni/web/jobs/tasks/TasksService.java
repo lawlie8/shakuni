@@ -1,6 +1,7 @@
 package org.lawlie8.shakuni.web.jobs.tasks;
 
 import jakarta.xml.bind.DatatypeConverter;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.lawlie8.shakuni.entity.jobs.Tasks;
 import org.lawlie8.shakuni.repo.TaskRepo;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,7 +84,25 @@ public class TasksService {
     }
 
     public boolean saveSQlTask(SQLTaskDTO sqlTaskDTO) throws InterruptedException {
-        return true;
+        log.info("Saving SQl Code To File");
+        sqlTaskDTO.setUser(SecurityContextHolder.getContext().getAuthentication().getName());
+        Optional<Tasks> tasks = taskRepo.findById(sqlTaskDTO.getTaskId());
+        boolean isSaved = saveSqlFileData(sqlTaskDTO.getSqlCode(), tasks.get().getFilePath());
+        if(isSaved){
+            //Save Task History Here
+        }
+        return isSaved;
+    }
+
+    private boolean saveSqlFileData(String sqlCode, String filePath) {
+        File file = new File(filePath);
+        try {
+            FileUtils.writeStringToFile(file, sqlCode, StandardCharsets.UTF_8);
+            return true;
+        } catch (Exception e) {
+            log.error("Exception Occurred While Saving Sql Data to File : {}", filePath);
+            return false;
+        }
     }
 
     public String fetchTaskDataById(Long taskId) throws IOException {
