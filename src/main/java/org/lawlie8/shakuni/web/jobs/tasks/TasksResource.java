@@ -96,7 +96,7 @@ public class TasksResource {
     public ResponseEntity<?> saveSQLFileForTask(@RequestBody SQLTaskDTO sqlTaskDTO){
         boolean isSaved = false;
         try {
-            log.info("Rest Call To Save New Task with Name : {}",sqlTaskDTO);
+            log.info("Rest Call To Save SQL Task Data with Id : {}",sqlTaskDTO.getTaskId());
             isSaved = tasksService.saveSQlTask(sqlTaskDTO);
         }catch (Exception e){
             log.error("Exception Occurred While Saving SQL Task at Rest level : {}",e.getMessage());

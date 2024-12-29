@@ -28,4 +28,13 @@ public class SQLTaskDTO {
     public void setUser(String user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "SQLTaskDTO{" +
+                "taskId=" + taskId +
+                ", sqlCode='" + sqlCode + '\'' +
+                ", user='" + user + '\'' +
+                '}';
+    }
 }
