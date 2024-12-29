@@ -14,20 +14,21 @@ export default function TaskViewDetails({ params }) {
 
     useEffect(()=>{
         getAllUsers().then((response) => {
-        }).catch((e)=>{
-            console.log(e);
-        }).finally(()=>{
             dispatch(setAllUsers(response.data))
-        })
 
-        setSelectedUserOptions([]);
+        }).catch((e)=>{
 
-        allUserInfo.map((item)=>{
-            setSelectedUserOptions(x=>[...x,
-                {
-                value:item.id,
-                label:item.userName
-            }])
+        }).finally(()=>{
+            setSelectedUserOptions([]);
+
+            allUserInfo.map((item)=>{
+                setSelectedUserOptions(x=>[...x,
+                    {
+                    value:item.id,
+                    label:item.userName
+                }])
+            })
+    
         })
     },[])
 
