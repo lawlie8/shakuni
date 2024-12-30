@@ -23,7 +23,7 @@ Shakuni Schedules and Executes large Volumes of SQL Queries automatically, Strea
 ### Authentication is provided by default for the entire organization.
 <img src="https://i.ibb.co/BzvwRGc/auth-portal.png" alt="auth-portal" border="0"></img>
 ### InBuilt SQL Editor and File Upload Feature
-<img src="https://i.ibb.co/mT4z5Tg/jobs.png" alt="jobs" border="0"></img>
+<img src="https://i.ibb.co/QjDCk1D/jobs.png" alt="jobs" border="0" ></img>
 ### Supported Integrations for Data Sources.
 <img src="https://i.ibb.co/qd3QcS3/Screenshot-2024-11-27-235638.png" alt="Screenshot-2024-11-27-235638" border="0"></img>
 ### Integrate Multiple Data Sources.
