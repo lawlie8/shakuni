@@ -1,5 +1,6 @@
 .jobs-page-selection{
-    width: 300px;
+    min-width: 300px;
+    overflow: scroll;
 }
 
 .jobs-page{
@@ -17,6 +18,7 @@
 .jobs-page-content{
     margin: 0px;
     padding: 0px;
+    max-width: calc(100% - 300px);
 }
 
 .jobs-page-main{
@@ -25,10 +27,9 @@
 }
 
 .jobs-page-selection-menu{
-    border-radius: 0px;
     padding: 0px;
     border: none;
-    height: 100vh;
+    height: calc(100% + 150px);
     &:hover{
         border-radius: 0px;
     }

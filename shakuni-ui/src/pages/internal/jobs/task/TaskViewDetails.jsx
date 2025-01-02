@@ -104,48 +104,48 @@ export default function TaskViewDetails({ params }) {
             </Row>
         </div>
 
-        <div className="current-task-details" style={{overflow:'scroll',marginTop:'20px'}}>
+        <div className="current-task-details" style={{ overflow: 'scroll', marginTop: '20px' }}>
             <Row style={{ width: '100%', textAlign: 'start', color: 'black' }}>
                 <Col span={12}>
                     <h3 style={{ textAlign: 'start' }}>{currentTask?.taskName}</h3>
                 </Col>
                 <Col span={2} offset={10}>
-                    <DeleteFilled style={{fontSize:'25px',top:'50%',transform:'translateY(-50%)',position:'relative',color:'red'}}/>
+                    <DeleteFilled style={{ fontSize: '25px', top: '50%', transform: 'translateY(-50%)', position: 'relative', color: 'red' }} />
                 </Col>
             </Row>
-                <Row style={{ width: '100%', textAlign: 'start', color: 'black' }}>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {"Type"}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {currentTask?.taskTypeEnum}
-                    </Col>
+            <Row style={{ width: '100%', textAlign: 'start', color: 'black' }}>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {"Type"}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {currentTask?.taskTypeEnum}
+                </Col>
 
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {"Date"}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {currentTask?.taskCreationDate === undefined ? "" : new Date(currentTask?.taskCreationDate).toISOString().split("T")[0]}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {"Time"}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {currentTask?.taskCreationDate === undefined ? "" : new Date(currentTask?.taskCreationDate).toTimeString().split(" ")[0]}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {"File Name"}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {currentTask?.filePath.split("\\").pop()}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {"Created By"}
-                    </Col>
-                    <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
-                        {currentTask?.createdBy}
-                    </Col>
-                </Row>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {"Date"}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {currentTask?.taskCreationDate === undefined ? "" : new Date(currentTask?.taskCreationDate).toISOString().split("T")[0]}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {"Time"}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {currentTask?.taskCreationDate === undefined ? "" : new Date(currentTask?.taskCreationDate).toTimeString().split(" ")[0]}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {"File Name"}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {currentTask?.filePath.split("\\").pop()}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {"Created By"}
+                </Col>
+                <Col span={12} style={{ borderBottom: '1px solid #dfdfdf', fontWeight: "600" }}>
+                    {currentTask?.createdBy}
+                </Col>
+            </Row>
 
         </div>
     </div>

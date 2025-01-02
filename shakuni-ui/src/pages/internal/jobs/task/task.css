@@ -3,7 +3,7 @@
     border-radius: 10px;
     position: relative;
     color: rgba(0, 0, 0, 0.88);
-
+    height: calc(100vh);
 }
 
 .user-share-details{
@@ -34,4 +34,9 @@
     position: relative;
     left:50%;
     transform:translateX(-50%)
+}
+
+.current-task-details{
+    display: block;
+    overflow: scroll;
 }
