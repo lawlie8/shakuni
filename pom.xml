@@ -33,6 +33,7 @@
 		<npm.version>10.8.3</npm.version>
 		<frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
 		<spring.boot.version>3.4.0</spring.boot.version>
+		<hikari.cp.version>6.2.1</hikari.cp.version>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
@@ -40,6 +41,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>6.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikari.cp.version}</version>
 		</dependency>
 
 
