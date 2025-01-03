@@ -38,38 +38,48 @@ export default function Editor({ params }) {
   }, [selectedTaskId])
 
   function saveCurrentFile() {
-    setIsProcessing(true);
-    setOriginalCode(code)
-    saveCurrentSQLFile(code, selectedTaskId)
-      .then((response) => {
-        if (response?.status === 200 && response?.data === true) {
-          notification.success({
-            message: "Success",
-            description: "Data Saved",
-            duration: 1,
-            style: { width: "250px" },
-          });
-        } else {
+    if (code !== originalCode) {
+      setIsProcessing(true);
+      setOriginalCode(code)
+      saveCurrentSQLFile(code, selectedTaskId)
+        .then((response) => {
+          if (response?.status === 200 && response?.data === true) {
+            notification.success({
+              message: "Success",
+              description: "Data Saved",
+              duration: 1,
+              style: { width: "250px" },
+            });
+          } else {
+            notification.error({
+              message: "Error",
+              description: "Save Failure",
+              duration: 1,
+              style: { width: "250px" },
+            });
+          }
+        })
+        .catch((error) => {
           notification.error({
             message: "Error",
             description: "Save Failure",
             duration: 1,
             style: { width: "250px" },
           });
-        }
-      })
-      .catch((error) => {
-        notification.error({
-          message: "Error",
-          description: "Save Failure",
-          duration: 1,
-          style: { width: "250px" },
+          console.error(error); // For debugging purposes
+        })
+        .finally(() => {
+          setIsProcessing(false);
         });
-        console.error(error); // For debugging purposes
-      })
-      .finally(() => {
-        setIsProcessing(false);
+    }else{
+      notification.info({
+        message: "File Not Modified",
+        description: "Update The File To Save",
+        duration: 5,
+        style: { width: "250px" },
       });
+    }
+
   }
 
 
