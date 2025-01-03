@@ -12,6 +12,8 @@ export default function Editor({ params }) {
   const tasksList = useSelector((state) => state.jobStore.taskList)
   const selectedTaskId = useSelector((state) => state.jobStore.selectedTaskId);
   const [code, setCode] = useState(``);
+  const [originalCode, setOriginalCode] = useState(``);
+
   const [isProcessing, setIsProcessing] = useState(false);
   const dispatch = useDispatch();
 
@@ -28,16 +30,16 @@ export default function Editor({ params }) {
     }
   };
 
-  
   useEffect(() => {
     fetchTaskData(selectedTaskId).then((response) => {
       setCode(response.data)
+      setOriginalCode(response.data)
     })
   }, [selectedTaskId])
 
   function saveCurrentFile() {
     setIsProcessing(true);
-
+    setOriginalCode(code)
     saveCurrentSQLFile(code, selectedTaskId)
       .then((response) => {
         if (response?.status === 200 && response?.data === true) {
@@ -85,8 +87,8 @@ export default function Editor({ params }) {
 
         </li>
         <li className='editor-tool-pick-ul-li'>
-          <Tooltip title="Save Query">
-            <SaveFilled onClick={() => saveCurrentFile()} style={{ fontSize: '20px', color: 'aliceblue', cursor: 'pointer' }} />
+          <Tooltip title={code !== originalCode ? 'Save' : 'Nothing To Save'}>
+            <SaveFilled onClick={() => saveCurrentFile()} style={{ fontSize: '20px', color: code !== originalCode ? 'aliceblue' : '#919191', cursor: 'pointer' }} />
           </Tooltip>
         </li>
         <li style={{ display: 'absolute', left: 'calc(100% - 90px)' }} className='editor-tool-pick-ul-li' >
@@ -111,9 +113,12 @@ export default function Editor({ params }) {
       onChange={(evn) => setCode(evn.target.value)}
       padding={15}
       onKeyDown={keyDownHandler}
+
+
       rehypePlugins={[
-        [rehypePrism, { ignoreMissing: true, showLineNumbers: true, }]
+        [rehypePrism, { ignoreMissing: true, showLineNumbers: true }]
       ]}
+
 
       style={{
         backgroundColor: "#161b22",
